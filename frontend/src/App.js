@@ -5,7 +5,7 @@ import './App.css';
 
 let endPoint = "http://localhost:5000"
 
-let socket = io.connect(endPoint);
+//let socket = io.connect(endPoint);
 
 function App() {
   /*const [messages, setMessages] = useState(["Hello and Welcome"]);
