@@ -5,7 +5,7 @@ import './App.css';
 
 let endPoint = "http://localhost:5000"
 
-//let socket = io.connect(endPoint);
+//slet socket = io.connect(endPoint);
 
 function App() {
   /*const [messages, setMessages] = useState(["Hello and Welcome"]);
@@ -47,7 +47,7 @@ const onClick = () => {
     <button onClick={() => onClick()}>send Message</button></div>
     
   );*/
-  return( <div><p>dddddd!!!</p></div>);
+  return( <div><p>ddd!!ddd!!!</p></div>);
 }
 
 export default App;
