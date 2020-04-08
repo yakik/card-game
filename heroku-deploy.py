@@ -24,7 +24,7 @@ def copy_build_folder():
     shutil.copytree(
         os.path.join(FILE_PATH, 'frontend', 'build'),
         os.path.join(FILE_PATH, 'web', 'build'))
-    shutil.rmtree(os.path.join(FILE_PATH, 'frontend', 'build'))
+   # shutil.rmtree(os.path.join(FILE_PATH, 'frontend', 'build'))
 
 
 def push_to_heroku():
