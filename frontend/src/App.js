@@ -8,7 +8,7 @@ let endPoint = "http://localhost:5000"
 let socket = io.connect(endPoint);
 
 function App() {
-  const [messages, setMessages] = useState(["Hello and Welcome"]);
+  /*const [messages, setMessages] = useState(["Hello and Welcome"]);
   const [message, setMessage] = useState("");
 
 
@@ -46,7 +46,8 @@ const onClick = () => {
     <input value = {message} name = "message" onChange={e => onChange(e)} />
     <button onClick={() => onClick()}>send Message</button></div>
     
-  );
+  );*/
+  return( <div><p>dddddd!!!</p></div>
 }
 
 export default App;
