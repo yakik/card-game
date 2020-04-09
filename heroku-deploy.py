@@ -30,8 +30,8 @@ def cleanup():
 def main():
     build_frontend()
     copy_build_folder()
-    #deploy()
-    #cleanup()
+    deploy()
+    cleanup()
 
 if __name__ == "__main__":
     main()
