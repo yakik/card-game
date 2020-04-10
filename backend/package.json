@@ -1,0 +1,31 @@
+{
+  "name": "newbackend",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "babel-node ./bin/www",
+    "test": "jest --watchAll",
+    "jenkinsTest": "jest"
+  },
+  "dependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.9.5",
+    "@babylonjs/core": "^4.1.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "mongoose": "^5.9.7",
+    "morgan": "~1.9.0",
+    "socket.io": "^2.3.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0",
+    "newman": "^4.6.1"
+  }
+}

@@ -2,13 +2,19 @@ import React, {useState, useEffect} from 'react';
 import io from "socket.io-client"
 import './App.css';
 
-
 let endPoint = "http://localhost:5000"
 
-//slet socket = io.connect(endPoint);
+if (process.env.REACT_APP_ENVIRONMENT === "PRODUCTION") {
+  endPoint = "https://card-game989.herokuapp.com"
+}
+
+
+
+
+let socket = io.connect(endPoint);
 
 function App() {
-  /*const [messages, setMessages] = useState(["Hello and Welcome"]);
+  const [messages, setMessages] = useState(["Hello and Welcome"]);
   const [message, setMessage] = useState("");
 
 
@@ -46,8 +52,7 @@ const onClick = () => {
     <input value = {message} name = "message" onChange={e => onChange(e)} />
     <button onClick={() => onClick()}>send Message</button></div>
     
-  );*/
-  return( <div><p>dd!!!d!!ddd!!!</p></div>);
+  );
 }
 
 export default App;
