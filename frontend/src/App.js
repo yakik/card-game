@@ -4,11 +4,12 @@ import './App.css';
 
 let endPoint = "http://localhost:5000"
 
-if (process.env.REACT_APP_ENVIRONMENT === "PRODUCTION") {
+if (process.env.NODE_ENV === "production") {
   endPoint = "https://card-game989.herokuapp.com"
 }
 
-
+console.log(process.env.NODE_ENV)
+console.log(endPoint)
 
 
 let socket = io.connect(endPoint);
