@@ -4,10 +4,14 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 
-var indexRouter = require('./routes/index');
+var app = express();
+
+app.io = require('socket.io')();
+
+var indexRouter = require('./routes/index')(app.io);
 var usersRouter = require('./routes/users');
 
-var app = express();
+
 
 app.use(cors());
 app.options('*', cors()) 
