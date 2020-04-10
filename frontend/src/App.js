@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import io from "socket.io-client"
 import './App.css';
 
@@ -15,44 +15,53 @@ console.log(endPoint)
 let socket = io.connect(endPoint);
 
 function App() {
-  const [messages, setMessages] = useState(["Hello and Welcome"]);
-  const [message, setMessage] = useState("");
+  const [players, setPlayers] = useState([]);
+  const [playerName, setName] = useState("");
 
 
-useEffect(() => {
-    socket.on("get_message", msg => {
-      setMessages([...messages,msg.message]);
+
+
+  useEffect(() => {
+    socket.on("players", msg => {
+      setPlayers(msg);
     });
-});
- 
+  });
 
 
-const onChange = e => {
-  setMessage(e.target.value);
-};
 
-const onClick = () => {
-  if (message !== "") {
-    socket.emit("enter_message",message);
-    setMessage("");
+  const onChange = e => {
+    setName(e.target.value);
+  };
+
+
+  const onClickName = () => {
+    if (playerName !== "") {
+      socket.emit("new_player", playerName);
+    }
+    else {
+      alert("Please Add A Message")
+    }
   }
-  else{
-    alert("Please Add A Message")
-  }
-}
+
+
 
   return (
-    <div>
-    {messages.length > 0 &&
-    messages.map(msg => (
-      <div>
-        <p>{msg}</p>
-      </div>
-    ))}
 
-    <input value = {message} name = "message" onChange={e => onChange(e)} />
-    <button onClick={() => onClick()}>send Message</button></div>
-    
+    <div>
+      <h1>take six, the remote version</h1>
+      <input value={playerName} name="playerName" onChange={e => onChange(e)} />
+      <button onClick={() => onClickName()}>enter your name</button>
+      {players.length > 0 &&
+        players.map(msg => (
+          <div>
+            <p>{msg.name}</p>
+            <p>{msg.score}</p>
+            <p>{msg.cards.join(' ')}</p>
+          </div>
+        ))}
+
+    </div>
+
   );
 }
 

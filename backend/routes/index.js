@@ -6,9 +6,31 @@ var cors = require('cors')
 var express = require('express');
 var router = express.Router();
 
+var players = []
 
+function getCardsForPlayer(){
+  let cards=[]
+  for (let u=0;u<10;u++)
+    cards.push(hafisa.pop())
+  return cards
+}
 
+function getHafisaMeurbevet() {
+  let hafisa = []
+  for (let r = 0; r < 104; r++)
+    hafisa.push(r + 1)
+  for (let f = 0; f < 300; f++) {
+    let a = Math.round(Math.random()*103)
+    let b = Math.round(Math.random()*103)
+    let p = hafisa[a]
+    hafisa[a] = hafisa[b]
+    hafisa[b] = p
+    f = f + 1
+  }
+  return hafisa
+}
 
+let hafisa = getHafisaMeurbevet()
 
 
 var corsOptions = {
@@ -22,8 +44,10 @@ module.exports = function (io) {
   io.on('connection', function (socket) {
       console.log('User has connected to Index');
       //ON Events
-      socket.on('enter_message', function(msg){
-        io.emit('get_message', {'message': msg});
+      socket.on('new_player', function(name){
+        players.push({name:name, score:0, cards:getCardsForPlayer()})
+
+        io.emit('players', players);
       });
 
       //End ON Events
