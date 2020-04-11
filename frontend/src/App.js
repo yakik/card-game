@@ -15,6 +15,7 @@ console.log(endPoint)
 let socket = io.connect(endPoint);
 
 function App() {
+  const [selectedPile, setSelectedPile] = useState("");
   const [players, setPlayers] = useState([]);
   const [playerName, setName] = useState("");
   const [piles, setPiles] = useState([[' ', '', ' ', ' ', ' '], [' ', ' ', ' ', '', ' '], [' ', ' ', ' ', '', ' '], [' ', ' ', ' ', ' ', '']]);
@@ -36,6 +37,10 @@ function App() {
 
   const onChange = e => {
     setName(e.target.value);
+  };
+
+  const onChangePile = e => {
+    setSelectedPile(e.target.value);
   };
 
 
@@ -86,7 +91,7 @@ function App() {
 
   const getRows = (piles) => {
     let myRows = [];
-    myRows.push(getOneRow([['A'],['B'],['C'],['D']],0))
+    myRows.push(getOneRow([['A'], ['B'], ['C'], ['D']], 0))
     for (let row = 0; row < 5; row++)
       myRows.push(getOneRow(piles, row));
     return <div className="flexCol">{myRows}</div>;
@@ -124,18 +129,29 @@ function App() {
               </div>
             )
         })}
-      {players.length > 0 &&
-        players.map(msg => {
-
-          return (
-            <div >
-              <p>{msg.selectedCard+" "  + msg.name+ "  בחר/ה"}</p>
-            </div>
-          )
-        })}
-      {getPilesJSX(piles)}
-
+        <div className="flexGrid" >
+      <div className="flexRow">
+        <div className="flexCol">
+          <input value={playerName} name="playerName" onChange={e => onChange(e)} />
+        </div>
+        <div className="flexCol">
+        <p>חבילה לפעולה</p>
+      </div>
     </div>
+    </div>
+      {players.length > 0 &&
+    players.map(msg => {
+
+      return (
+        <div >
+          <p>{msg.selectedCard + " " + msg.name + "  בחר/ה"}</p>
+        </div>
+      )
+    })
+  }
+  { getPilesJSX(piles) }
+
+    </div >
 
   );
 }

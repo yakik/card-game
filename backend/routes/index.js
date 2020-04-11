@@ -73,6 +73,10 @@ module.exports = function (io) {
         player.cards = getCardsForPlayer()
         player.score = 0
       })
+      let piles = [[], [], [], []]
+      for (let i = 0; i < 4; i++)
+        piles[i].push(hafisa.pop())
+      io.emit('piles', piles);
       io.emit('players', players);
     });
     socket.on('new_game', function (name) {
@@ -81,6 +85,7 @@ module.exports = function (io) {
       let piles = [[], [], [], []]
       for (let i = 0; i < 4; i++)
         piles[i].push(hafisa.pop())
+        io.emit('piles', piles);
       io.emit('players', players);
     });
     socket.on("card_selected", function (msg) {
