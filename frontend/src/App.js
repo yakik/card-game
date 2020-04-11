@@ -42,6 +42,10 @@ function App() {
       alert("Please Add A Message")
     }
   }
+  const newGame = () => {
+      socket.emit("new_game", playerName);
+   
+  }
 
 
 
@@ -49,16 +53,19 @@ function App() {
 
     <div>
       <h1>take six, the remote version</h1>
+      <button onClick={() => newGame()}>משחק חדש</button>
+      
       <input value={playerName} name="playerName" onChange={e => onChange(e)} />
-      <button onClick={() => onClickName()}>enter your name</button>
+      <button onClick={() => onClickName()}>עדכן שם</button>
       {players.length > 0 &&
-        players.map(msg => (
+        players.map(msg => {if (msg.name==playerName)
+        return (
           <div>
             <p>{msg.name}</p>
             <p>{msg.score}</p>
             <p>{msg.cards.join(' ')}</p>
           </div>
-        ))}
+        )})}
 
     </div>
 

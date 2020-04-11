@@ -12,6 +12,7 @@ function getCardsForPlayer(){
   let cards=[]
   for (let u=0;u<10;u++)
     cards.push(hafisa.pop())
+  cards = cards.sort(function(a, b){return a - b})
   return cards
 }
 
@@ -49,7 +50,14 @@ module.exports = function (io) {
 
         io.emit('players', players);
       });
-
+      socket.on('new_game', function(name){
+        hafisa = getHafisaMeurbevet()
+        players.map(player => {
+          player.cards=getCardsForPlayer()
+          player.score=0
+        })
+        io.emit('players', players);
+      });
       //End ON Events
   });
   return router;
