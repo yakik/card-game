@@ -129,27 +129,18 @@ function App() {
               </div>
             )
         })}
-        <div className="flexGrid" >
-      <div className="flexRow">
-        <div className="flexCol">
-          <input value={playerName} name="playerName" onChange={e => onChange(e)} />
-        </div>
-        <div className="flexCol">
-        <p>חבילה לפעולה</p>
-      </div>
-    </div>
-    </div>
+     
       {players.length > 0 &&
-    players.map(msg => {
+        players.map(player => {
 
-      return (
-        <div >
-          <p>{msg.selectedCard + " " + msg.name + "  בחר/ה"}</p>
-        </div>
-      )
-    })
-  }
-  { getPilesJSX(piles) }
+          return (
+            <div >
+              <p>{player.selectedCard + " " + player.name + "  בחר/ה"}</p>
+            </div>
+          )
+        })
+      }
+      {getPilesJSX(piles)}
 
     </div >
 
