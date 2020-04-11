@@ -12,7 +12,7 @@ function getCardsForPlayer() {
   let cards = []
   for (let u = 0; u < 10; u++)
     cards.push(hafisa.pop())
-  cards = cards.sort(function (a, b) { return a - b })
+  cards = cards.sort(function (a, b) { return a.replace(/\*/g, '') - b.replace(/\*/g,'') })
   return cards
 }
 
