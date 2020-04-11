@@ -12,6 +12,47 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+.flexGrid {
+
+  display: flex;
+
+  flex-direction: row;
+
+  border: 5px;
+
+  border-color: #282c34;
+
+  justify-content: center
+
+}
+
+
+
+.flexRow {
+
+  display: flex;
+
+  flex-direction: row;
+
+  border: 5px;
+
+  border-color: #282c34;
+
+}
+
+
+
+.flexColumn {
+
+  display: flex;
+
+  flex-direction: column;
+
+  border: 5px;
+
+  border-color: #282c34;
+
+}
 
 .App-header {
   background-color: #282c34;

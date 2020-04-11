@@ -45,42 +45,60 @@ function App() {
 
   const reshuffle = () => {
     socket.emit("reshuffle", playerName);
- 
-}
 
-const newGame = () => {
-  socket.emit("new_game", playerName);
+  }
 
-}
-const onClickCard = (card) => {
-  socket.emit("card_selected", {player:playerName, card:card});
+  const newGame = () => {
+    socket.emit("new_game", playerName);
 
-}
+  }
+  const onClickCard = (card) => {
+    socket.emit("card_selected", { player: playerName, selectedCard: card });
 
-const getCardsButtons = (cards) => {
-  return cards.map(card =>(
-    <button onClick={() => onClickCard(card)}>{card}</button>
-  ))}
-   
+  }
+
+  const getCardsButtons = (cards) => {
+    return cards.map(card => (
+      <button onClick={() => onClickCard(card)}>{card}</button>
+    ))
+  }
+
 
   return (
 
-    <div>
+    <div className="App" >
       <h1>take six, the remote version</h1>
-      <button onClick={() => reshuffle()}>ערבב מחדש</button>
-      <button onClick={() => newGame()}>משחק חדש</button>
-      
+
+      <div >
+        <button onClick={() => newGame()}>משחק חדש</button>
+      </div>
+      <div>
+        <button onClick={() => reshuffle()}>ערבב מחדש</button>
+      </div>
+      <h1></h1>
       <input value={playerName} name="playerName" onChange={e => onChange(e)} />
       <button onClick={() => onClickName()}>עדכן שם</button>
       {players.length > 0 &&
-        players.map(msg => {if (msg.name==playerName)
-        return (
-          <div>
-            <p>{msg.name}</p>
-            <p>{msg.score}</p>
-            <p>{getCardsButtons(msg.cards)}</p>
-          </div> 
-        )})}
+        players.map(msg => {
+          if (msg.name == playerName)
+            return (
+              <div>
+
+                <p>{getCardsButtons(msg.cards)}</p>
+              </div>
+            )
+        })}
+      {players.length > 0 &&
+        players.map(msg => {
+          
+            return (
+              <div >
+                  <p>{msg.name+" selected "+msg.selectedCard}</p>
+              </div>
+            )
+        })}
+
+
 
     </div>
 

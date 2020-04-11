@@ -59,7 +59,7 @@ module.exports = function (io) {
     console.log('User has connected to Index');
     //ON Events
     socket.on('new_player', function (name) {
-      players.push({ name: name, score: 0, cards: getCardsForPlayer() })
+      players.push({ name: name, score: 0, cards: getCardsForPlayer() ,selectedCard:"X" })
 
       io.emit('players', players);
     });
@@ -73,6 +73,18 @@ module.exports = function (io) {
     });
     socket.on('new_game', function (name) {
       players = []
+      io.emit('players', players);
+    });
+    socket.on("card_selected", function (msg) {
+      players.map(player => {
+        if (player.name==msg.player){
+          player.selectedCard=msg.selectedCard
+          player.cards=player.cards.map(card=>{
+            return card==msg.selectedCard?"X":card
+          })
+        }
+       
+      })
       io.emit('players', players);
     });
     //End ON Events
