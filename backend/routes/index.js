@@ -12,7 +12,7 @@ function getCardsForPlayer() {
   let cards = []
   for (let u = 0; u < 10; u++)
     cards.push(hafisa.pop())
-  cards = cards.sort(function (a, b) { return a.replace(/\*/g, '') - b.replace(/\*/g,'') })
+  cards = cards.sort(function (a, b) { return a.replace(/\*/g, '') - b.replace(/\*/g, '') })
   return cards
 }
 
@@ -45,8 +45,8 @@ function getHafisaMeurbevet() {
 }
 
 let hafisa = getHafisaMeurbevet()
-let piles = [[],[],[],[]]
-for (let i=0;i<4;i++)
+let piles = [[], [], [], []]
+for (let i = 0; i < 4; i++)
   piles[i].push(hafisa.pop())
 
 
@@ -62,7 +62,7 @@ module.exports = function (io) {
     console.log('User has connected to Index');
     //ON Events
     socket.on('new_player', function (name) {
-      players.push({ name: name, score: 0, cards: getCardsForPlayer() ,selectedCard:"X" })
+      players.push({ name: name, score: 0, cards: getCardsForPlayer(), selectedCard: "X" })
 
       io.emit('players', players);
       io.emit('piles', piles);
@@ -78,19 +78,39 @@ module.exports = function (io) {
     socket.on('new_game', function (name) {
       players = []
       hafisa = getHafisaMeurbevet()
+      let piles = [[], [], [], []]
+      for (let i = 0; i < 4; i++)
+        piles[i].push(hafisa.pop())
       io.emit('players', players);
     });
     socket.on("card_selected", function (msg) {
       players.map(player => {
-        if (player.name==msg.player){
-          player.selectedCard=msg.selectedCard
-          player.cards=player.cards.map(card=>{
-            return card==msg.selectedCard?"X":card
+        if (player.name == msg.player) {
+          player.selectedCard = msg.selectedCard
+          player.cards = player.cards.map(card => {
+            return card == msg.selectedCard ? "X" : card
           })
         }
-       
+        players = players.sort(function (a, b) { return a.selectedCard.replace(/\*/g, '') - b.selectedCard.replace(/\*/g, '') })
+
       })
       io.emit('players', players);
+    });
+    socket.on("add_card_to_pile", function (playerName) {
+      let card
+      players.map(player => {
+        if (player.name == msg.player) {
+          card = player.selectedCard
+        }
+
+
+
+
+      })
+
+
+
+
     });
     //End ON Events
   });
