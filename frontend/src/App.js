@@ -17,6 +17,7 @@ let socket = io.connect(endPoint);
 function App() {
   const [players, setPlayers] = useState([]);
   const [playerName, setName] = useState("");
+  const [piles, setPiles] = useState([[' ', '', ' ', ' ', ' '], [' ', ' ', ' ', '', ' '], [' ', ' ', ' ', '', ' '], [' ', ' ', ' ', ' ', '']]);
 
 
 
@@ -25,6 +26,10 @@ function App() {
     socket.on("players", msg => {
       setPlayers(msg);
     });
+    socket.on("piles", msg => {
+      setPiles(msg);
+    });
+
   });
 
 
@@ -64,6 +69,37 @@ function App() {
   }
 
 
+  const getOneRow = (piles, row) => {
+    let myCols = [];
+    for (let pile = 0; pile < 4; pile++) {
+      myCols.push(
+        <div ><textarea className="cell"
+          rows="1"
+          cols="8"
+          value={piles[pile][row]}
+          readOnly={true}
+        ></textarea></div>);
+    }
+    return <div className="flexRow">{myCols}</div>;
+  }
+
+
+  const getRows = (piles) => {
+    let myRows = [];
+    myRows.push(getOneRow([['A'],['B'],['C'],['D']],0))
+    for (let row = 0; row < 5; row++)
+      myRows.push(getOneRow(piles, row));
+    return <div className="flexCol">{myRows}</div>;
+  }
+
+  const getPilesJSX = (piles) => {
+    return (
+      <div className="flexGrid" >{getRows(piles)}</div>
+    );
+  }
+
+
+
   return (
 
     <div className="App" >
@@ -90,15 +126,14 @@ function App() {
         })}
       {players.length > 0 &&
         players.map(msg => {
-          
-            return (
-              <div >
-                  <p>{msg.name+" selected "+msg.selectedCard}</p>
-              </div>
-            )
+
+          return (
+            <div >
+              <p>{msg.selectedCard+" "  + msg.name+ "  בחר/ה"}</p>
+            </div>
+          )
         })}
-
-
+      {getPilesJSX(piles)}
 
     </div>
 

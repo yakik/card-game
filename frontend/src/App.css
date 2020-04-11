@@ -40,9 +40,17 @@
 
 }
 
+.cell {
+  display: flex;
+  border: 1px solid black;
+  border-collapse: collapse;
+  vertical-align:middle;
+  text-align: center;
+  font-size: 12px;
+  resize: none;
+}
 
-
-.flexColumn {
+.flexCol {
 
   display: flex;
 

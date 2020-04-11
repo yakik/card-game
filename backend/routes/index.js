@@ -45,6 +45,9 @@ function getHafisaMeurbevet() {
 }
 
 let hafisa = getHafisaMeurbevet()
+let piles = [[],[],[],[]]
+for (let i=0;i<4;i++)
+  piles[i].push(hafisa.pop())
 
 
 var corsOptions = {
@@ -62,6 +65,7 @@ module.exports = function (io) {
       players.push({ name: name, score: 0, cards: getCardsForPlayer() ,selectedCard:"X" })
 
       io.emit('players', players);
+      io.emit('piles', piles);
     });
     socket.on('reshuffle', function (name) {
       hafisa = getHafisaMeurbevet()
@@ -73,6 +77,7 @@ module.exports = function (io) {
     });
     socket.on('new_game', function (name) {
       players = []
+      hafisa = getHafisaMeurbevet()
       io.emit('players', players);
     });
     socket.on("card_selected", function (msg) {
