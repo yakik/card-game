@@ -42,17 +42,32 @@ function App() {
       alert("Please Add A Message")
     }
   }
-  const newGame = () => {
-      socket.emit("new_game", playerName);
+
+  const reshuffle = () => {
+    socket.emit("reshuffle", playerName);
+ 
+}
+
+const newGame = () => {
+  socket.emit("new_game", playerName);
+
+}
+const onClickCard = (card) => {
+  socket.emit("card_selected", {player:playerName, card:card});
+
+}
+
+const getCardsButtons = (cards) => {
+  return cards.map(card =>(
+    <button onClick={() => onClickCard(card)}>{card}</button>
+  ))}
    
-  }
-
-
 
   return (
 
     <div>
       <h1>take six, the remote version</h1>
+      <button onClick={() => reshuffle()}>ערבב מחדש</button>
       <button onClick={() => newGame()}>משחק חדש</button>
       
       <input value={playerName} name="playerName" onChange={e => onChange(e)} />
@@ -63,8 +78,8 @@ function App() {
           <div>
             <p>{msg.name}</p>
             <p>{msg.score}</p>
-            <p>{msg.cards.join(' ')}</p>
-          </div>
+            <p>{getCardsButtons(msg.cards)}</p>
+          </div> 
         )})}
 
     </div>
