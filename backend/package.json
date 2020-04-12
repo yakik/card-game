@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "babel-node ./bin/www",
+    "startDev": "nodemon --exec babel-node ./bin/www ",
     "test": "jest --watchAll",
     "jenkinsTest": "jest"
   },
@@ -20,6 +21,7 @@
     "mongoose": "^5.9.7",
     "morgan": "~1.9.0",
     "nodemon": "^2.0.3",
+    "redux": "^4.0.5",
     "socket.io": "^2.3.0"
   },
   "jest": {
