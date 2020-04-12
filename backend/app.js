@@ -9,7 +9,6 @@ var app = express();
 app.io = require('socket.io')();
 
 var indexRouter = require('./routes/index')(app.io);
-var usersRouter = require('./routes/users');
 
 
 
@@ -23,7 +22,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 module.exports = app;
 

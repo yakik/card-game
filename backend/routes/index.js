@@ -1,60 +1,34 @@
 
 
-
+import { createStore} from 'redux'
+import {getShuffledPack} from '../modules/Pack'
+import {rootReducer,getInitialState} from '../reducers/main'
 var cors = require('cors')
 
 var express = require('express');
 var router = express.Router();
+const store = createStore(rootReducer, getInitialState());
 
 var players = []
 
-function getCardsForPlayer() {
-  let cards = []
-  for (let u = 0; u < 10; u++)
-    cards.push(hafisa.pop())
-  cards = cards.sort(function (a, b) { return a.replace(/\*/g, '') - b.replace(/\*/g, '') })
-  return cards
-}
-
-function getHafisaMeurbevet() {
-  let hafisa = []
-  for (let r = 0; r < 104; r++) {
-    hafisa.push(r + 1)
-    if (hafisa[r] == 55)
-      hafisa[r] = hafisa[r] + "*******"
-    else {
-      hafisa[r] = hafisa[r] + "*"
-      if ((r + 1) % 11 == 0)
-        hafisa[r] = hafisa[r] + "****"
-      if ((r + 1) % 10 == 0)
-        hafisa[r] = hafisa[r] + "**"
-      if ((r + 1) % 5 == 0 && (r + 1) % 10 != 0)
-        hafisa[r] = hafisa[r] + "*"
-    }
-
-  }
-  for (let f = 0; f < 300; f++) {
-    let a = Math.round(Math.random() * 103)
-    let b = Math.round(Math.random() * 103)
-    let p = hafisa[a]
-    hafisa[a] = hafisa[b]
-    hafisa[b] = p
-    f = f + 1
-  }
-  return hafisa
-}
-
-let hafisa = getHafisaMeurbevet()
+let pack = getShuffledPack()
 let piles = [[], [], [], []]
 for (let i = 0; i < 4; i++)
-  piles[i].push(hafisa.pop())
+  piles[i].push(pack.pop())
 
 
 var corsOptions = {
   origin: '*',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  optionsSuccessStatus: 200 
 }
 
+export function getCardsForPlayer() {
+  let cards = []
+  for (let u = 0; u < 10; u++)
+    cards.push(pack.pop())
+  cards = cards.sort(function (a, b) { return a.replace(/\*/g, '') - b.replace(/\*/g, '') })
+  return cards
+}
 
 module.exports = function (io) {
   //Socket.IO
@@ -68,23 +42,23 @@ module.exports = function (io) {
       io.emit('piles', piles);
     });
     socket.on('reshuffle', function (name) {
-      hafisa = getHafisaMeurbevet()
+      pack = getShuffledPack()
       players.map(player => {
         player.cards = getCardsForPlayer()
         player.score = 0
       })
       let piles = [[], [], [], []]
       for (let i = 0; i < 4; i++)
-        piles[i].push(hafisa.pop())
+        piles[i].push(pack.pop())
       io.emit('piles', piles);
       io.emit('players', players);
     });
     socket.on('new_game', function (name) {
       players = []
-      hafisa = getHafisaMeurbevet()
+      pack = getShuffledPack()
       let piles = [[], [], [], []]
       for (let i = 0; i < 4; i++)
-        piles[i].push(hafisa.pop())
+        piles[i].push(pack.pop())
         io.emit('piles', piles);
       io.emit('players', players);
     });
@@ -108,19 +82,10 @@ module.exports = function (io) {
           card = player.selectedCard
         }
 
-
-
-
       })
 
-
-
-
     });
-    //End ON Events
   });
   return router;
 };
 
-
-//module.exports = router;
