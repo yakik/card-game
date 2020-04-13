@@ -1,7 +1,7 @@
 
 
 import { createStore} from 'redux'
-import {getShuffledPack} from '../modules/Pack'
+import {getShuffledPack} from '../modules/pack'
 import {rootReducer,getInitialState} from '../reducers/main'
 var cors = require('cors')
 
