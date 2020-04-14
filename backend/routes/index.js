@@ -1,90 +1,50 @@
 
 
-import { createStore} from 'redux'
-import {getShuffledPack} from '../modules/pack'
-import {rootReducer,getInitialState} from '../reducers/main'
-var cors = require('cors')
+import { addPlayer,reshuffle , newGame, cardSelected, getPlayers, getPiles} from '../modules/takeSix'
+import { getGame, addGame} from '../modules/games'
 
 var express = require('express');
 var router = express.Router();
-const store = createStore(rootReducer, getInitialState());
-
-var players = []
-
-let pack = getShuffledPack()
-let piles = [[], [], [], []]
-for (let i = 0; i < 4; i++)
-  piles[i].push(pack.pop())
-
 
 var corsOptions = {
   origin: '*',
-  optionsSuccessStatus: 200 
+  optionsSuccessStatus: 200
 }
 
-export function getCardsForPlayer() {
-  let cards = []
-  for (let u = 0; u < 10; u++)
-    cards.push(pack.pop())
-  cards = cards.sort(function (a, b) { return a.replace(/\*/g, '') - b.replace(/\*/g, '') })
-  return cards
-}
+let gameID = addGame('Take Six')
+reshuffle(getGame(gameID))
+
 
 module.exports = function (io) {
   //Socket.IO
   io.on('connection', function (socket) {
     console.log('User has connected to Index');
     //ON Events
+   
     socket.on('new_player', function (name) {
-      players.push({ name: name, score: 0, cards: getCardsForPlayer(), selectedCard: "X" })
-
-      io.emit('players', players);
-      io.emit('piles', piles);
+      addPlayer(getGame(gameID),name)
+      io.emit('players', getPlayers(getGame(gameID)));
+      io.emit('piles', getPiles(getGame(gameID)));
     });
-    socket.on('reshuffle', function (name) {
-      pack = getShuffledPack()
-      players.map(player => {
-        player.cards = getCardsForPlayer()
-        player.score = 0
-      })
-      let piles = [[], [], [], []]
-      for (let i = 0; i < 4; i++)
-        piles[i].push(pack.pop())
-      io.emit('piles', piles);
-      io.emit('players', players);
+   
+    socket.on('reshuffle', function () {
+      reshuffle(getGame(gameID))
+      io.emit('piles', getPiles(getGame(gameID)));
+      io.emit('players', getPlayers(getGame(gameID)));
     });
-    socket.on('new_game', function (name) {
-      players = []
-      pack = getShuffledPack()
-      let piles = [[], [], [], []]
-      for (let i = 0; i < 4; i++)
-        piles[i].push(pack.pop())
-        io.emit('piles', piles);
-      io.emit('players', players);
+   
+    socket.on('new_game', function () {
+      newGame(getGame(gameID))
+      io.emit('piles', getPiles(getGame(gameID)));
+      io.emit('players', getPlayers(getGame(gameID)));
     });
+   
     socket.on("card_selected", function (msg) {
-      players.map(player => {
-        if (player.name == msg.player) {
-          player.selectedCard = msg.selectedCard
-          player.cards = player.cards.map(card => {
-            return card == msg.selectedCard ? "X" : card
-          })
-        }
-        players = players.sort(function (a, b) { return a.selectedCard.replace(/\*/g, '') - b.selectedCard.replace(/\*/g, '') })
-
-      })
-      io.emit('players', players);
+      cardSelected(getGame(0),msg)
+     
+      io.emit('players', getPlayers(getGame(gameID)));
     });
-    socket.on("add_card_to_pile", function (playerName) {
-      let card
-      players.map(player => {
-        if (player.name == msg.player) {
-          card = player.selectedCard
-        }
 
-      })
-
-    });
   });
   return router;
 };
