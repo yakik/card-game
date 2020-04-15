@@ -19,27 +19,39 @@ function whichPileToAdd(piles,selectedCard) {
 }
 
 
-function updatePilesAndScores(piles, players, pileToReplace) {
-    for (let playerIndex = 0; playerIndex < players.length; playerIndex++) {
-        let t = whichPileToAdd(piles,players[playerIndex].selectedCard)
-        let newPileItem={number: players[playerIndex].selectedCard.number , points: players[playerIndex].selectedCard.points}
+function updatePilesAndScores(game, pileToReplace) {
+
+    game.players = game.players.sort(function (a, b) { return a.selectedCard.number - b.selectedCard.number })
+
+    for (let playerIndex = 0; playerIndex < game.players.length; playerIndex++) {
+        let t = whichPileToAdd(game.piles, game.players[playerIndex].selectedCard)
+        let newPileItem = { number: game.players[playerIndex].selectedCard.number, points: game.players[playerIndex].selectedCard.points }
         if (t != -1) {
-            if (piles[t].length == 5) {
-                for(let y = 0; y < piles[t].length; y++){
-                    players[playerIndex].score+=piles[t][y].points
+            if (game.piles[t].length == 5) {
+                for (let y = 0; y < game.piles[t].length; y++) {
+                    game.players[playerIndex].score += game.piles[t][y].points
                 }
-                piles[t]=[newPileItem]
+                game.piles[t] = [newPileItem]
             }
-            else{
-                piles[t].push(newPileItem)
+            else {
+                game.piles[t].push(newPileItem)
             }
         }
-        if (t==-1){
-            for(let y = 0; y < piles[pileToReplace].length ; y++){
-                players[playerIndex].score+=piles[pileToReplace][y].points
+        if (t == -1) {
+            for (let y = 0; y < game.piles[pileToReplace].length; y++) {
+                game.players[playerIndex].score += game.piles[pileToReplace][y].points
             }
-            piles[pileToReplace]=[newPileItem]
+            game.piles[pileToReplace] = [newPileItem]
         }
+        let newCards = []
+        game.players[playerIndex].cards.map(card => {
+            if (card.number !== game.players[playerIndex].selectedCard.number)
+                newCards.push(card)
+        })
+        game.players[playerIndex].cards = newCards
+        game.players[playerIndex].selectedCard.show="--"
+        game.players[playerIndex].selectedCard.number=""
+
     }
 }
 
@@ -53,10 +65,11 @@ describe("take six tests", () => {
         [{ number: 2, points: 1 }, { number: 17, points: 1 }, { number: 35, points: 2 }, { number: 56, points: 1 }, { number: 90, points: 3 }],
         [{ number: 30, points: 3 }, { number: 45, points: 2 }, { number: 57, points: 1 }]]
 
-        let players = [{ name: 'Yaakov', score: 0, selectedCard: { number: 19, points: 1 } },
-        { name: 'Esav', score: 0, selectedCard: { number: 92, points: 1 } }]
-
-        updatePilesAndScores(piles, players)
+        let players = [
+        { name: 'Esav', score: 0, selectedCard: { number: 92, points: 1 } , cards:[{number:92}, {number:31}]},
+        { name: 'Yaakov', score: 0, selectedCard: { number: 19, points: 1 } , cards:[{number:19}, {number:12}]}]
+let game = {piles:piles, players:players}
+        updatePilesAndScores(game)
 
 
         expect(players[0].score).toBe(0)
@@ -65,6 +78,9 @@ describe("take six tests", () => {
         expect(piles[2][0].points).toBe(1)
         expect(piles[1][1].number).toBe(19)
         expect(piles[1][1].points).toBe(1)
+        expect(players[0].selectedCard.number).toBe('')
+        expect(players[0].selectedCard.show).toBe('--')
+        expect(players[0].cards.length).toBe(1)
 
     });
 
@@ -75,11 +91,11 @@ describe("take six tests", () => {
         [{ number: 2, points: 1 }, { number: 17, points: 1 }, { number: 35, points: 2 }, { number: 56, points: 1 }, { number: 90, points: 3 }],
         [{ number: 30, points: 3 }, { number: 45, points: 2 }, { number: 57, points: 1 }]]
 
-        let players = [{ name: 'Esav', score: 0, selectedCard: { number: 1, points: 1 } },
-        { name: 'Yaakov', score: 0, selectedCard: { number: 19, points: 1 } }
+        let players = [{ name: 'Esav', score: 0, selectedCard: { number: 1, points: 1 } , cards:[{number:1}, {number:31}]},
+        { name: 'Yaakov', score: 0, selectedCard: { number: 19, points: 1 } , cards:[{number:19}, {number:31}]}
         ]
-
-        updatePilesAndScores(piles, players, 3)
+        let game = {piles:piles, players:players}
+        updatePilesAndScores(game,3)
 
 
         expect(players[1].score).toBe(0)
