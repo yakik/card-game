@@ -129,7 +129,6 @@ const getCell=(key,value)=>{
     return <div className="flexRow" key={"headers"}>{myCols}</div>;
   }
 
-
   const getRows = (piles) => {
     let myRows = [];
     myRows.push(getHeaders())
