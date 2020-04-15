@@ -37,25 +37,26 @@ module.exports = function (io) {
     socket.on('update_piles_And_scores', function (msg) {
       updatePilesAndScores(getGame(msg.gameID),msg.selectedPile)
       
-      io.emit('players', getPlayers(getGame(msg.gameID)));
-      io.emit('piles', getPiles(getGame(msg.gameID)));
+      io.emit('players', {gameID:msg.gameID,players:getPlayers(getGame(msg.gameID))});
+      io.emit('piles', {gameID:msg.gameID,piles:getPiles(getGame(msg.gameID))});
     });
     socket.on('new_player', function (msg) {
       addPlayer(getGame(msg.gameID),msg.playerName)
       
-      io.emit('players', getPlayers(getGame(msg.gameID)));
-      io.emit('piles', getPiles(getGame(msg.gameID)));
+      io.emit('players', {gameID:msg.gameID,players:getPlayers(getGame(msg.gameID))});
+      io.emit('piles', {gameID:msg.gameID,piles:getPiles(getGame(msg.gameID))});
     });
     socket.on('selection_mode', function (msg) {
       setSelectionMode(getGame(msg.gameID),msg.allowSelection)
       io.emit('selection_mode', msg);
-      io.emit('players', getPlayers(getGame(msg.gameID)));
+      io.emit('players', {gameID:msg.gameID,players:getPlayers(getGame(msg.gameID))});
     });
    
     socket.on('reshuffle', function (msg) {
       reshuffle(getGame(msg.gameID))
-      io.emit('piles', getPiles(getGame(msg.gameID)));
-      io.emit('players', getPlayers(getGame(msg.gameID)));
+      io.emit('piles', {gameID:msg.gameID,piles:getPiles(getGame(msg.gameID))});
+      io.emit('players', {gameID:msg.gameID,players:getPlayers(getGame(msg.gameID))});
+     
     });
    
    /* socket.on('new_game', function () {
@@ -67,7 +68,7 @@ module.exports = function (io) {
     socket.on("card_selected", function (msg) {
       cardSelected(getGame(msg.gameID),msg)
      
-      io.emit('players', getPlayers(getGame(msg.gameID)));
+      io.emit('players', {gameID:msg.gameID,players:getPlayers(getGame(msg.gameID))});
     });
 
   });
