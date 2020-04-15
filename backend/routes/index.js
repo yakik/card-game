@@ -12,8 +12,8 @@ var corsOptions = {
   optionsSuccessStatus: 200
 }
 
-let gameID = addGame('Take Six')
-reshuffle(getGame(gameID))
+//let gameID = addGame('Take Six')
+//reshuffle(getGame(gameID))
 
 router.post('/getGameID', cors(corsOptions), (req, res) => {
   //get parameter: req.body.parameterName;
@@ -41,6 +41,7 @@ module.exports = function (io) {
       io.emit('piles', {gameID:msg.gameID,piles:getPiles(getGame(msg.gameID))});
     });
     socket.on('new_player', function (msg) {
+      console.log(msg)
       addPlayer(getGame(msg.gameID),msg.playerName)
       
       io.emit('players', {gameID:msg.gameID,players:getPlayers(getGame(msg.gameID))});

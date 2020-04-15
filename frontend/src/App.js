@@ -28,14 +28,23 @@ function App() {
 
   useEffect(() => {
     socket.on("players", msg => {
+      console.log('XXXX')
+      console.log(msg.gameID)
+      console.log(gameID)
       if (msg.gameID === gameID)
         setPlayers(msg.players);
     });
     socket.on("piles", msg => {
+      console.log('YYY')
+      console.log(msg.gameID)
+      console.log(gameID)
       if (msg.gameID === gameID)
       setPiles(msg.piles);
     });
     socket.on("selection_mode", msg => {
+      console.log('ZZZZ')
+      console.log(msg.gameID)
+      console.log(gameID)
       if (msg.gameID===gameID)
         setAllowSelection(msg.allowSelection);
     });
