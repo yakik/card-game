@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import io from "socket.io-client"
 import './App.css';
+import axios from "axios"
 
 let endPoint = "http://localhost:5000"
 
@@ -15,11 +16,11 @@ console.log(endPoint)
 let socket = io.connect(endPoint);
 
 function App() {
-  const [selectedPile, setSelectedPile] = useState("");
   const [players, setPlayers] = useState([]);
+  const [inGame, setInGame] = useState(false);
+  const [gameID, setGameID] = useState("");
   const [playerName, setName] = useState("");
   const [piles, setPiles] = useState([[' ', '', ' ', ' ', ' '], [' ', ' ', ' ', '', ' '], [' ', ' ', ' ', '', ' '], [' ', ' ', ' ', ' ', '']]);
-
 
 
 
@@ -39,14 +40,14 @@ function App() {
     setName(e.target.value);
   };
 
-  const onChangePile = e => {
-    setSelectedPile(e.target.value);
+  const onChangeGameID = e => {
+    setGameID(e.target.value);
   };
 
 
   const onClickName = () => {
     if (playerName !== "") {
-      socket.emit("new_player", playerName);
+      socket.emit("new_player", { gameID: gameID, playerName: playerName });
     }
     else {
       alert("Please Add A Message")
@@ -54,47 +55,87 @@ function App() {
   }
 
   const reshuffle = () => {
-    socket.emit("reshuffle", playerName);
+    socket.emit("reshuffle", { gameID: gameID });
+
+  }
+
+  const checkIfGameExists = () =>{
+    axios
+    .post(endPoint + "/doesExist", {gameID: gameID})
+    .then(
+      res => {
+        let exist = res.data.exist
+        setInGame(exist)
+      },
+      error => {
+        console.log(error);
+      }
+    )
 
   }
 
   const newGame = () => {
-    socket.emit("new_game", playerName);
+    axios
+      .post(endPoint + "/getGameID", {})
+      .then(
+        res => {
+          let ID = res.data.gameID
+          setGameID(ID)
+          setInGame(true)
+        },
+        error => {
+          console.log(error);
+        }
+      )
 
   }
   const onClickCard = (card) => {
-    socket.emit("card_selected", { player: playerName, selectedCard: card });
+    socket.emit("card_selected", { gameID: gameID, playerName: playerName, selectedCard: card });
 
   }
 
   const getCardsButtons = (cards) => {
+    let i=0
     return cards.map(card => (
-      <button onClick={() => onClickCard(card)}>{card}</button>
+      <button key={i++} onClick={() => onClickCard(card)}>{card}</button>
     ))
   }
 
 
+const getCell=(key,value)=>{
+  return (
+    <div key={key}><textarea className="cell"
+      rows="1"
+      cols="8"
+      value={value}
+      readOnly={true}
+    ></textarea></div>)
+}
+
   const getOneRow = (piles, row) => {
     let myCols = [];
     for (let pile = 0; pile < 4; pile++) {
-      myCols.push(
-        <div ><textarea className="cell"
-          rows="1"
-          cols="8"
-          value={piles[pile][row]}
-          readOnly={true}
-        ></textarea></div>);
+      myCols.push(getCell(row*4+pile,piles[pile][row]))
     }
-    return <div className="flexRow">{myCols}</div>;
+    return <div className="flexRow" key={row}>{myCols}</div>;
+  }
+
+  const getHeaders = () => {
+    let myCols = [];
+    let pileHeaders = ['1','2','3','4']
+    for (let i = 0; i < 4; i++) {
+      myCols.push(getCell("header"+i,pileHeaders[i]))
+    }
+    return <div className="flexRow" key={"headers"}>{myCols}</div>;
   }
 
 
   const getRows = (piles) => {
     let myRows = [];
-    myRows.push(getOneRow([['A'], ['B'], ['C'], ['D']], 0))
+    myRows.push(getHeaders())
     for (let row = 0; row < 5; row++)
       myRows.push(getOneRow(piles, row));
-    return <div className="flexCol">{myRows}</div>;
+    return <div className="flexCol" >{myRows}</div>;
   }
 
   const getPilesJSX = (piles) => {
@@ -104,47 +145,56 @@ function App() {
   }
 
 
-
-  return (
-
-    <div className="App" >
-      <h1>take six, the remote version</h1>
-
-      <div >
+  if (!inGame) {
+    return(
+      <div className="App" >
+<div>
         <button onClick={() => newGame()}>משחק חדש</button>
-      </div>
-      <div>
-        <button onClick={() => reshuffle()}>ערבב מחדש</button>
-      </div>
-      <h1></h1>
-      <input value={playerName} name="playerName" onChange={e => onChange(e)} />
-      <button onClick={() => onClickName()}>עדכן שם</button>
-      {players.length > 0 &&
-        players.map(msg => {
-          if (msg.name == playerName)
-            return (
-              <div>
+        </div>
+      <input  name="game ID" onChange={e => onChangeGameID(e)} />
+      <button onClick={() => checkIfGameExists()}>כנס למשחק</button>
+    </div>
+    )
+  }
+  else
+    return (
 
-                <p>{getCardsButtons(msg.cards)}</p>
+      <div className="App" >
+        <h1>take six, the remote version</h1>
+        <h3>Game ID: {gameID}</h3>
+
+
+        <div>
+          <button onClick={() => reshuffle()}>ערבב מחדש</button>
+        </div>
+        <input value={playerName} name="playerName" onChange={e => onChange(e)} />
+        <button onClick={() => onClickName()}>עדכן שם</button>
+        {players.length > 0 &&
+          players.map(player => {
+            if (player.name === playerName)
+              return (
+                <div key={player.name}>
+                  <p>{getCardsButtons(player.cards)}</p>
+                </div>
+              )
+            else return <div key={player.name}></div>
+          })}
+
+        {players.length > 0 &&
+          players.map(player => {
+
+            return (
+              <div key={player.name}>
+                <p>{player.selectedCard + " " + player.name + "  בחר/ה"}</p>
               </div>
             )
-        })}
-     
-      {players.length > 0 &&
-        players.map(player => {
+          })
+        }
+        {getPilesJSX(piles)}
 
-          return (
-            <div >
-              <p>{player.selectedCard + " " + player.name + "  בחר/ה"}</p>
-            </div>
-          )
-        })
-      }
-      {getPilesJSX(piles)}
+      </div >
 
-    </div >
-
-  );
+    );
 }
 
 export default App;
