@@ -161,7 +161,7 @@ const getCardText = (card) => {
 
   const getHeaders = () => {
     let myCols = [];
-    let pileHeaders = ['1','2','3','4']
+    let pileHeaders = ['0','1','2','3']
     for (let i = 0; i < 4; i++) {
       myCols.push(getCell("header"+i,pileHeaders[i]))
     }
