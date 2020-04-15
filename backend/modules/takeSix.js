@@ -59,6 +59,16 @@ export function cardSelected(game, msg) {
     })
 }
 
+export function removePlayer(game,playerName){
+    let newPlayers = []
+    game.players.map(player=>{
+        if (player.name!==playerName)
+        newPlayers.push(player)
+    })
+    game.players = newPlayers
+}
+
+
 export function getPlayers(game) {
     return game.players
 }

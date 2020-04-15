@@ -1,6 +1,6 @@
 
 
-import { addPlayer,reshuffle , setSelectionMode,newGame, 
+import { addPlayer,reshuffle , setSelectionMode,newGame, removePlayer,
   updatePilesAndScores,cardSelected, getPlayers, getPiles} from '../modules/takeSix'
 import { getGame, addGame, doesGameIDExist} from '../modules/games'
 var cors = require('cors')
@@ -39,6 +39,12 @@ module.exports = function (io) {
       
       io.emit('players', {gameID:msg.gameID,players:getPlayers(getGame(msg.gameID))});
       io.emit('piles', {gameID:msg.gameID,piles:getPiles(getGame(msg.gameID))});
+    });
+    socket.on('remove_player', function (msg) {
+      console.log(msg)
+      removePlayer(getGame(msg.gameID),msg.playerName)
+      
+      io.emit('players', {gameID:msg.gameID,players:getPlayers(getGame(msg.gameID))});
     });
     socket.on('new_player', function (msg) {
       console.log(msg)
