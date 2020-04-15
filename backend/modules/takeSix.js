@@ -3,6 +3,7 @@ import { getShuffledPack, getCardsForPlayer } from './cards'
 export function getNewTakeSixGame() {
     let game = {}
     game.players = []
+    reshuffle(game)
     return game
 }
 
@@ -41,7 +42,7 @@ export function newGame(game) {
 
 export function cardSelected(game, msg) {
     game.players.map(player => {
-        if (player.name == msg.player) {
+        if (player.name == msg.playerName) {
             player.selectedCard = msg.selectedCard
             player.cards = player.cards.map(card => {
                 return card == msg.selectedCard ? "X" : card
