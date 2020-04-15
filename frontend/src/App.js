@@ -97,6 +97,7 @@ function App() {
   }
 
   const checkIfGameExists = () =>{
+    setIsManager(false)
     axios
     .post(endPoint + "/doesExist", {gameID: gameID})
     .then(
