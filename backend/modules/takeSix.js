@@ -3,10 +3,17 @@ import { getShuffledPack, getCardsForPlayer } from './cards'
 export function getNewTakeSixGame() {
     let game = {}
     game.players = []
+    game.allowSelection = true
     reshuffle(game)
     return game
 }
+export function setSelectionMode(game,allowSelection){
+    game.allowSelection=allowSelection
+    console.log(allowSelection)
+    if (!allowSelection)
+        game.players = game.players.sort(function (a, b) { return a.selectedCard.replace(/\*/g, '') - b.selectedCard.replace(/\*/g, '') })
 
+}
 
 export function addPlayer(game, name) {
     let cards
@@ -44,11 +51,11 @@ export function cardSelected(game, msg) {
     game.players.map(player => {
         if (player.name == msg.playerName) {
             player.selectedCard = msg.selectedCard
-            player.cards = player.cards.map(card => {
+        /* player.cards = player.cards.map(card => {
                 return card == msg.selectedCard ? "X" : card
-            })
+            })*/
         }
-        game.players = game.players.sort(function (a, b) { return a.selectedCard.replace(/\*/g, '') - b.selectedCard.replace(/\*/g, '') })
+        //game.players = game.players.sort(function (a, b) { return a.selectedCard.replace(/\*/g, '') - b.selectedCard.replace(/\*/g, '') })
 
     })
 }

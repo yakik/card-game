@@ -17,7 +17,9 @@ let socket = io.connect(endPoint);
 
 function App() {
   const [players, setPlayers] = useState([]);
+  const [allowSelection, setAllowSelection] = useState(true);
   const [inGame, setInGame] = useState(false);
+  const [isManager, setIsManager] = useState(false);
   const [gameID, setGameID] = useState("");
   const [playerName, setName] = useState("");
   const [piles, setPiles] = useState([[' ', '', ' ', ' ', ' '], [' ', ' ', ' ', '', ' '], [' ', ' ', ' ', '', ' '], [' ', ' ', ' ', ' ', '']]);
@@ -30,6 +32,10 @@ function App() {
     });
     socket.on("piles", msg => {
       setPiles(msg);
+    });
+    socket.on("selection_mode", msg => {
+      console.log(msg)
+      setAllowSelection(msg.allowSelection);
     });
 
   });
@@ -44,6 +50,10 @@ function App() {
     setGameID(e.target.value);
   };
 
+  const toggleSelection = () => {
+    socket.emit("selection_mode", { gameID: gameID, allowSelection:!allowSelection });
+  
+  };
 
   const onClickName = () => {
     if (playerName !== "") {
@@ -75,6 +85,7 @@ function App() {
   }
 
   const newGame = () => {
+    setIsManager(true)
     axios
       .post(endPoint + "/getGameID", {})
       .then(
@@ -163,9 +174,14 @@ const getCell=(key,value)=>{
         <h3>Game ID: {gameID}</h3>
 
 
+        {isManager?
         <div>
           <button onClick={() => reshuffle()}>ערבב מחדש</button>
+          <button onClick={() => toggleSelection()}>אפשר והסתר בחירה /חסום בחירה והראה</button>
+        </div>:<div>
+
         </div>
+}
         <input value={playerName} name="playerName" onChange={e => onChange(e)} />
         <button onClick={() => onClickName()}>עדכן שם</button>
         {players.length > 0 &&
@@ -181,10 +197,10 @@ const getCell=(key,value)=>{
 
         {players.length > 0 &&
           players.map(player => {
-
+console.log(allowSelection)
             return (
               <div key={player.name}>
-                <p>{player.selectedCard + " " + player.name + "  בחר/ה"}</p>
+                <p>{((allowSelection&&player.name!==playerName)?"X":player.selectedCard) + " " + player.name + "  בחר/ה"}</p>
               </div>
             )
           })
