@@ -6,7 +6,7 @@ export function getCardsForPlayer(oldPack) {
   let cards = []
   for (let u = 0; u < 10; u++)
     cards.push(pack.pop())
-  cards = cards.sort(function (a, b) { return a.replace(/\*/g, '') - b.replace(/\*/g, '') })
+  cards = cards.sort(function (a, b) { return a.number - b.number })
   return {cards:cards, pack:pack}
 }
 
@@ -14,17 +14,17 @@ export function getCardsForPlayer(oldPack) {
 export function getShuffledPack() {
   let pack = []
   for (let r = 0; r < 104; r++) {
-    pack.push(r + 1)
+    pack.push({number:(r + 1), sign:'', show:'--'})
     if (pack[r] == 55)
-      pack[r] = pack[r] + "*******"
+      pack[r].sign +=  "*******"
     else {
-      pack[r] = pack[r] + "*"
+      pack[r].sign+=  "*"
       if ((r + 1) % 11 == 0)
-        pack[r] = pack[r] + "****"
+        pack[r].sign +=  "****"
       if ((r + 1) % 10 == 0)
-        pack[r] = pack[r] + "**"
+        pack[r].sign+= "**"
       if ((r + 1) % 5 == 0 && (r + 1) % 10 != 0)
-        pack[r] = pack[r] + "*"
+        pack[r].sign+= "*"
     }
 
   }

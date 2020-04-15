@@ -9,14 +9,13 @@ if (process.env.NODE_ENV === "production") {
   endPoint = "https://card-game989.herokuapp.com"
 }
 
-console.log(process.env.NODE_ENV)
-console.log(endPoint)
 
 
 let socket = io.connect(endPoint);
 
 function App() {
   const [players, setPlayers] = useState([]);
+  const [playerSelection, setPlayerSelection] = useState("");
   const [allowSelection, setAllowSelection] = useState(true);
   const [inGame, setInGame] = useState(false);
   const [isManager, setIsManager] = useState(false);
@@ -34,8 +33,8 @@ function App() {
       setPiles(msg);
     });
     socket.on("selection_mode", msg => {
-      console.log(msg)
-      setAllowSelection(msg.allowSelection);
+      if (msg.gameID===gameID)
+        setAllowSelection(msg.allowSelection);
     });
 
   });
@@ -101,6 +100,7 @@ function App() {
 
   }
   const onClickCard = (card) => {
+    setPlayerSelection(card.number+card.sign)
     socket.emit("card_selected", { gameID: gameID, playerName: playerName, selectedCard: card });
 
   }
@@ -108,7 +108,7 @@ function App() {
   const getCardsButtons = (cards) => {
     let i=0
     return cards.map(card => (
-      <button key={i++} onClick={() => onClickCard(card)}>{card}</button>
+      <button key={i++} onClick={() => onClickCard(card)}>{card.number+card.sign}</button>
     ))
   }
 
@@ -123,10 +123,14 @@ const getCell=(key,value)=>{
     ></textarea></div>)
 }
 
+const getCardText = (card) => {
+  return card===undefined?"":card.number+card.sign
+}
+
   const getOneRow = (piles, row) => {
     let myCols = [];
     for (let pile = 0; pile < 4; pile++) {
-      myCols.push(getCell(row*4+pile,piles[pile][row]))
+      myCols.push(getCell(row*4+pile,getCardText(piles[pile][row])))
     }
     return <div className="flexRow" key={row}>{myCols}</div>;
   }
@@ -194,13 +198,13 @@ const getCell=(key,value)=>{
               )
             else return <div key={player.name}></div>
           })}
+          <div>{playerSelection + ":בחירתך"}</div>
 
         {players.length > 0 &&
           players.map(player => {
-console.log(allowSelection)
             return (
               <div key={player.name}>
-                <p>{((allowSelection&&player.name!==playerName)?"X":player.selectedCard) + " " + player.name + "  בחר/ה"}</p>
+                <p>{player.selectedCard.show + " " + player.name + "  בחר/ה"}</p>
               </div>
             )
           })
