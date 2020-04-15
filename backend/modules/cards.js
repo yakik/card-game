@@ -14,7 +14,7 @@ export function getCardsForPlayer(oldPack) {
 export function getShuffledPack() {
   let pack = []
   for (let r = 0; r < 104; r++) {
-    pack.push({number:(r + 1), sign:'', show:'--'})
+    pack.push({number:(r + 1), sign:'', points:0, show:'--'})
     if (pack[r] == 55)
       pack[r].sign +=  "*******"
     else {
@@ -25,6 +25,7 @@ export function getShuffledPack() {
         pack[r].sign+= "**"
       if ((r + 1) % 5 == 0 && (r + 1) % 10 != 0)
         pack[r].sign+= "*"
+      pack[r].points = pack[r].sign.length
     }
 
   }

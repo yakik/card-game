@@ -1,6 +1,7 @@
 
 
-import { addPlayer,reshuffle , setSelectionMode,newGame, cardSelected, getPlayers, getPiles} from '../modules/takeSix'
+import { addPlayer,reshuffle , setSelectionMode,newGame, 
+  updatePilesAndScores,cardSelected, getPlayers, getPiles} from '../modules/takeSix'
 import { getGame, addGame, doesGameIDExist} from '../modules/games'
 var cors = require('cors')
 var express = require('express');
@@ -33,6 +34,12 @@ module.exports = function (io) {
     console.log('User has connected to Index');
     //ON Events
    
+    socket.on('update_piles_And_scores', function (msg) {
+      updatePilesAndScores(getGame(msg.gameID),msg.selectedPile)
+      
+      io.emit('players', getPlayers(getGame(msg.gameID)));
+      io.emit('piles', getPiles(getGame(msg.gameID)));
+    });
     socket.on('new_player', function (msg) {
       addPlayer(getGame(msg.gameID),msg.playerName)
       
@@ -40,7 +47,6 @@ module.exports = function (io) {
       io.emit('piles', getPiles(getGame(msg.gameID)));
     });
     socket.on('selection_mode', function (msg) {
-      console.log('Hi!')
       setSelectionMode(getGame(msg.gameID),msg.allowSelection)
       io.emit('selection_mode', msg);
       io.emit('players', getPlayers(getGame(msg.gameID)));

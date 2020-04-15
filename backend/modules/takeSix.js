@@ -90,7 +90,7 @@ export function updatePilesAndScores(game, pileToReplace) {
 
     for (let playerIndex = 0; playerIndex < game.players.length; playerIndex++) {
         let t = whichPileToAdd(game.piles, game.players[playerIndex].selectedCard)
-        let newPileItem = { number: game.players[playerIndex].selectedCard.number, points: game.players[playerIndex].selectedCard.points }
+        let newPileItem = Object.assign({},game.players[playerIndex].selectedCard)
         if (t != -1) {
             if (game.piles[t].length == 5) {
                 for (let y = 0; y < game.piles[t].length; y++) {

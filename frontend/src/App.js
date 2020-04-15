@@ -14,6 +14,7 @@ if (process.env.NODE_ENV === "production") {
 let socket = io.connect(endPoint);
 
 function App() {
+  const [selectedPile, setSelectedPile] = useState('');
   const [players, setPlayers] = useState([]);
   const [playerSelection, setPlayerSelection] = useState("");
   const [allowSelection, setAllowSelection] = useState(true);
@@ -49,11 +50,23 @@ function App() {
     setGameID(e.target.value);
   };
 
+  const onChangeSelectedPile = e => {
+    setSelectedPile(e.target.value)
+  }
+
   const toggleSelection = () => {
     socket.emit("selection_mode", { gameID: gameID, allowSelection:!allowSelection });
   
   };
+  const updatePilesAndScores = () => {
+    socket.emit("update_piles_And_scores", { gameID: gameID, selectedPile:selectedPile });
+    socket.emit("selection_mode", { gameID: gameID, allowSelection:!allowSelection });
+  
+  };
 
+
+
+  
   const onClickName = () => {
     if (playerName !== "") {
       socket.emit("new_player", { gameID: gameID, playerName: playerName });
@@ -182,7 +195,10 @@ const getCardText = (card) => {
         <div>
           <button onClick={() => reshuffle()}>ערבב מחדש</button>
           <button onClick={() => toggleSelection()}>אפשר והסתר בחירה /חסום בחירה והראה</button>
+          <button onClick={() => updatePilesAndScores()}>שייך כרטיסים לערימות</button>
+          <input  name="selected Pile" onChange={e => onChangeSelectedPile(e)} />
         </div>:<div>
+          
 
         </div>
 }
@@ -204,7 +220,7 @@ const getCardText = (card) => {
           players.map(player => {
             return (
               <div key={player.name}>
-                <p>{player.selectedCard.show + " " + player.name + "  בחר/ה"}</p>
+                <p>{player.name + "  Score: " + player.score + "  selection: " + player.selectedCard.show}</p>
               </div>
             )
           })
