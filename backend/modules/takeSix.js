@@ -77,8 +77,23 @@ export function getPiles(game) {
     return game.piles
 }
 
+export function whichPileToAdd(piles, selectedCard) {
 
-export function whichPileToAdd(piles,selectedCard) {
+    let maxAndLength = []
+    for (let i = 0; i < piles.length; i++) {
+        maxAndLength.push({ pile: i, max: piles[i][piles[i].length - 1].number })
+    }
+    maxAndLength = maxAndLength.sort(function (a, b) { return a.max - b.max })
+    if (selectedCard.number < maxAndLength[0].max) {
+        return -1
+    }
+
+    for (let i = maxAndLength.length - 1; i >= 0; i--)
+        if (selectedCard.number > maxAndLength[i].max)
+            return maxAndLength[i].pile
+}
+
+/*export function whichPileToAdd(piles,selectedCard) {
     for (let l = 0; l < 101; l++) {
         for (let i = 0; i < piles.length; i++) {
             for (let r = 0; r < piles[i].length; r++) {
@@ -91,7 +106,7 @@ export function whichPileToAdd(piles,selectedCard) {
             }
         }
     }
-}
+}*/
 
 
 export function updatePilesAndScores(game, pileToReplace) {
