@@ -113,6 +113,7 @@ export function updatePilesAndScores(game, pileToReplace) {
             }
         }
         if (t == -1) {
+            if (pileToReplace===undefined) return
             for (let y = 0; y < game.piles[pileToReplace].length; y++) {
                 game.players[playerIndex].score += game.piles[pileToReplace][y].points
             }
