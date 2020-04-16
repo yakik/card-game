@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import io from "socket.io-client"
 import './App.css';
 import axios from "axios"
+import { Piles } from "./piles";
 
 let endPoint = "http://localhost:5000"
 
@@ -28,23 +29,14 @@ function App() {
 
   useEffect(() => {
     socket.on("players", msg => {
-      console.log('XXXX')
-      console.log(msg.gameID)
-      console.log(gameID)
       if (msg.gameID === gameID)
         setPlayers(msg.players);
     });
     socket.on("piles", msg => {
-      console.log('YYY')
-      console.log(msg.gameID)
-      console.log(gameID)
       if (msg.gameID === gameID)
       setPiles(msg.piles);
     });
     socket.on("selection_mode", msg => {
-      console.log('ZZZZ')
-      console.log(msg.gameID)
-      console.log(gameID)
       if (msg.gameID===gameID)
         setAllowSelection(msg.allowSelection);
     });
@@ -142,50 +134,9 @@ function App() {
   }
 
 
-const getCell=(key,value)=>{
-  return (
-    <div key={key}><textarea className="cell"
-      rows="1"
-      cols="8"
-      value={value}
-      readOnly={true}
-    ></textarea></div>)
-}
 
-const getCardText = (card) => {
-  return card===undefined?"":card.number+card.sign
-}
 
-  const getOneRow = (piles, row) => {
-    let myCols = [];
-    for (let pile = 0; pile < 4; pile++) {
-      myCols.push(getCell(row*4+pile,getCardText(piles[pile][row])))
-    }
-    return <div className="flexRow" key={row}>{myCols}</div>;
-  }
 
-  const getHeaders = () => {
-    let myCols = [];
-    let pileHeaders = ['0','1','2','3']
-    for (let i = 0; i < 4; i++) {
-      myCols.push(getCell("header"+i,pileHeaders[i]))
-    }
-    return <div className="flexRow" key={"headers"}>{myCols}</div>;
-  }
-
-  const getRows = (piles) => {
-    let myRows = [];
-    myRows.push(getHeaders())
-    for (let row = 0; row < 5; row++)
-      myRows.push(getOneRow(piles, row));
-    return <div className="flexCol" >{myRows}</div>;
-  }
-
-  const getPilesJSX = (piles) => {
-    return (
-      <div className="flexGrid" >{getRows(piles)}</div>
-    );
-  }
 
 
   if (!inGame) {
@@ -251,7 +202,7 @@ const getCardText = (card) => {
             )
           })
         }
-        {getPilesJSX(piles)}
+        <Piles piles={piles}/>
 
       </div >
 
