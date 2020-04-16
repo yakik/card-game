@@ -3,9 +3,10 @@ import io from "socket.io-client"
 import './App.css';
 import axios from "axios"
 
-import {isManager, setIsManager} from '../stateManager/state'
+import { isManager, setIsManager } from '../stateManager/state'
 import { Piles } from "./piles";
 import { PlayersList } from "./playersList";
+import { Management } from "./management";
 
 let endPoint = "http://localhost:5000"
 
@@ -156,30 +157,11 @@ function App() {
         <h3>Game ID: {gameID}</h3>
 
 
-        {isManager() ?
-          <div>
-            <button onClick={() => reshuffle()}>ערבב מחדש</button>
-            <button onClick={() => toggleSelection()}>אפשר והסתר בחירה /חסום בחירה והראה</button>
-            <button onClick={() => updatePilesAndScores()}>שייך כרטיסים לערימות</button>
-            <input name="selected Pile" onChange={e => onChangeSelectedPile(e)} />
-
-            {players.length > 0 &&
-              players.map(player => {
-                return (
-                  <div key={player.name}>
-                    <button onClick={() => removePlayer(player.name)}>{player.name}</button>
-                  </div>
-                )
-              })
-            }
-          </div> : <div>
-
-
-          </div>
-        }
+        
+<Management isManager={isManager} reshuffle={reshuffle} toggleSelection={toggleSelection}
+ updatePilesAndScores={updatePilesAndScores} players={players} onChangeSelectedPile={onChangeSelectedPile} removePlayer={removePlayer}/>
+        
         <input value={playerName} name="playerName" onChange={e => onChange(e)} />
-        
-        
         <button onClick={() => onClickName()}>עדכן שם</button>
         {players.length > 0 &&
           players.map(player => {
@@ -193,7 +175,7 @@ function App() {
           })}
         <div>{playerSelection + ":בחירתך"}</div>
 
-     <PlayersList players={players}/>
+        <PlayersList players={players} />
         <Piles piles={piles} />
 
       </div >
