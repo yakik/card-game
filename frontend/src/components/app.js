@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import io from "socket.io-client"
 import './App.css';
-import axios from "axios"
 
-import { isManager, setIsManager } from '../stateManager/state'
 import { Piles } from "./piles";
 import { PlayersList } from "./playersList";
 import { Management } from "./management";
 import { CardSelection } from "./cardSelection";
+import { Start } from "./start";
 
 let endPoint = "http://localhost:5000"
 
@@ -25,7 +24,7 @@ function App() {
   const [playerSelection, setPlayerSelection] = useState("");
   const [allowSelection, setAllowSelection] = useState(true);
   const [inGame, setInGame] = useState(false);
-  //const [isManager, setIsManager] = useState(false);
+  const [isManager, setIsManager] = useState(false);
   const [gameID, setGameID] = useState("");
   const [playerName, setName] = useState("");
   const [piles, setPiles] = useState([[' ', '', ' ', ' ', ' '], [' ', ' ', ' ', '', ' '], [' ', ' ', ' ', '', ' '], [' ', ' ', ' ', ' ', '']]);
@@ -43,15 +42,10 @@ function App() {
       if (msg.gameID === gameID)
         setAllowSelection(msg.allowSelection);
     });
-
   });
 
   const onChange = e => {
     setName(e.target.value);
-  };
-
-  const onChangeGameID = e => {
-    setGameID(e.target.value);
   };
 
   const onChangeSelectedPile = e => {
@@ -60,14 +54,11 @@ function App() {
 
   const toggleSelection = () => {
     socket.emit("selection_mode", { gameID: gameID, allowSelection: !allowSelection });
-
   };
-
 
   const updatePilesAndScores = () => {
     socket.emit("update_piles_And_scores", { gameID: gameID, selectedPile: selectedPile });
     socket.emit("selection_mode", { gameID: gameID, allowSelection: !allowSelection });
-
   };
 
   const onClickName = () => {
@@ -79,49 +70,9 @@ function App() {
     }
   }
 
-  const checkIfGameExists = () => {
-    setIsManager(false)
-    axios
-      .post(endPoint + "/doesExist", { gameID: gameID })
-      .then(
-        res => {
-          let exist = res.data.exist
-          setInGame(exist)
-        },
-        error => {
-          console.log(error);
-        }
-      )
-  }
 
-  const newGame = () => {
-    setIsManager(true)
-    axios
-      .post(endPoint + "/getGameID", {})
-      .then(
-        res => {
-          let ID = res.data.gameID
-          setGameID(ID)
-          setInGame(true)
-        },
-        error => {
-          console.log(error);
-        }
-      )
-
-  }
-
-  if (!inGame) {
-    return (
-      <div className="App" >
-        <div>
-          <button onClick={() => newGame()}>משחק חדש</button>
-        </div>
-        <input name="game ID" onChange={e => onChangeGameID(e)} />
-        <button onClick={() => checkIfGameExists()}>כנס למשחק</button>
-      </div>
-    )
-  }
+  if (!inGame)
+    return <Start setIsManager={setIsManager} gameID={gameID} endPoint={endPoint} setInGame={setInGame} setGameID={setGameID} />
   else
     return (
 
