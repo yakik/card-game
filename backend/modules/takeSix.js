@@ -4,6 +4,7 @@ export function getNewTakeSixGame() {
     let game = {}
     game.players = []
     game.allowSelection = true
+    game.state = "new"
     reshuffle(game)
     return game
 }
@@ -14,7 +15,6 @@ export function setSelectionMode(game, allowSelection) {
         for (let i = 0; i < game.players.length; i++)
             game.players[i].selectedCard.show = game.players[i].selectedCard.number + game.players[i].selectedCard.sign
     }
-
 }
 
 export function addPlayer(game, name) {
