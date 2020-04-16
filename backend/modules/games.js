@@ -19,7 +19,7 @@ export function doesGameIDExist(gameID){
 
 export function addGame(type)
 {
-    let newGameID = Math.round(Math.random() * 999999).toString()
+    let newGameID = Math.round(Math.random() * 99).toString()
     if (type==="Take Six"){
         games.push({ID:newGameID,game:getNewTakeSixGame()})
     }
