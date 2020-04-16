@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import io from "socket.io-client"
 import './App.css';
 import axios from "axios"
-import { Piles } from "./piles";
+
 import {isManager, setIsManager} from '../stateManager/state'
+import { Piles } from "./piles";
+import { PlayersList } from "./playersList";
 
 let endPoint = "http://localhost:5000"
 
@@ -135,11 +137,6 @@ function App() {
   }
 
 
-
-
-
-
-
   if (!inGame) {
     return (
       <div className="App" >
@@ -196,15 +193,7 @@ function App() {
           })}
         <div>{playerSelection + ":בחירתך"}</div>
 
-        {players.length > 0 &&
-          players.map(player => {
-            return (
-              <div key={player.name}>
-                <p>{player.name + "  Score: " + player.score + "  selection: " + player.selectedCard.show}</p>
-              </div>
-            )
-          })
-        }
+     <PlayersList players={players}/>
         <Piles piles={piles} />
 
       </div >
