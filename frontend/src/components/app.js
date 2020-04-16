@@ -7,6 +7,7 @@ import { isManager, setIsManager } from '../stateManager/state'
 import { Piles } from "./piles";
 import { PlayersList } from "./playersList";
 import { Management } from "./management";
+import { CardSelection } from "./cardSelection";
 
 let endPoint = "http://localhost:5000"
 
@@ -29,8 +30,6 @@ function App() {
   const [playerName, setName] = useState("");
   const [piles, setPiles] = useState([[' ', '', ' ', ' ', ' '], [' ', ' ', ' ', '', ' '], [' ', ' ', ' ', '', ' '], [' ', ' ', ' ', ' ', '']]);
 
-
-
   useEffect(() => {
     socket.on("players", msg => {
       if (msg.gameID === gameID)
@@ -46,8 +45,6 @@ function App() {
     });
 
   });
-
-
 
   const onChange = e => {
     setName(e.target.value);
@@ -66,17 +63,12 @@ function App() {
 
   };
 
-  const removePlayer = (playerName) => {
-    socket.emit("remove_player", { gameID: gameID, playerName: playerName });
-  };
+
   const updatePilesAndScores = () => {
     socket.emit("update_piles_And_scores", { gameID: gameID, selectedPile: selectedPile });
     socket.emit("selection_mode", { gameID: gameID, allowSelection: !allowSelection });
 
   };
-
-
-
 
   const onClickName = () => {
     if (playerName !== "") {
@@ -85,11 +77,6 @@ function App() {
     else {
       alert("Please Add A Message")
     }
-  }
-
-  const reshuffle = () => {
-    socket.emit("reshuffle", { gameID: gameID });
-
   }
 
   const checkIfGameExists = () => {
@@ -105,7 +92,6 @@ function App() {
           console.log(error);
         }
       )
-
   }
 
   const newGame = () => {
@@ -124,19 +110,6 @@ function App() {
       )
 
   }
-  const onClickCard = (card) => {
-    setPlayerSelection(card.number + card.sign)
-    socket.emit("card_selected", { gameID: gameID, playerName: playerName, selectedCard: card });
-
-  }
-
-  const getCardsButtons = (cards) => {
-    let i = 0
-    return cards.map(card => (
-      <button key={i++} onClick={() => onClickCard(card)}>{card.number + card.sign}</button>
-    ))
-  }
-
 
   if (!inGame) {
     return (
@@ -156,25 +129,13 @@ function App() {
         <h1>take six, the remote version</h1>
         <h3>Game ID: {gameID}</h3>
 
+        <Management playerName={playerName} gameID={gameID} socket={socket} isManager={isManager} toggleSelection={toggleSelection}
+          updatePilesAndScores={updatePilesAndScores} players={players} onChangeSelectedPile={onChangeSelectedPile} />
 
-        
-<Management isManager={isManager} reshuffle={reshuffle} toggleSelection={toggleSelection}
- updatePilesAndScores={updatePilesAndScores} players={players} onChangeSelectedPile={onChangeSelectedPile} removePlayer={removePlayer}/>
-        
         <input value={playerName} name="playerName" onChange={e => onChange(e)} />
         <button onClick={() => onClickName()}>עדכן שם</button>
-        {players.length > 0 &&
-          players.map(player => {
-            if (player.name === playerName)
-              return (
-                <div key={player.name}>
-                  <p>{getCardsButtons(player.cards)}</p>
-                </div>
-              )
-            else return <div key={player.name}></div>
-          })}
-        <div>{playerSelection + ":בחירתך"}</div>
 
+        <CardSelection playerName={playerName} setPlayerSelection={setPlayerSelection} playerSelection={playerSelection} gameID={gameID} socket={socket} players={players} />
         <PlayersList players={players} />
         <Piles piles={piles} />
 
