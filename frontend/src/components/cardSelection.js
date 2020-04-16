@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 
-export function CardSelection({ setPlayerSelection, playerSelection, playerName, gameID,socket, players }) {
+export function CardSelection({ playerName, gameID,socket, players }) {
+    const [playerSelection, setPlayerSelection] = useState("");
 
     const onClickCard = (socket,card) => {
         setPlayerSelection(card.number + card.sign)

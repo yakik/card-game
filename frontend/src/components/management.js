@@ -1,14 +1,29 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 
-export function Management({ gameID, socket, players, isManager, toggleSelection, updatePilesAndScores, onChangeSelectedPile }) {
+export function Management({ allowSelection, gameID, socket, players, isManager }) {
+    
+    const [selectedPile, setSelectedPile] = useState('');
+    
     const removePlayer = (socket, playerName) => {
         socket.emit("remove_player", { gameID: gameID, playerName: playerName });
     };
 
     const reshuffle = (socket) => {
         socket.emit("reshuffle", { gameID: gameID });
+    }
 
+    const toggleSelection = () => {
+        socket.emit("selection_mode", { gameID: gameID, allowSelection: !allowSelection });
+    };
+
+    const updatePilesAndScores = () => {
+        socket.emit("update_piles_And_scores", { gameID: gameID, selectedPile: selectedPile });
+        socket.emit("selection_mode", { gameID: gameID, allowSelection: !allowSelection });
+    };
+
+    const onChangeSelectedPile = e => {
+        setSelectedPile(e.target.value)
     }
 
     if (isManager)
@@ -29,6 +44,6 @@ export function Management({ gameID, socket, players, isManager, toggleSelection
                     })
                 }
             </div>)
-        else
-            return <div></div>
+    else
+        return <div></div>
 }

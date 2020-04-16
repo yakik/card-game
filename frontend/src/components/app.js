@@ -14,14 +14,11 @@ if (process.env.NODE_ENV === "production") {
   endPoint = "https://card-game989.herokuapp.com"
 }
 
-
-
 let socket = io.connect(endPoint);
 
 function App() {
-  const [selectedPile, setSelectedPile] = useState('');
+  
   const [players, setPlayers] = useState([]);
-  const [playerSelection, setPlayerSelection] = useState("");
   const [allowSelection, setAllowSelection] = useState(true);
   const [inGame, setInGame] = useState(false);
   const [isManager, setIsManager] = useState(false);
@@ -48,19 +45,6 @@ function App() {
     setName(e.target.value);
   };
 
-  const onChangeSelectedPile = e => {
-    setSelectedPile(e.target.value)
-  }
-
-  const toggleSelection = () => {
-    socket.emit("selection_mode", { gameID: gameID, allowSelection: !allowSelection });
-  };
-
-  const updatePilesAndScores = () => {
-    socket.emit("update_piles_And_scores", { gameID: gameID, selectedPile: selectedPile });
-    socket.emit("selection_mode", { gameID: gameID, allowSelection: !allowSelection });
-  };
-
   const onClickName = () => {
     if (playerName !== "") {
       socket.emit("new_player", { gameID: gameID, playerName: playerName });
@@ -69,7 +53,6 @@ function App() {
       alert("Please Add A Message")
     }
   }
-
 
   if (!inGame)
     return <Start setIsManager={setIsManager} gameID={gameID} endPoint={endPoint} setInGame={setInGame} setGameID={setGameID} />
@@ -80,13 +63,12 @@ function App() {
         <h1>take six, the remote version</h1>
         <h3>Game ID: {gameID}</h3>
 
-        <Management playerName={playerName} gameID={gameID} socket={socket} isManager={isManager} toggleSelection={toggleSelection}
-          updatePilesAndScores={updatePilesAndScores} players={players} onChangeSelectedPile={onChangeSelectedPile} />
+        <Management allowSelection={allowSelection} playerName={playerName} gameID={gameID} socket={socket} isManager={isManager} players={players} />
 
         <input value={playerName} name="playerName" onChange={e => onChange(e)} />
         <button onClick={() => onClickName()}>עדכן שם</button>
 
-        <CardSelection playerName={playerName} setPlayerSelection={setPlayerSelection} playerSelection={playerSelection} gameID={gameID} socket={socket} players={players} />
+        <CardSelection playerName={playerName} gameID={gameID} socket={socket} players={players} />
         <PlayersList players={players} />
         <Piles piles={piles} />
 
