@@ -7,8 +7,8 @@ export function getNewTakeSixGame() {
     reshuffle(game)
     return game
 }
-export function setSelectionMode(game,allowSelection){
-    game.allowSelection=allowSelection
+export function setSelectionMode(game, allowSelection) {
+    game.allowSelection = allowSelection
     if (!allowSelection) {
         game.players = game.players.sort(function (a, b) { return a.selectedCard.number - b.selectedCard.number })
         for (let i = 0; i < game.players.length; i++)
@@ -22,7 +22,7 @@ export function addPlayer(game, name) {
     let a = getCardsForPlayer(game.pack)
     cards = a.cards
     game.pack = a.pack
-    game.players.push({ name: name, score: 0, cards: cards, selectedCard:{number:"X",sign:"", show:'--'}})
+    game.players.push({ name: name, score: 0, cards: cards, selectedCard: { number: "X", sign: "", show: '--' } })
 }
 
 export function reshuffle(game) {
@@ -34,7 +34,7 @@ export function reshuffle(game) {
     game.players.map(player => {
         player.cards = cards
         player.score = 0
-        player.selectedCard = {number:"X",sign:""}
+        player.selectedCard = { number: "X", sign: "" }
     })
     game.piles = [[], [], [], []]
     for (let i = 0; i < 4; i++)
@@ -59,11 +59,11 @@ export function cardSelected(game, msg) {
     })
 }
 
-export function removePlayer(game,playerName){
+export function removePlayer(game, playerName) {
     let newPlayers = []
-    game.players.map(player=>{
-        if (player.name!==playerName)
-        newPlayers.push(player)
+    game.players.map(player => {
+        if (player.name !== playerName)
+            newPlayers.push(player)
     })
     game.players = newPlayers
 }
@@ -80,6 +80,8 @@ export function getPiles(game) {
 export function whichPileToAdd(piles, selectedCard) {
 
     let maxAndLength = []
+    if (isNaN(selectedCard.number))
+        return -1
     for (let i = 0; i < piles.length; i++) {
         maxAndLength.push({ pile: i, max: piles[i][piles[i].length - 1].number })
     }
@@ -91,22 +93,8 @@ export function whichPileToAdd(piles, selectedCard) {
     for (let i = maxAndLength.length - 1; i >= 0; i--)
         if (selectedCard.number > maxAndLength[i].max)
             return maxAndLength[i].pile
-}
 
-/*export function whichPileToAdd(piles,selectedCard) {
-    for (let l = 0; l < 101; l++) {
-        for (let i = 0; i < piles.length; i++) {
-            for (let r = 0; r < piles[i].length; r++) {
-                if ((piles[i][r].number) + l == selectedCard.number) {
-                    return (i)
-                }
-                if (l == 100) {
-                    return (-1)
-                }
-            }
-        }
-    }
-}*/
+}
 
 
 export function updatePilesAndScores(game, pileToReplace) {
@@ -115,8 +103,10 @@ export function updatePilesAndScores(game, pileToReplace) {
 
     for (let playerIndex = 0; playerIndex < game.players.length; playerIndex++) {
         let t = whichPileToAdd(game.piles, game.players[playerIndex].selectedCard)
-        let newPileItem = Object.assign({},game.players[playerIndex].selectedCard)
+        let newPileItem = Object.assign({}, game.players[playerIndex].selectedCard)
         if (t != -1) {
+            if (game.piles[t] === undefined)
+                return
             if (game.piles[t].length == 5) {
                 for (let y = 0; y < game.piles[t].length; y++) {
                     game.players[playerIndex].score += game.piles[t][y].points
@@ -128,7 +118,9 @@ export function updatePilesAndScores(game, pileToReplace) {
             }
         }
         if (t == -1) {
-            if (pileToReplace===undefined) return
+            if (game.piles[pileToReplace] === undefined)
+                return
+            
             for (let y = 0; y < game.piles[pileToReplace].length; y++) {
                 game.players[playerIndex].score += game.piles[pileToReplace][y].points
             }
@@ -140,8 +132,8 @@ export function updatePilesAndScores(game, pileToReplace) {
                 newCards.push(card)
         })
         game.players[playerIndex].cards = newCards
-        game.players[playerIndex].selectedCard.show="--"
-        game.players[playerIndex].selectedCard.number=""
+        game.players[playerIndex].selectedCard.show = "--"
+        game.players[playerIndex].selectedCard.number = ""
 
     }
 }
