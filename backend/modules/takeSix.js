@@ -1,5 +1,7 @@
 import { getShuffledPack, getCardsForPlayer } from './cards'
 
+//adding_players -> select_cards -> all_selected -> cards_to_piles -> select cards
+
 export function getNewGame() {
     let game = {}
     game.players = []
@@ -8,13 +10,10 @@ export function getNewGame() {
     reshuffle(game)
     return game
 }
-export function setSelectionMode(game, allowSelection) {
-    game.allowSelection = allowSelection
-    if (!allowSelection) {
+export function revealCards(game) {
         game.players = game.players.sort(function (a, b) { return a.selectedCard.number - b.selectedCard.number })
         for (let i = 0; i < game.players.length; i++)
             game.players[i].selectedCard.show = game.players[i].selectedCard.number + game.players[i].selectedCard.sign
-    }
 }
 
 export function addNewPlayer(game, name) {
@@ -58,13 +57,21 @@ export function newGame(game) {
 }
 
 export function cardSelected(game, msg) {
+    
     game.players.map(player => {
         if (player.name == msg.playerName) {
             player.selectedCard = msg.selectedCard
             player.selectedCard.show = "?"
         }
-
     })
+    let numberOfPlayersWithSelection = 0
+    game.players.map(player => {
+        if (player.selectedCard.show === "?")
+            numberOfPlayersWithSelection++
+    })
+    if (numberOfPlayersWithSelection===game.players.length)
+        game.state = "all_selected"
+
 }
 
 export function removePlayer(game, playerName) {

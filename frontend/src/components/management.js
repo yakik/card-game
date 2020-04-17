@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 
 
-export function Management({ allowSelection, gameID, socket, players, isManager }) {
+export function Management({ allowSelection, gameID, socket, players, isManager, gameState }) {
     
     const [selectedPile, setSelectedPile] = useState('');
     
@@ -14,11 +14,11 @@ export function Management({ allowSelection, gameID, socket, players, isManager 
     }
 
     const startGame = (socket) => {
-        socket.emit("start_game", { gameID: gameID });
+        socket.emit("select_cards", { gameID: gameID });
     }
 
-    const toggleSelection = () => {
-        socket.emit("selection_mode", { gameID: gameID, allowSelection: !allowSelection });
+    const revealCards = () => {
+        socket.emit("reveal_cards", { gameID: gameID });
     };
 
     const updatePilesAndScores = () => {
@@ -35,7 +35,7 @@ export function Management({ allowSelection, gameID, socket, players, isManager 
             <div>
                 <button onClick={() => reshuffle(socket)}>ערבב מחדש</button>
                 <button onClick={() => startGame(socket)}>התחל המשחק</button>
-                <button onClick={() => toggleSelection()}>אפשר והסתר בחירה /חסום בחירה והראה</button>
+                <button disabled={gameState!=="all_selected"?true:false} onClick={() => revealCards()}>גלה קלפים</button>
                 <button onClick={() => updatePilesAndScores()}>שייך כרטיסים לערימות</button>
                 <input name="selected Pile" onChange={e => onChangeSelectedPile(e)} />
 

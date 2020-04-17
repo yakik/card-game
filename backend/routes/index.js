@@ -1,6 +1,6 @@
 
 
-import { reshuffle , setSelectionMode,newGame, removePlayer,
+import { reshuffle , revealCards, removePlayer,
   updatePilesAndScores,cardSelected, updateState} from '../modules/takeSix'
 import { getGame, addGame, doesGameIDExist, addPlayer} from '../modules/games'
 var cors = require('cors')
@@ -23,7 +23,7 @@ router.post('/joinGame', cors(corsOptions), (req, res) => {
   let exist = doesGameIDExist(req.body.gameID)
   let status = true
   if (exist)
-    status=addPlayer(getGame(req.body.gameID),req.body.playerName)
+    status=addPlayer(req.body.gameID,req.body.playerName)
   return res.json({ success: status, exist: exist });
 });
 
@@ -56,8 +56,9 @@ module.exports = function (io) {
       addPlayer(msg.gameID,msg.playerName)
       sendState(io,msg.gameID,getGame(msg.gameID))
     });*/
-    socket.on('selection_mode', function (msg) {
-      setSelectionMode(getGame(msg.gameID),msg.allowSelection)
+    socket.on('reveal_cards', function (msg) {
+      updateState(getGame(msg.gameID),"cards_to_piles")
+      revealCards(getGame(msg.gameID))
       sendState(io,msg.gameID,getGame(msg.gameID))
     });
    
