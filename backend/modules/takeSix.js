@@ -1,27 +1,24 @@
 import { getShuffledPack, getCardsForPlayer } from './cards'
 
-//adding_players -> select_cards -> all_selected -> cards_to_piles -> select cards
+//select_cards -> all_selected -> cards_to_piles -> select cards
 
 export function getNewGame() {
     let game = {}
     game.players = []
     game.allowSelection = true
-    game.state = "adding_players"
+    game.state = "select_cards"
     reshuffle(game)
     return game
 }
 export function revealCards(game) {
-        game.players = game.players.sort(function (a, b) { return a.selectedCard.number - b.selectedCard.number })
-        for (let i = 0; i < game.players.length; i++)
-            game.players[i].selectedCard.show = game.players[i].selectedCard.number + game.players[i].selectedCard.sign
+    game.players = game.players.sort(function (a, b) { return a.selectedCard.number - b.selectedCard.number })
+    for (let i = 0; i < game.players.length; i++)
+        game.players[i].selectedCard.show = game.players[i].selectedCard.number + game.players[i].selectedCard.sign
 }
 
 export function addNewPlayer(game, name) {
     let cards
     let a = getCardsForPlayer(game.pack)
-    console.log(game.state)
-    if (game.state!=="adding_players")
-        return false
     cards = a.cards
     game.pack = a.pack
     game.players.push({ name: name, score: 0, cards: cards, selectedCard: { number: "X", sign: "", show: '--' } })
@@ -29,16 +26,17 @@ export function addNewPlayer(game, name) {
 }
 
 export function updateState(game, state) {
-    game.state=state
+    game.state = state
 }
 
 export function reshuffle(game) {
     let cards
     game.pack = getShuffledPack()
-    let a = getCardsForPlayer(game.pack)
-    cards = a.cards
-    game.pack = a.pack
+
     game.players.map(player => {
+        let a = getCardsForPlayer(game.pack)
+        cards = a.cards
+        game.pack = a.pack
         player.cards = cards
         player.score = 0
         player.selectedCard = { number: "X", sign: "" }
@@ -57,7 +55,7 @@ export function newGame(game) {
 }
 
 export function cardSelected(game, msg) {
-    
+
     game.players.map(player => {
         if (player.name == msg.playerName) {
             player.selectedCard = msg.selectedCard
@@ -69,7 +67,7 @@ export function cardSelected(game, msg) {
         if (player.selectedCard.show === "?")
             numberOfPlayersWithSelection++
     })
-    if (numberOfPlayersWithSelection===game.players.length)
+    if (numberOfPlayersWithSelection === game.players.length)
         game.state = "all_selected"
 
 }
@@ -112,43 +110,56 @@ export function whichPileToAdd(piles, selectedCard) {
 }
 
 
-export function updatePilesAndScores(game, pileToReplace) {
+export function updatePilesAndScores(game, pileToReplace, numberOfPlayersToProcess) {
 
     game.players = game.players.sort(function (a, b) { return a.selectedCard.number - b.selectedCard.number })
-
+    let processedPlayers = 0
+    let howManyToProcess = 0
+    game.players.map(player => {
+        if (player.selectedCard.show !== "--")
+            howManyToProcess++
+    })
     for (let playerIndex = 0; playerIndex < game.players.length; playerIndex++) {
-        let t = whichPileToAdd(game.piles, game.players[playerIndex].selectedCard)
-        let newPileItem = Object.assign({}, game.players[playerIndex].selectedCard)
-        if (t != -1) {
-            if (game.piles[t] === undefined)
-                return
-            if (game.piles[t].length == 5) {
-                for (let y = 0; y < game.piles[t].length; y++) {
-                    game.players[playerIndex].score += game.piles[t][y].points
+        if (game.players[playerIndex].selectedCard.show !== '--') {
+            let t = whichPileToAdd(game.piles, game.players[playerIndex].selectedCard)
+            let newPileItem = Object.assign({}, game.players[playerIndex].selectedCard)
+            if (t != -1) {
+                if (game.piles[t] === undefined)
+                    return
+                if (game.piles[t].length == 5) {
+                    for (let y = 0; y < game.piles[t].length; y++) {
+                        game.players[playerIndex].score += game.piles[t][y].points
+                    }
+                    game.piles[t] = [newPileItem]
                 }
-                game.piles[t] = [newPileItem]
+                else {
+                    game.piles[t].push(newPileItem)
+                }
             }
-            else {
-                game.piles[t].push(newPileItem)
-            }
-        }
-        if (t == -1) {
-            if (game.piles[pileToReplace] === undefined)
-                return
-            
-            for (let y = 0; y < game.piles[pileToReplace].length; y++) {
-                game.players[playerIndex].score += game.piles[pileToReplace][y].points
-            }
-            game.piles[pileToReplace] = [newPileItem]
-        }
-        let newCards = []
-        game.players[playerIndex].cards.map(card => {
-            if (card.number !== game.players[playerIndex].selectedCard.number)
-                newCards.push(card)
-        })
-        game.players[playerIndex].cards = newCards
-        game.players[playerIndex].selectedCard.show = "--"
-        game.players[playerIndex].selectedCard.number = ""
+            if (t == -1) {
+                if (game.piles[pileToReplace] === undefined)
+                    return
 
+                for (let y = 0; y < game.piles[pileToReplace].length; y++) {
+                    game.players[playerIndex].score += game.piles[pileToReplace][y].points
+                }
+                game.piles[pileToReplace] = [newPileItem]
+            }
+            let newCards = []
+            game.players[playerIndex].cards.map(card => {
+                if (card.number !== game.players[playerIndex].selectedCard.number)
+                    newCards.push(card)
+            })
+            game.players[playerIndex].cards = newCards
+            game.players[playerIndex].selectedCard.show = "--"
+            game.players[playerIndex].selectedCard.number = ""
+
+            processedPlayers++
+            if (processedPlayers == numberOfPlayersToProcess)
+                return (howManyToProcess - processedPlayers)
+            if (processedPlayers === howManyToProcess)
+                return (howManyToProcess - processedPlayers)
+
+        }
     }
 }

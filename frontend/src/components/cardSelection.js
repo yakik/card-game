@@ -1,19 +1,26 @@
 import React, {useState} from 'react';
 
 
-export function CardSelection({ playerName, gameID,socket, players }) {
+export function CardSelection({ playerName, gameID,socket, players , gameState}) {
     const [playerSelection, setPlayerSelection] = useState("");
 
     const onClickCard = (socket,card) => {
         setPlayerSelection(card.number + card.sign)
-        socket.emit("card_selected", { gameID: gameID, playerName: playerName, selectedCard: card });
+        socket.emit("select_card", { gameID: gameID, playerName: playerName, selectedCard: card });
     
       }
     
+const canSelectCard=(gameState)=>{
+  if (gameState==="select_cards" || gameState==="all_selected")
+    return true
+  else
+    return false
+}
+
       const getCardsButtons = (socket,cards) => {
         let i = 0
         return cards.map(card => (
-          <button key={i++} onClick={() => onClickCard(socket,card)}>{card.number + card.sign}</button>
+          <button disabled={!canSelectCard(gameState)} key={i++} onClick={() => onClickCard(socket,card)}>{card.number + card.sign}</button>
         ))
       }
     return (

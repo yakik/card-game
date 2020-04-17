@@ -1,7 +1,7 @@
 
 
 import { reshuffle , revealCards, removePlayer,
-  updatePilesAndScores,cardSelected, updateState} from '../modules/takeSix'
+  updatePilesAndScores,cardSelected as selectCard, updateState} from '../modules/takeSix'
 import { getGame, addGame, doesGameIDExist, addPlayer} from '../modules/games'
 var cors = require('cors')
 var express = require('express');
@@ -45,17 +45,15 @@ module.exports = function (io) {
     });
 
     socket.on('update_piles_And_scores', function (msg) {
-      updatePilesAndScores(getGame(msg.gameID),msg.selectedPile)
+      let remainingCards = updatePilesAndScores(getGame(msg.gameID),msg.selectedPile, msg.playersToProcess)
+      if (remainingCards==0)
+        updateState(getGame(msg.gameID),"select_cards")
       sendState(io,msg.gameID,getGame(msg.gameID))
     });
     socket.on('remove_player', function (msg) {
       removePlayer(getGame(msg.gameID),msg.playerName)
       sendState(io,msg.gameID,getGame(msg.gameID))
     });
-    /*socket.on('new_player', function (msg) {
-      addPlayer(msg.gameID,msg.playerName)
-      sendState(io,msg.gameID,getGame(msg.gameID))
-    });*/
     socket.on('reveal_cards', function (msg) {
       updateState(getGame(msg.gameID),"cards_to_piles")
       revealCards(getGame(msg.gameID))
@@ -64,11 +62,12 @@ module.exports = function (io) {
    
     socket.on('reshuffle', function (msg) {
       reshuffle(getGame(msg.gameID))
+      updateState(getGame(msg.gameID),"select_cards")
       sendState(io,msg.gameID,getGame(msg.gameID))
     });
    
-    socket.on("card_selected", function (msg) {
-      cardSelected(getGame(msg.gameID),msg)
+    socket.on("select_card", function (msg) {
+      selectCard(getGame(msg.gameID),msg)
       sendState(io,msg.gameID,getGame(msg.gameID))
     });
 

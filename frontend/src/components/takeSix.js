@@ -6,7 +6,7 @@ import { CardSelection } from "./cardSelection";
 
 
 
-export function TakeSix({gameID, socket, playerName, isManager, endPoint}) {
+export function TakeSix({gameID, socket, playerName, isManager}) {
   
   const [game, setGame] = useState({});
 
@@ -29,7 +29,7 @@ export function TakeSix({gameID, socket, playerName, isManager, endPoint}) {
         <h1>take six, the remote version</h1>
         <h3>Game ID: {gameID}</h3>
         <Management gameState={game.state} playerName={playerName} gameID={gameID} socket={socket} isManager={isManager} players={game.players} />
-        <CardSelection playerName={playerName} gameID={gameID} socket={socket} players={game.players} />
+        <CardSelection gameState={game.state} playerName={playerName} gameID={gameID} socket={socket} players={game.players} />
         <PlayersList players={game.players} />
         <Piles piles={game.piles} />
       </div >
