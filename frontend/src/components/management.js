@@ -13,6 +13,10 @@ export function Management({ allowSelection, gameID, socket, players, isManager 
         socket.emit("reshuffle", { gameID: gameID });
     }
 
+    const startGame = (socket) => {
+        socket.emit("start_game", { gameID: gameID });
+    }
+
     const toggleSelection = () => {
         socket.emit("selection_mode", { gameID: gameID, allowSelection: !allowSelection });
     };
@@ -30,6 +34,7 @@ export function Management({ allowSelection, gameID, socket, players, isManager 
         return (
             <div>
                 <button onClick={() => reshuffle(socket)}>ערבב מחדש</button>
+                <button onClick={() => startGame(socket)}>התחל המשחק</button>
                 <button onClick={() => toggleSelection()}>אפשר והסתר בחירה /חסום בחירה והראה</button>
                 <button onClick={() => updatePilesAndScores()}>שייך כרטיסים לערימות</button>
                 <input name="selected Pile" onChange={e => onChangeSelectedPile(e)} />
