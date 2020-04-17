@@ -23,6 +23,9 @@ export function addGame(type)
     if (type==="Take Six"){
         games.push({ID:newGameID,game:getNewTakeSixGame()})
     }
+    if (type==="Taki"){
+        games.push({ID:newGameID,game:getNewTakiGame()})
+    }
 
     return newGameID
 

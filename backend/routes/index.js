@@ -13,8 +13,9 @@ var corsOptions = {
 }
 
 
+
 router.post('/getGameID', cors(corsOptions), (req, res) => {
-  let newID = addGame('Take Six')
+  let newID = addGame(req.body.gameType)
   addPlayer(getGame(newID),req.body.playerName)
   return res.json({ success: true, gameID: newID });
 });

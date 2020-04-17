@@ -22,7 +22,7 @@ export function Start() {
         setNewGameID(e.target.value);
       }
     
-    const joinGame = () => {
+    const joinGame = (gameType) => {
         axios
           .post(endPoint + "/doesExist", { gameID: newGameID , playerName: newPlayerName})
           .then(
@@ -38,9 +38,9 @@ export function Start() {
           
       }
     
-      const newGame = () => {
+      const newGame = (gameType) => {
         axios
-          .post(endPoint + "/getGameID", {playerName: newPlayerName})
+          .post(endPoint + "/getGameID", {gameType: gameType, playerName: newPlayerName})
           .then(
             res => {
               let ID = res.data.gameID
@@ -65,10 +65,13 @@ export function Start() {
           <p>הקלד שם שחקן</p>
           <input name="playerName" onChange={e => onChangeNewPlayerName(e)} />
           <div>
-            <button onClick={() => newGame()}>משחק חדש</button>
+            <button onClick={() => newGame("Take Six")}>משחק חדש</button>
             <button onClick={() => joinGame()}>הצטרף למשחק</button>
           </div>
-          
+          <div>
+            <button onClick={() => newGame("Taki")}>משחק טאקי חדש</button>
+            <button onClick={() => joinGame("Taki")}> הצטרף למשחק טאקי</button>
+          </div>
         </div>
       )
       }
