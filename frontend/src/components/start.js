@@ -53,44 +53,8 @@ export function Start() {
           )
       }
 
-      const onChangeNewPlayerName = e => {
-        setNewPlayerName(e.target.value);
-      };
-    
-      if (state==="not_in_game"){
-      return (
-        <div className="App" >
-          <p>הקלד מספר המשחק</p>
-          <input name="game ID" onChange={e => onChangeGameID(e)} />
-          <p>הקלד שם שחקן</p>
-          <input name="playerName" onChange={e => onChangeNewPlayerName(e)} />
-          <div>
-            <button onClick={() => newGame("Take Six")}>משחק חדש</button>
-            <button onClick={() => joinGame()}>הצטרף למשחק</button>
-          </div>
-          <div>
-            <button onClick={() => newGame("Taki")}>משחק טאקי חדש</button>
-            <button onClick={() => joinGame("Taki")}> הצטרף למשחק טאקי</button>
-          </div>
-        </div>
-      )
+     
 
-  }
-
-  const newGame = () => {
-    axios
-      .post(endPoint + "/startNewGame", { playerName: newPlayerName })
-      .then(
-        res => {
-          let ID = res.data.gameID
-          setNewGameID(ID)
-          setState("in_game_manager")
-        },
-        error => {
-          console.log(error);
-        }
-      )
-  }
 
   const onChangeNewPlayerName = e => {
     setNewPlayerName(e.target.value);
@@ -104,8 +68,12 @@ export function Start() {
         <p>הקלד שם שחקן</p>
         <input name="playerName" onChange={e => onChangeNewPlayerName(e)} />
         <div>
-          <button onClick={() => newGame()}>משחק חדש</button>
+          <button onClick={() => newGame("Take Six")}>משחק חדש</button>
           <button onClick={() => joinGame()}>הצטרף למשחק</button>
+        </div>
+        <div>
+          <button onClick={() => newGame("Taki")}>משחק טאקי חדש</button>
+          <button onClick={() => joinGame()}>הצטרף למשחק טאקי</button>
         </div>
 
       </div>

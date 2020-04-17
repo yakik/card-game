@@ -1,8 +1,8 @@
 
 
-import { addPlayer,reshuffle , setSelectionMode,newGame, removePlayer,
+import { reshuffle , setSelectionMode,newGame, removePlayer,
   updatePilesAndScores,cardSelected, updateState} from '../modules/takeSix'
-import { getGame, addGame, doesGameIDExist} from '../modules/games'
+import { getGame, addGame, doesGameIDExist, addPlayer} from '../modules/games'
 var cors = require('cors')
 var express = require('express');
 var router = express.Router();
@@ -13,15 +13,9 @@ var corsOptions = {
 }
 
 
-<<<<<<< HEAD
-
-router.post('/getGameID', cors(corsOptions), (req, res) => {
-  let newID = addGame(req.body.gameType)
-=======
 router.post('/startNewGame', cors(corsOptions), (req, res) => {
-  let newID = addGame('Take Six')
->>>>>>> 0b680e2c5ea05455ca84c186510663a80d196bc3
-  addPlayer(getGame(newID),req.body.playerName)
+  let newID = addGame(req.body.gameType)
+  addPlayer(newID,req.body.playerName)
   return res.json({ success: true, gameID: newID });
 });
 
@@ -58,10 +52,10 @@ module.exports = function (io) {
       removePlayer(getGame(msg.gameID),msg.playerName)
       sendState(io,msg.gameID,getGame(msg.gameID))
     });
-    socket.on('new_player', function (msg) {
-      addPlayer(getGame(msg.gameID),msg.playerName)
+    /*socket.on('new_player', function (msg) {
+      addPlayer(msg.gameID,msg.playerName)
       sendState(io,msg.gameID,getGame(msg.gameID))
-    });
+    });*/
     socket.on('selection_mode', function (msg) {
       setSelectionMode(getGame(msg.gameID),msg.allowSelection)
       sendState(io,msg.gameID,getGame(msg.gameID))

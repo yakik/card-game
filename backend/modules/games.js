@@ -1,12 +1,18 @@
-import { getNewTakeSixGame } from './takeSix'
+import { addNewPlayer as addNewTakeSixPlayer, getNewGame as getNewTakeSixGame } from './takeSix'
+import { addNewPlayer as addNewTakiPlayer, getNewGame as getNewTakiGame } from './taki'
 
 let games = []
-let gameID=0
 
 export function getGame(gameID){
     for (let i=0;i<games.length;i++)
         if (games[i].ID == gameID)
             return games[i].game
+}
+
+export function getGameObject(gameID){
+    for (let i=0;i<games.length;i++)
+        if (games[i].ID == gameID)
+            return games[i]
 }
 
 export function doesGameIDExist(gameID){
@@ -17,14 +23,23 @@ export function doesGameIDExist(gameID){
     return exist
 }
 
+export function addPlayer(gameID, name){
+    let game = getGameObject(gameID)
+    if (game.type==="Take Six")
+        return addNewTakeSixPlayer(game.game, name)
+    
+}
+
+
+
 export function addGame(type)
 {
     let newGameID = Math.round(Math.random() * 99).toString()
     if (type==="Take Six"){
-        games.push({ID:newGameID,game:getNewTakeSixGame()})
+        games.push({ID:newGameID,game:getNewTakeSixGame(),type:"Take Six"})
     }
     if (type==="Taki"){
-        games.push({ID:newGameID,game:getNewTakiGame()})
+        games.push({ID:newGameID,game:getNewTakiGame(),type:"Taki"})
     }
 
     return newGameID

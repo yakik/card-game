@@ -1,6 +1,6 @@
 import { getShuffledPack, getCardsForPlayer } from './cards'
 
-export function getNewTakeSixGame() {
+export function getNewGame() {
     let game = {}
     game.players = []
     game.allowSelection = true
@@ -17,7 +17,7 @@ export function setSelectionMode(game, allowSelection) {
     }
 }
 
-export function addPlayer(game, name) {
+export function addNewPlayer(game, name) {
     let cards
     let a = getCardsForPlayer(game.pack)
     console.log(game.state)
