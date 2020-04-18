@@ -34,5 +34,6 @@ const canSelectCard=(gameState)=>{
                 )
               else return <div key={player.name}></div>
             })}
-          <div>{playerSelection + ":בחירתך"}</div></div>)
+          <div>{playerSelection + ":בחירתך"}</div><br></br></div>)
+          
 }

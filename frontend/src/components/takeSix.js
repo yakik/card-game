@@ -31,6 +31,7 @@ export function TakeSix({gameID, socket, playerName, isManager}) {
         <Management gameState={game.state} playerName={playerName} gameID={gameID} socket={socket} isManager={isManager} players={game.players} />
         <CardSelection gameState={game.state} playerName={playerName} gameID={gameID} socket={socket} players={game.players} />
         <PlayersList players={game.players} />
+        <br></br>
         <Piles piles={game.piles} />
       </div >
 

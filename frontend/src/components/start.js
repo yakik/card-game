@@ -67,10 +67,12 @@ export function Start() {
         <input name="game ID" onChange={e => onChangeGameID(e)} />
         <p>הקלד שם שחקן</p>
         <input name="playerName" onChange={e => onChangeNewPlayerName(e)} />
+        <br></br>
         <div>
           <button disabled={newPlayerName===""} onClick={() => newGame("Take Six")}>משחק טייק סיקס חדש</button>
           <button disabled={newPlayerName===""} onClick={() => joinGame()}>הצטרף למשחק טייק סיקס</button>
         </div>
+        <br></br>
         <div>
           <button disabled={(process.env.NODE_ENV === "production") } onClick={() => newGame("Taki")}>משחק טאקי חדש</button>
           <button disabled={(process.env.NODE_ENV === "production") } onClick={() => joinGame()}>הצטרף למשחק טאקי</button>
