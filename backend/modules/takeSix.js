@@ -21,7 +21,7 @@ export function addNewPlayer(game, name) {
     let a = getCardsForPlayer(game.pack)
     cards = a.cards
     game.pack = a.pack
-    game.players.push({ name: name, score: 0, cards: cards, selectedCard: { number: "X", sign: "", show: '--' } })
+    game.players.push({ name: name, changeThisTurn: 0,score: 0, cards: cards, selectedCard: { number: "X", sign: "", show: '--' } })
     return true
 }
 
@@ -121,6 +121,7 @@ export function updatePilesAndScores(game, pileToReplace, numberOfPlayersToProce
     })
     for (let playerIndex = 0; playerIndex < game.players.length; playerIndex++) {
         if (game.players[playerIndex].selectedCard.show !== '--') {
+            game.players[playerIndex].changeThisTurn = 0
             let t = whichPileToAdd(game.piles, game.players[playerIndex].selectedCard)
             let newPileItem = Object.assign({}, game.players[playerIndex].selectedCard)
             if (t != -1) {
@@ -129,6 +130,7 @@ export function updatePilesAndScores(game, pileToReplace, numberOfPlayersToProce
                 if (game.piles[t].length == 5) {
                     for (let y = 0; y < game.piles[t].length; y++) {
                         game.players[playerIndex].score += game.piles[t][y].points
+                        game.players[playerIndex].changeThisTurn += game.piles[t][y].points
                     }
                     game.piles[t] = [newPileItem]
                 }
@@ -142,6 +144,7 @@ export function updatePilesAndScores(game, pileToReplace, numberOfPlayersToProce
 
                 for (let y = 0; y < game.piles[pileToReplace].length; y++) {
                     game.players[playerIndex].score += game.piles[pileToReplace][y].points
+                    game.players[playerIndex].changeThisTurn += game.piles[pileToReplace][y].points
                 }
                 game.piles[pileToReplace] = [newPileItem]
             }

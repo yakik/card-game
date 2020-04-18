@@ -14,7 +14,7 @@ let socket = io.connect(endPoint);
 
 
 export function Start() {
-  const [newPlayerName, setNewPlayerName] = useState([]);
+  const [newPlayerName, setNewPlayerName] = useState("");
   const [newGameID, setNewGameID] = useState([]);
   const [state, setState] = useState("not_in_game");
 
@@ -68,8 +68,8 @@ export function Start() {
         <p>הקלד שם שחקן</p>
         <input name="playerName" onChange={e => onChangeNewPlayerName(e)} />
         <div>
-          <button onClick={() => newGame("Take Six")}>משחק טייק סיקס חדש</button>
-          <button onClick={() => joinGame()}>הצטרף למשחק טייק סיקס</button>
+          <button disabled={newPlayerName===""} onClick={() => newGame("Take Six")}>משחק טייק סיקס חדש</button>
+          <button disabled={newPlayerName===""} onClick={() => joinGame()}>הצטרף למשחק טייק סיקס</button>
         </div>
         <div>
           <button disabled={(process.env.NODE_ENV === "production") } onClick={() => newGame("Taki")}>משחק טאקי חדש</button>

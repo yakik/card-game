@@ -33,16 +33,16 @@ export function Management({ gameID, socket, players, isManager, gameState }) {
                 <button disabled={gameState!=="cards_to_piles"?true:false} onClick={() => updatePilesAndScores(20)}>שייך כרטיסים </button>
                 <button disabled={gameState!=="cards_to_piles"?true:false} onClick={() => updatePilesAndScores(1)}>שייך כרטיס הבא </button>
                 <input name="selected Pile" onChange={e => onChangeSelectedPile(e)} />
+                <div>
 
                 {players.length > 0 &&
                     players.map(player => {
                         return (
-                            <div key={player.name}>
-                                <button onClick={() => removePlayer(socket, player.name)}>{player.name}</button>
-                            </div>
+                                <button key={player.name} onClick={() => removePlayer(socket, player.name)}>{player.name}</button>
                         )
                     })
                 }
+                </div>
             </div>)
     else
         return <div></div>
