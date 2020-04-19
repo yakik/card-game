@@ -1,4 +1,4 @@
-import { addNewPlayer as addNewTakeSixPlayer, getNewGame as getNewTakeSixGame } from './takeSix'
+import { removePlayer as removeTakeSixPlayer, addNewPlayer as addNewTakeSixPlayer, getNewGame as getNewTakeSixGame } from './takeSix'
 import { addNewPlayer as addNewTakiPlayer, getNewGame as getNewTakiGame } from './taki'
 
 let games = []
@@ -27,8 +27,14 @@ export function addPlayer(gameID, name){
     let game = getGameObject(gameID)
     if (game.type==="Take Six")
         return addNewTakeSixPlayer(game.game, name)
-    
 }
+
+export function removePlayer(gameID, name){
+    let game = getGameObject(gameID)
+    if (game.type==="Take Six")
+        return removeTakeSixPlayer(game.game, name)
+}
+
 
 
 

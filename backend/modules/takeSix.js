@@ -74,11 +74,24 @@ export function cardSelected(game, msg) {
 
 export function removePlayer(game, playerName) {
     let newPlayers = []
+    console.log('YYYYYYYYY')
+    console.log(game.pack.length)
+    console.log(game.pack)
+    console.log('XXXXXXXX')
+
     game.players.map(player => {
         if (player.name !== playerName)
             newPlayers.push(player)
+        else{
+            player.cards.map(card=>{
+                game.pack.push(card)
+            })
+        }
     })
     game.players = newPlayers
+    console.log(game.pack.length)
+    console.log(game.pack)
+    console.log('---------')
 }
 
 

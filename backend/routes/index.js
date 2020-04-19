@@ -1,8 +1,7 @@
 
 
-import { reshuffle , revealCards, removePlayer,
-  updatePilesAndScores,cardSelected as selectCard, updateState} from '../modules/takeSix'
-import { getGame, addGame, doesGameIDExist, addPlayer} from '../modules/games'
+import { reshuffle , revealCards,  updatePilesAndScores,cardSelected as selectCard, updateState} from '../modules/takeSix'
+import { getGame, addGame, doesGameIDExist, addPlayer, removePlayer,} from '../modules/games'
 var cors = require('cors')
 var express = require('express');
 var router = express.Router();
@@ -51,7 +50,7 @@ module.exports = function (io) {
       sendState(io,msg.gameID,getGame(msg.gameID))
     });
     socket.on('remove_player', function (msg) {
-      removePlayer(getGame(msg.gameID),msg.playerName)
+      removePlayer(msg.gameID,msg.playerName)
       sendState(io,msg.gameID,getGame(msg.gameID))
     });
     socket.on('reveal_cards', function (msg) {
