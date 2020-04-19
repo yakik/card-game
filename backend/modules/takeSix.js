@@ -44,6 +44,7 @@ export function reshuffle(game) {
     game.piles = [[], [], [], []]
     for (let i = 0; i < 4; i++)
         game.piles[i].push(game.pack.pop())
+    updateState(game,"select_cards")
 }
 
 export function newGame(game) {
@@ -54,7 +55,7 @@ export function newGame(game) {
         game.piles[i].push(game.pack.pop())
 }
 
-export function cardSelected(game, msg) {
+export function selectCard(game, msg) {
 
     game.players.map(player => {
         if (player.name == msg.playerName) {

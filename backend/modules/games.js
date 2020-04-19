@@ -1,4 +1,4 @@
-import { removePlayer as removeTakeSixPlayer, addNewPlayer as addNewTakeSixPlayer, getNewGame as getNewTakeSixGame } from './takeSix'
+import { reshuffle as reshuffleTakeSix, removePlayer as removeTakeSixPlayer, addNewPlayer as addNewTakeSixPlayer, getNewGame as getNewTakeSixGame } from './takeSix'
 import { addNewPlayer as addNewTakiPlayer, getNewGame as getNewTakiGame } from './taki'
 
 let games = []
@@ -21,6 +21,12 @@ export function doesGameIDExist(gameID){
         if (games[i].ID == gameID)
             exist=true
     return exist
+}
+
+export function reshuffle(gameID){
+    let game = getGameObject(gameID)
+    if (game.type==="Take Six")
+        return reshuffleTakeSix(game.game)
 }
 
 export function addPlayer(gameID, name){
