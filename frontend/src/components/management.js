@@ -30,7 +30,7 @@ export function Management({ gameID, socket, players, isManager, gameState }) {
             <div>
                 <button onClick={() => reshuffle(socket)}>ערבב מחדש</button>
                 <button disabled={gameState !== "all_selected" ? true : false} onClick={() => revealCards()}>גלה קלפים</button>
-                <button disabled={gameState !== "cards_to_piles" ? true : false} onClick={() => updatePilesAndScores(20)}>שייך כרטיסים </button>
+                <button disabled={gameState !== "cards_to_piles" ? true : false} onClick={() => updatePilesAndScores(players.length)}>שייך כרטיסים </button>
                 <button disabled={gameState !== "cards_to_piles" ? true : false} onClick={() => updatePilesAndScores(1)}>שייך כרטיס הבא </button>
                 <div>
                     <br></br>

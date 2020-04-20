@@ -14,6 +14,7 @@ export function revealCards(game) {
     game.players = game.players.sort(function (a, b) { return a.selectedCard.number - b.selectedCard.number })
     for (let i = 0; i < game.players.length; i++)
         game.players[i].selectedCard.show = game.players[i].selectedCard.number + game.players[i].selectedCard.sign
+    game.state="cards_to_piles"
 }
 
 export function addNewPlayer(game, name) {
@@ -25,9 +26,7 @@ export function addNewPlayer(game, name) {
     return true
 }
 
-export function updateState(game, state) {
-    game.state = state
-}
+
 
 export function reshuffle(game) {
     let cards
@@ -44,7 +43,7 @@ export function reshuffle(game) {
     game.piles = [[], [], [], []]
     for (let i = 0; i < 4; i++)
         game.piles[i].push(game.pack.pop())
-    updateState(game,"select_cards")
+    game.state="select_cards"
 }
 
 export function newGame(game) {
@@ -126,6 +125,8 @@ export function whichPileToAdd(piles, selectedCard) {
 
 export function updatePilesAndScores(game, pileToReplace, numberOfPlayersToProcess) {
 
+
+    
     game.players = game.players.sort(function (a, b) { return a.selectedCard.number - b.selectedCard.number })
     let processedPlayers = 0
     let howManyToProcess = 0
@@ -140,7 +141,7 @@ export function updatePilesAndScores(game, pileToReplace, numberOfPlayersToProce
             let newPileItem = Object.assign({}, game.players[playerIndex].selectedCard)
             if (t != -1) {
                 if (game.piles[t] === undefined)
-                    return
+                    return -1
                 if (game.piles[t].length == 5) {
                     for (let y = 0; y < game.piles[t].length; y++) {
                         game.players[playerIndex].score += game.piles[t][y].points
@@ -154,7 +155,7 @@ export function updatePilesAndScores(game, pileToReplace, numberOfPlayersToProce
             }
             if (t == -1) {
                 if (game.piles[pileToReplace] === undefined)
-                    return
+                    return -1
 
                 for (let y = 0; y < game.piles[pileToReplace].length; y++) {
                     game.players[playerIndex].score += game.piles[pileToReplace][y].points
@@ -172,6 +173,7 @@ export function updatePilesAndScores(game, pileToReplace, numberOfPlayersToProce
             game.players[playerIndex].selectedCard.number = ""
 
             processedPlayers++
+            console.log(processedPlayers + " " + numberOfPlayersToProcess + " " + howManyToProcess)
             if (processedPlayers == numberOfPlayersToProcess)
                 return (howManyToProcess - processedPlayers)
             if (processedPlayers === howManyToProcess)

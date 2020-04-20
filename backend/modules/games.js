@@ -23,6 +23,11 @@ export function doesGameIDExist(gameID){
     return exist
 }
 
+export function updateState(gameID, state) {
+    let game = getGame(gameID)
+    game.state = state
+}
+
 export function reshuffle(gameID){
     let game = getGameObject(gameID)
     if (game.type==="Take Six")
@@ -40,8 +45,6 @@ export function removePlayer(gameID, name){
     if (game.type==="Take Six")
         return removeTakeSixPlayer(game.game, name)
 }
-
-
 
 
 export function addGame(type)
