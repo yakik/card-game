@@ -1,5 +1,6 @@
 import { reshuffle as reshuffleTakeSix, removePlayer as removeTakeSixPlayer, addNewPlayer as addNewTakeSixPlayer, getNewGame as getNewTakeSixGame } from './takeSix'
 import { addNewPlayer as addNewTakiPlayer, getNewGame as getNewTakiGame } from './taki'
+import {gameTypes} from '../constants'
 
 let games = []
 
@@ -30,19 +31,19 @@ export function updateState(gameID, state) {
 
 export function reshuffle(gameID){
     let game = getGameObject(gameID)
-    if (game.type==="Take Six")
+    if (game.type===gameTypes.TAKE_SIX)
         return reshuffleTakeSix(game.game)
 }
 
 export function addPlayer(gameID, name){
     let game = getGameObject(gameID)
-    if (game.type==="Take Six")
+    if (game.type===gameTypes.TAKE_SIX)
         return addNewTakeSixPlayer(game.game, name)
 }
 
 export function removePlayer(gameID, name){
     let game = getGameObject(gameID)
-    if (game.type==="Take Six")
+    if (game.type===gameTypes.TAKE_SIX)
         return removeTakeSixPlayer(game.game, name)
 }
 
@@ -50,11 +51,11 @@ export function removePlayer(gameID, name){
 export function addGame(type)
 {
     let newGameID = Math.round(Math.random() * 99).toString()
-    if (type==="Take Six"){
-        games.push({ID:newGameID,game:getNewTakeSixGame(),type:"Take Six"})
+    if (type===gameTypes.TAKE_SIX){
+        games.push({ID:newGameID,game:getNewTakeSixGame(),type:gameTypes.TAKE_SIX})
     }
-    if (type==="Taki"){
-        games.push({ID:newGameID,game:getNewTakiGame(),type:"Taki"})
+    if (type===gameTypes.TAKI){
+        games.push({ID:newGameID,game:getNewTakiGame(),type:gameTypes.TAKE_SIX})
     }
 
     return newGameID

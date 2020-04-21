@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {socketMsgTypes, states} from '../constants'
 
 
 export function Management({ gameID, socket, players, isManager, gameState }) {
@@ -6,19 +7,19 @@ export function Management({ gameID, socket, players, isManager, gameState }) {
     const [selectedPile, setSelectedPile] = useState('');
 
     const removePlayer = (socket, playerName) => {
-        socket.emit("remove_player", { gameID: gameID, playerName: playerName });
+        socket.emit(socketMsgTypes.REMOVE_PLAYER, { gameID: gameID, playerName: playerName });
     };
 
     const reshuffle = (socket) => {
-        socket.emit("reshuffle", { gameID: gameID });
+        socket.emit(socketMsgTypes.RESHUFFLE, { gameID: gameID });
     }
 
     const revealCards = () => {
-        socket.emit("reveal_cards", { gameID: gameID });
+        socket.emit(socketMsgTypes.REVEAL_CARDS, { gameID: gameID });
     };
 
     const updatePilesAndScores = (playersToProcess) => {
-        socket.emit("update_piles_And_scores", { gameID: gameID, selectedPile: selectedPile, playersToProcess: playersToProcess });
+        socket.emit(socketMsgTypes.UPDATE_PILES_AND_SCORES, { gameID: gameID, selectedPile: selectedPile, playersToProcess: playersToProcess });
     };
 
     const onChangeSelectedPile = e => {
@@ -29,9 +30,9 @@ export function Management({ gameID, socket, players, isManager, gameState }) {
         return (
             <div>
                 <button onClick={() => reshuffle(socket)}>ערבב מחדש</button>
-                <button disabled={gameState !== "all_selected" ? true : false} onClick={() => revealCards()}>גלה קלפים</button>
-                <button disabled={gameState !== "cards_to_piles" ? true : false} onClick={() => updatePilesAndScores(players.length)}>שייך כרטיסים </button>
-                <button disabled={gameState !== "cards_to_piles" ? true : false} onClick={() => updatePilesAndScores(1)}>שייך כרטיס הבא </button>
+                <button disabled={gameState !== states.ALL_PLAYERS_SELECTED_CARDS ? true : false} onClick={() => revealCards()}>גלה קלפים</button>
+                <button disabled={gameState !== states.RELATING_CARDS_TO_PILES ? true : false} onClick={() => updatePilesAndScores(players.length)}>שייך כרטיסים </button>
+                <button disabled={gameState !== states.RELATING_CARDS_TO_PILES ? true : false} onClick={() => updatePilesAndScores(1)}>שייך כרטיס הבא </button>
                 <div>
                     <br></br>
                     <select name="selected Pile" onChange={e => onChangeSelectedPile(e)}>

@@ -28,25 +28,5 @@ export function PlayersList({ players }) {
   }
 
   return getGrid(players)
-  /*return    (<div className="flexGrid">{players.length > 0 &&
-      players.map(player => {
-        
-        /*return (
-          <div>
-          <div className="flexCol" key={player.name}>
-              <div className="cell"  cols="10">{player.name}</div>
-              <div className="cell">{player.score}</div>
-              <div className="cell">{player.selectedCard.show}</div>
-              <div className="cell">{player.changeThisTurn}</div>
-          </div>
-          <div className="flexCol" key={player.name}>
-          <div className="cell"  cols="10">{player.name}</div>
-          <div className="cell">{player.score}</div>
-          <div className="cell">{player.selectedCard.show}</div>
-          <div className="cell">{player.changeThisTurn}</div>
-      </div>
-      </div>
-        )
-      })
-    }</div>)*/
+
 }

@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {states,socketMsgTypes} from '../constants'
 
 
 export function CardSelection({ playerName, gameID,socket, players , gameState}) {
@@ -6,12 +7,12 @@ export function CardSelection({ playerName, gameID,socket, players , gameState})
 
     const onClickCard = (socket,card) => {
         setPlayerSelection(card.number + card.sign)
-        socket.emit("select_card", { gameID: gameID, playerName: playerName, selectedCard: card });
+        socket.emit(socketMsgTypes.SELECT_CARDS, { gameID: gameID, playerName: playerName, selectedCard: card });
     
       }
     
 const canSelectCard=(gameState)=>{
-  if (gameState==="select_cards" || gameState==="all_selected")
+  if (gameState===states.SELECTING_CARDS || gameState===states.ALL_PLAYERS_SELECTED_CARDS)
     return true
   else
     return false

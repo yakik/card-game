@@ -1,4 +1,5 @@
 import { getShuffledPack, getCardsForPlayer } from './cards'
+import {states} from '../constants'
 
 //select_cards -> all_selected -> cards_to_piles -> select cards
 
@@ -6,7 +7,7 @@ export function getNewGame() {
     let game = {}
     game.players = []
     game.allowSelection = true
-    game.state = "select_cards"
+    game.state = states.SELECTING_CARDS
     reshuffle(game)
     return game
 }
@@ -14,7 +15,7 @@ export function revealCards(game) {
     game.players = game.players.sort(function (a, b) { return a.selectedCard.number - b.selectedCard.number })
     for (let i = 0; i < game.players.length; i++)
         game.players[i].selectedCard.show = game.players[i].selectedCard.number + game.players[i].selectedCard.sign
-    game.state="cards_to_piles"
+    game.state=states.RELATING_CARDS_TO_PILES
 }
 
 export function addNewPlayer(game, name) {
@@ -43,7 +44,7 @@ export function reshuffle(game) {
     game.piles = [[], [], [], []]
     for (let i = 0; i < 4; i++)
         game.piles[i].push(game.pack.pop())
-    game.state="select_cards"
+    game.state=states.SELECTING_CARDS
 }
 
 export function newGame(game) {
@@ -68,7 +69,7 @@ export function selectCard(game, msg) {
             numberOfPlayersWithSelection++
     })
     if (numberOfPlayersWithSelection === game.players.length)
-        game.state = "all_selected"
+        game.state = states.ALL_PLAYERS_SELECTED_CARDS
 
 }
 

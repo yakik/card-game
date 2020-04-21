@@ -3,11 +3,12 @@ import axios from "axios"
 import io from "socket.io-client"
 import './App.css';
 import { TakeSix } from './takeSix'
+import {routes, states, gameTypes, endPoints, envTyoes} from '../constants'
 
-let endPoint = "http://localhost:5000"
+let endPoint = endPoints.LOCAL_HOST
 
-if (process.env.NODE_ENV === "production") {
-  endPoint = "https://card-game989.herokuapp.com"
+if (process.env.NODE_ENV === envTyoes.PRODUCTION) {
+  endPoint = endPoints.PRODUCTION
 }
 
 let socket = io.connect(endPoint);
@@ -16,7 +17,7 @@ let socket = io.connect(endPoint);
 export function Start() {
   const [newPlayerName, setNewPlayerName] = useState("");
   const [newGameID, setNewGameID] = useState([]);
-  const [state, setState] = useState("not_in_game");
+  const [state, setState] = useState(states.NOT_IN_GAME);
 
     const onChangeGameID = e => {
         setNewGameID(e.target.value);
@@ -24,12 +25,11 @@ export function Start() {
     
     const joinGame = (gameType) => {
         axios
-          .post(endPoint + "/joinGame", { gameID: newGameID , playerName: newPlayerName})
+          .post(endPoint + routes.JOIN_GAME, { gameID: newGameID , playerName: newPlayerName})
           .then(
             res => {
-              let exist = res.data.exist
               setNewGameID(newGameID)
-              setState("in_game_not_manager")
+              setState(states.IN_GAME_NOT_MANAGER)
             },
             error => {
               console.log(error);
@@ -40,12 +40,12 @@ export function Start() {
     
       const newGame = (gameType) => {
         axios
-          .post(endPoint + "/startNewGame", {gameType: gameType, playerName: newPlayerName})
+          .post(endPoint + routes.START_NEW_GAME, {gameType: gameType, playerName: newPlayerName})
           .then(
             res => {
               let ID = res.data.gameID
               setNewGameID(ID)
-              setState("in_game_manager")
+              setState(states.IN_GAME_AS_MANAGER)
             },
             error => {
               console.log(error);
@@ -60,7 +60,7 @@ export function Start() {
     setNewPlayerName(e.target.value);
   };
 
-  if (state === "not_in_game") {
+  if (state === states.NOT_IN_GAME) {
     return (
       <div className="App" >
         <p>הקלד מספר המשחק</p>
@@ -69,13 +69,13 @@ export function Start() {
         <input name="playerName" onChange={e => onChangeNewPlayerName(e)} />
         <br></br>
         <div>
-          <button disabled={newPlayerName===""} onClick={() => newGame("Take Six")}>משחק טייק סיקס חדש</button>
+          <button disabled={newPlayerName===""} onClick={() => newGame(gameTypes.TAKE_SIX)}>משחק טייק סיקס חדש</button>
           <button disabled={newPlayerName===""} onClick={() => joinGame()}>הצטרף למשחק טייק סיקס</button>
         </div>
         <br></br>
         <div>
-          <button disabled={(process.env.NODE_ENV === "production") } onClick={() => newGame("Taki")}>משחק טאקי חדש</button>
-          <button disabled={(process.env.NODE_ENV === "production") } onClick={() => joinGame()}>הצטרף למשחק טאקי</button>
+          <button disabled={(process.env.NODE_ENV === envTyoes.PRODUCTION) } onClick={() => newGame(gameTypes.TAKI)}>משחק טאקי חדש</button>
+          <button disabled={(process.env.NODE_ENV === envTyoes.PRODUCTION) } onClick={() => joinGame()}>הצטרף למשחק טאקי</button>
         </div>
 
       </div>
@@ -83,6 +83,6 @@ export function Start() {
   }
   else {
 
-    return (<TakeSix gameID={newGameID.toString()} playerName={newPlayerName} isManager={state === "in_game_manager" ? true : false} socket={socket} endPoint={endPoint} />)
+    return (<TakeSix gameID={newGameID.toString()} playerName={newPlayerName} isManager={state === states.IN_GAME_AS_MANAGER ? true : false} socket={socket} endPoint={endPoint} />)
   }
 }

@@ -3,6 +3,7 @@ import { Piles } from "./piles";
 import { PlayersList } from "./playersList";
 import { Management } from "./management";
 import { CardSelection } from "./cardSelection";
+import {socketMsgTypes} from '../constants'
 
 
 
@@ -11,10 +12,10 @@ export function TakeSix({gameID, socket, playerName, isManager}) {
   const [game, setGame] = useState({});
 
   if (game.players===undefined)
-    socket.emit("refresh", { gameID: gameID});
+    socket.emit(socketMsgTypes.REFRESH, { gameID: gameID});
 
   useEffect(() => {
-    socket.on("game_state", msg => {
+    socket.on(socketMsgTypes.SET_GAME_STATE, msg => {
       if (msg.gameID === gameID){
         setGame(msg.game)
       }
