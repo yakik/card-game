@@ -78,8 +78,8 @@ export function Start() {
         </div>
         <br></br>
         <div>
-          <button disabled={(process.env.NODE_ENV === envTyoes.PRODUCTION) } onClick={() => newGame(gameTypes.TAKI)}>משחק טאקי חדש</button>
-          <button disabled={(process.env.NODE_ENV === envTyoes.PRODUCTION) } onClick={() => joinGame()}>הצטרף למשחק טאקי</button>
+          <button disabled={newPlayerName===""} onClick={() => newGame(gameTypes.TAKI)}>משחק טאקי חדש</button>
+          <button disabled={newPlayerName===""} onClick={() => joinGame()}>הצטרף למשחק טאקי</button>
         </div>
 
       </div>
