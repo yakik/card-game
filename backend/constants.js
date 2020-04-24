@@ -12,7 +12,8 @@ export const socketMsgTypes ={
     REMOVE_PLAYER:'remove_player',
     REVEAL_CARDS:'reveal_cards',
     RESHUFFLE:'reshuffle',
-    SELECT_CARDS:"select_card"
+    SELECT_CARDS:"select_card",
+    TAKE_CARD:"take_card"
 }
 
 export const states = {

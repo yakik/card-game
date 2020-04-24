@@ -3,6 +3,7 @@ import axios from "axios"
 import io from "socket.io-client"
 import './App.css';
 import { TakeSix } from './takeSix'
+import { Taki } from './taki/taki'
 import {routes, states, gameTypes, endPoints, envTyoes} from '../constants'
 
 let endPoint = endPoints.LOCAL_HOST
@@ -16,6 +17,7 @@ let socket = io.connect(endPoint);
 
 export function Start() {
   const [newPlayerName, setNewPlayerName] = useState("");
+  const [gameType, setGameType] = useState("");
   const [newGameID, setNewGameID] = useState([]);
   const [state, setState] = useState(states.NOT_IN_GAME);
 
@@ -30,6 +32,7 @@ export function Start() {
             res => {
               setNewGameID(newGameID)
               setState(states.IN_GAME_NOT_MANAGER)
+              setGameType (gameType)
             },
             error => {
               console.log(error);
@@ -46,6 +49,7 @@ export function Start() {
               let ID = res.data.gameID
               setNewGameID(ID)
               setState(states.IN_GAME_AS_MANAGER)
+              setGameType (gameType)
             },
             error => {
               console.log(error);
@@ -82,7 +86,12 @@ export function Start() {
     )
   }
   else {
+if ( gameType===gameTypes.TAKE_SIX)
+    return (<TakeSix gameID={newGameID.toString()} playerName={newPlayerName}
+     isManager={state === states.IN_GAME_AS_MANAGER ? true : false} socket={socket} endPoint={endPoint} />)
+else
+return (<Taki gameID={newGameID.toString()} playerName={newPlayerName}
+     isManager={state === states.IN_GAME_AS_MANAGER ? true : false} socket={socket} endPoint={endPoint} />)
 
-    return (<TakeSix gameID={newGameID.toString()} playerName={newPlayerName} isManager={state === states.IN_GAME_AS_MANAGER ? true : false} socket={socket} endPoint={endPoint} />)
   }
 }
