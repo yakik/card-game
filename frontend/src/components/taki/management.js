@@ -26,7 +26,10 @@ export function Management({ gameID, socket, players, isManager, gameState }) {
                     {players.length > 0 &&
                         players.map(player => {
                             return (
+                                <div>
                                 <button key={player.name} onClick={() => removePlayer(socket, player.name)}>{player.name}</button>
+                                <button  onClick={() => socket.emit(socketMsgTypes.RESHUFFLE_USED_CARDS, { gameID: gameID})}>מחזר קלפים</button>
+                            </div>
                             )
                         })
                     }

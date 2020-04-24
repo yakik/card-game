@@ -13,7 +13,9 @@ export const socketMsgTypes ={
     REVEAL_CARDS:'reveal_cards',
     RESHUFFLE:'reshuffle',
     SELECT_CARDS:"select_card",
-    TAKE_CARD:"take_card"
+    TAKE_CARD:"take_card",
+    TAKE_CARD_BACK:"take_card_back",
+    RESHUFFLE_USED_CARDS:"reshuffle_used_cards"
 }
 
 export const states = {

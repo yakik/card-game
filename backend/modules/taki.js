@@ -5,7 +5,7 @@ export function getNewGame() {
     game.state = "new"
     game.onTable = []
     reshuffle(game)
-    game.onTable.push(game.pack.pop())
+
     return game
 }
 export function getCardsForPlayer(oldPack) {
@@ -30,11 +30,11 @@ function getShuffledPack() {
     let colors = ["  אדום ", "כחול ", "ירוק ", "צהוב"]
     for (let j = 0; j < 2; j++) {
         colors.map(color => {
-            for (let i = 1; i < 10; i++){
-                if (i!==2)
-                pack.push({ id: id++, color: color, type: i })
+            for (let i = 1; i < 10; i++) {
+                if (i !== 2)
+                    pack.push({ id: id++, color: color, type: i })
                 else
-                pack.push({ id: id++, color: color, type: "2 פלוס " })
+                    pack.push({ id: id++, color: color, type: "2 פלוס " })
             }
             pack.push({ id: id++, color: color, type: "עצור" })
             pack.push({ id: id++, color: color, type: "שנה כיוון" })
@@ -101,6 +101,7 @@ export function selectCard(game, msg) {
         }
     }
     game.onTable.push(msg.selectedCard)
+    game.lastPlayerPlacedCard = msg.playerName
 
 }
 
@@ -110,7 +111,28 @@ export function takeCard(game, playerName) {
             player.cards.push(game.pack.pop())
     })
 }
-
+export function takeCardBack(game, playerName) {
+    if (playerName === game.lastPlayerPlacedCard) {
+        game.players.map(player => {
+            if (player.name === playerName)
+                player.cards.push(game.onTable.pop())
+        })
+        game.lastPlayerPlacedCard = undefined
+    }
+}
+export function reshuffleUsedCards(game) {
+   let cardsOnTable = game.onTable.length-1
+    for (let i=0;i<cardsOnTable ;i++)
+        game.pack.push(game.onTable.shift())
+    for (let f = 0; f < 300; f++) {
+            let cardIndexA = Math.round(Math.random() * (game.pack.length - 1))
+            let cardIndexB = Math.round(Math.random() * (game.pack.length - 1))
+            let p = game.pack[cardIndexA]
+            game.pack[cardIndexA] = game.pack[cardIndexB]
+            game.pack[cardIndexB] = p
+            f = f + 1
+        } 
+}
 
 
 
@@ -124,6 +146,7 @@ export function reshuffle(game) {
         player.cards = cards
 
     })
+    game.onTable.push(game.pack.pop())
 
 }
 
