@@ -10,8 +10,7 @@ export function Taki({ gameID, socket, playerName, isManager }) {
 
   const [game, setGame] = useState({});
   const getLastCard = () => {
-    let cards = game.players.find(player => player.name === playerName).cards
-    return cards[cards.length - 1].color + cards[cards.length - 1].type
+    return game.players.find(player => player.name === playerName).newCard
   }
   if (game.players === undefined)
     socket.emit(socketMsgTypes.REFRESH, { gameID: gameID });
@@ -35,8 +34,8 @@ export function Taki({ gameID, socket, playerName, isManager }) {
         <button onClick={() => socket.emit(socketMsgTypes.TAKE_CARD, { gameID: gameID, playerName: playerName })}>קח קלף</button>
         <button onClick={() => socket.emit(socketMsgTypes.TAKE_CARD_BACK, { gameID: gameID, playerName: playerName })}>החזר קלף</button>
         <CardSelection gameState={game.state} playerName={playerName} gameID={gameID} socket={socket} players={game.players} />
-        <div>{"הקלף האחרון שקיבלת: " + getLastCard()}</div>
-        <div>{"הקלף שבראש הערמה על השולחן: " + game.onTable[game.onTable.length - 1].color + game.onTable[game.onTable.length - 1].type}</div>
+        <div  class={getLastCard().color}>{"הקלף האחרון שקיבלת: " + getLastCard().type}</div>
+        <div  class={game.onTable[game.onTable.length - 1].color}>{"הקלף שבראש הערמה על השולחן: " + game.onTable[game.onTable.length - 1].type}</div>
         <div>{"מספר הקלפים בחפיסה: " + game.pack.length}</div>
         <br></br>
         <PlayersList players={game.players} />

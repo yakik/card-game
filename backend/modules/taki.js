@@ -21,14 +21,14 @@ export function addNewPlayer(game, name) {
     let a = getCardsForPlayer(game.pack)
     cards = a.cards.sort(sortCards)
     game.pack = a.pack
-    game.players.push({ name: name, cards: cards })
+    game.players.push({ name: name, cards: cards, newCard:{color:"noCard",type:"--"} })
 }
 
 function getShuffledPack() {
     let pack = []
     let id = 0
     let colorCounter = 0
-    let colors = [" אדום ", "כחול ", "ירוק ", "צהוב"]
+    let colors = ["greenCard","yellowCard","blueCard","redCard"]
 
     colors.map(color => {
         colorCounter++
@@ -49,18 +49,18 @@ function getShuffledPack() {
 
     })
 
-    pack.push({ id: id++, kind: 1001, color: "", type: "שנה צבע" })
-    pack.push({ id: id++, kind: 1002, color: "", type: "שנה צבע" })
-    pack.push({ id: id++, kind: 1003, color: "", type: "שנה צבע" })
-    pack.push({ id: id++, kind: 1004, color: "", type: "שנה צבע" })
-    pack.push({ id: id++, kind: 1005, color: "", type: "מלך" })
-    pack.push({ id: id++, kind: 1006, color: "", type: "מלך" })
-    pack.push({ id: id++, kind: 1007, color: "", type: "שובר פלוס שלוש" })
-    pack.push({ id: id++, kind: 1008, color: "", type: "שובר פלוס שלוש" })
-    pack.push({ id: id++, kind: 1009, color: "", type: "שובר פלוס שלוש" })
-    pack.push({ id: id++, kind: 1010, color: "", type: "+3" })
-    pack.push({ id: id++, kind: 1011, color: "", type: "+3" })
-    pack.push({ id: id++, kind: 1012, color: "", type: "+3" })
+    pack.push({ id: id++, kind: 1001, color: "specialCard", type: "שנה צבע" })
+    pack.push({ id: id++, kind: 1002, color: "specialCard", type: "שנה צבע" })
+    pack.push({ id: id++, kind: 1003, color: "specialCard", type: "שנה צבע" })
+    pack.push({ id: id++, kind: 1004, color: "specialCard", type: "שנה צבע" })
+    pack.push({ id: id++, kind: 1005, color: "specialCard", type: "מלך" })
+    pack.push({ id: id++, kind: 1006, color: "specialCard", type: "מלך" })
+    pack.push({ id: id++, kind: 1007, color: "specialCard", type: "שובר פלוס שלוש" })
+    pack.push({ id: id++, kind: 1008, color: "specialCard", type: "שובר פלוס שלוש" })
+    pack.push({ id: id++, kind: 1009, color: "specialCard", type: "שובר פלוס שלוש" })
+    pack.push({ id: id++, kind: 1010, color: "specialCard", type: "+3" })
+    pack.push({ id: id++, kind: 1011, color: "specialCard", type: "+3" })
+    pack.push({ id: id++, kind: 1012, color: "specialCard", type: "+3" })
     for (let f = 0; f < 300; f++) {
         let cardIndexA = Math.round(Math.random() * (pack.length - 1))
         let cardIndexB = Math.round(Math.random() * (pack.length - 1))
@@ -111,7 +111,8 @@ export function takeCard(game, playerName) {
         return
     game.players.map(player => {
         if (player.name === playerName) {
-            player.cards.push(game.pack.pop())
+            player.newCard = game.pack.pop()
+            player.cards.push(player.newCard)
             player.cards = player.cards.sort(sortCards)
         }
     })
@@ -119,8 +120,10 @@ export function takeCard(game, playerName) {
 export function takeCardBack(game, playerName) {
     if (playerName === game.lastPlayerPlacedCard) {
         game.players.map(player => {
-            if (player.name === playerName)
-                player.cards.push(game.onTable.pop())
+            if (player.name === playerName){
+                player.newCard = game.onTable.pop()
+                player.cards.push(player.newCard)
+            }
         })
         game.lastPlayerPlacedCard = undefined
     }

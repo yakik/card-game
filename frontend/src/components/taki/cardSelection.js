@@ -15,7 +15,7 @@ export function CardSelection({ playerName, gameID,socket, players , gameState})
       const getCardsButtons = (socket,cards) => {
         let i = 0
         return cards.map(card => (
-          <button  key={i++} onClick={() => onClickCard(socket,card)}>{card.color + card.type}</button>
+          <button  class={card.color} key={i++} onClick={() => onClickCard(socket,card)}>{card.type}</button>
         ))
       }
     return (
