@@ -3,6 +3,7 @@ export function getNewGame() {
     let game = {}
     game.players = []
     game.state = "new"
+    game.lastAction="משחק מתחיל"
     game.onTable = []
     reshuffle(game)
 
@@ -103,6 +104,7 @@ export function selectCard(game, msg) {
     }
     game.onTable.push(msg.selectedCard)
     game.lastPlayerPlacedCard = msg.playerName
+    game.lastAction= msg.playerName + " הניח קלף "
 
 }
 
@@ -114,6 +116,7 @@ export function takeCard(game, playerName) {
             player.newCard = game.pack.pop()
             player.cards.push(player.newCard)
             player.cards = player.cards.sort(sortCards)
+            game.lastAction= playerName + " לקח קלף "
         }
     })
 }
@@ -123,6 +126,7 @@ export function takeCardBack(game, playerName) {
             if (player.name === playerName){
                 player.newCard = game.onTable.pop()
                 player.cards.push(player.newCard)
+                game.lastAction= playerName + " לקח קלף בחזרה "
             }
         })
         game.lastPlayerPlacedCard = undefined
@@ -140,6 +144,7 @@ export function reshuffleUsedCards(game) {
         game.pack[cardIndexB] = p
         f = f + 1
     }
+    game.lastAction=" הכררטיסים מוחזרו "
 }
 
 const sortCards = (a, b) => { return (a.kind) - (b.kind) }

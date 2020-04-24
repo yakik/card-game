@@ -83,6 +83,11 @@
   color: white;
 }
 
+.takeCard {
+  padding: 15px 15px;
+  font-size:20px ; 
+}
+
 .greenCard {
   background-color: #4CAF50;
   padding: 15px 15px;
