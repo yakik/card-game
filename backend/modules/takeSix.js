@@ -174,7 +174,6 @@ export function updatePilesAndScores(game, pileToReplace, numberOfPlayersToProce
             game.players[playerIndex].selectedCard.number = ""
 
             processedPlayers++
-            console.log(processedPlayers + " " + numberOfPlayersToProcess + " " + howManyToProcess)
             if (processedPlayers == numberOfPlayersToProcess)
                 return (howManyToProcess - processedPlayers)
             if (processedPlayers === howManyToProcess)

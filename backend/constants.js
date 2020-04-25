@@ -41,3 +41,11 @@ export const envTyoes = {
     PRODUCTION : 'production'
 }
     
+export const takiCardType = {
+    STOP : 'stop',
+    CHANGE_ORDER :'change_order',
+    PLUS : 'plus',
+    NUMBER: 'number',
+    CHANGE_COLOR: 'change_color',
+    TAKI:'taki'
+}
