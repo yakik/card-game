@@ -74,18 +74,19 @@ export function Start() {
         <br></br>
         <div>
           <button disabled={newPlayerName===""} onClick={() => newGame(gameTypes.TAKE_SIX)}>משחק טייק סיקס חדש</button>
-          <button disabled={newPlayerName===""} onClick={() => joinGame()}>הצטרף למשחק טייק סיקס</button>
+          <button disabled={newPlayerName===""} onClick={() => joinGame(gameTypes.TAKE_SIX)}>הצטרף למשחק טייק סיקס</button>
         </div>
         <br></br>
         <div>
           <button disabled={newPlayerName===""} onClick={() => newGame(gameTypes.TAKI)}>משחק טאקי חדש</button>
-          <button disabled={newPlayerName===""} onClick={() => joinGame()}>הצטרף למשחק טאקי</button>
+          <button disabled={newPlayerName===""} onClick={() => joinGame(gameTypes.TAKI)}>הצטרף למשחק טאקי</button>
         </div>
 
       </div>
     )
   }
   else {
+    console.log(gameType)
 if ( gameType===gameTypes.TAKE_SIX)
     return (<TakeSix gameID={newGameID.toString()} playerName={newPlayerName}
      isManager={state === states.IN_GAME_AS_MANAGER ? true : false} socket={socket} endPoint={endPoint} />)
