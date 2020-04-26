@@ -6,8 +6,8 @@ export function Management({ gameID, socket, players, isManager, gameState }) {
 
 
 
-    const removePlayer = (socket, playerName) => {
-        socket.emit(socketMsgTypes.REMOVE_PLAYER, { gameID: gameID, playerName: playerName });
+    const removePlayer = (socket, playerID) => {
+        socket.emit(socketMsgTypes.REMOVE_PLAYER, { gameID: gameID, playerID:playerID });
     };
 
     const reshuffle = (socket) => {
@@ -27,7 +27,7 @@ export function Management({ gameID, socket, players, isManager, gameState }) {
                         players.map(player => {
                             return (
                                 <div>
-                                <button key={player.name} onClick={() => removePlayer(socket, player.name)}>{player.name}</button>
+                                <button key={player.name} onClick={() => removePlayer(socket, player.ID)}>{player.name}</button>
                                 <button  onClick={() => socket.emit(socketMsgTypes.RESHUFFLE_USED_CARDS, { gameID: gameID})}>מחזר קלפים</button>
                             </div>
                             )

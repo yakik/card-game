@@ -57,12 +57,12 @@ export function addPlayer(gameID, name) {
         return addNewTakiPlayer(game.game, name)
 }
 
-export function removePlayer(gameID, name){
+export function removePlayer(gameID, playerID){
     let game = getGameObject(gameID)
     if (game.type===gameTypes.TAKE_SIX)
-        return removeTakeSixPlayer(game.game, name)
+        return removeTakeSixPlayer(game.game, playerID)
         if (game.type===gameTypes.TAKI)
-        return removeTakiPlayer(game.game, name)
+        return removeTakiPlayer(game.game, playerID)
 }
 
 

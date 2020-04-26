@@ -4,6 +4,7 @@ export function getNewGame() {
     game.players = []
     game.state = "new"
     game.lastAction="משחק מתחיל"
+    game.lastPlayerID = 0
     game.onTable = []
     reshuffle(game)
 
@@ -22,7 +23,9 @@ export function addNewPlayer(game, name) {
     let a = getCardsForPlayer(game.pack)
     cards = a.cards.sort(sortCards)
     game.pack = a.pack
-    game.players.push({ name: name, cards: cards, newCard:{color:"noCard",type:"--"} })
+    let ID = game.lastPlayerID++
+    game.players.push({ name: name, ID:ID, cards: cards, newCard:{color:"noCard",type:"--"} })
+    return ID
 }
 
 function getShuffledPack() {
@@ -73,15 +76,11 @@ function getShuffledPack() {
     console.log(pack)
     return pack
 }
-export function removePlayer(game, playerName) {
+export function removePlayer(game, playerID) {
     let newPlayers = []
-    console.log('YYYYYYYYY')
-    console.log(game.pack.length)
-    console.log(game.pack)
-    console.log('XXXXXXXX')
 
     game.players.map(player => {
-        if (player.name !== playerName)
+        if (player.ID !== playerID)
             newPlayers.push(player)
         else {
             player.cards.map(card => {
@@ -93,7 +92,7 @@ export function removePlayer(game, playerName) {
 }
 export function selectCard(game, msg) {
     for (let playerIndex = 0; playerIndex < game.players.length; playerIndex++) {
-        if (game.players[playerIndex].name === msg.playerName) {
+        if (game.players[playerIndex].ID === msg.playerID) {
             let newCards = []
             game.players[playerIndex].cards.map(card => {
                 if (msg.selectedCard.id !== card.id)
@@ -103,30 +102,30 @@ export function selectCard(game, msg) {
         }
     }
     game.onTable.push(msg.selectedCard)
-    game.lastPlayerPlacedCard = msg.playerName
+    game.lastPlayerPlacedCard = msg.playerID
     game.lastAction= msg.playerName + " הניח קלף "
 
 }
 
-export function takeCard(game, playerName) {
+export function takeCard(game, playerID) {
     if (game.pack.length === 0)
         return
     game.players.map(player => {
-        if (player.name === playerName) {
+        if (player.ID === playerID) {
             player.newCard = game.pack.pop()
             player.cards.push(player.newCard)
             player.cards = player.cards.sort(sortCards)
-            game.lastAction= playerName + " לקח קלף "
+            game.lastAction= player.name + " לקח קלף "
         }
     })
 }
-export function takeCardBack(game, playerName) {
-    if (playerName === game.lastPlayerPlacedCard) {
+export function takeCardBack(game, playerID) {
+    if (playerID === game.lastPlayerPlacedCard) {
         game.players.map(player => {
-            if (player.name === playerName){
+            if (player.ID === playerID){
                 player.newCard = game.onTable.pop()
                 player.cards.push(player.newCard)
-                game.lastAction= playerName + " לקח קלף בחזרה "
+                game.lastAction= player.name + " לקח קלף בחזרה "
             }
         })
         game.lastPlayerPlacedCard = undefined

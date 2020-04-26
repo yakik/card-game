@@ -17,6 +17,7 @@ let socket = io.connect(endPoint);
 
 export function Start() {
   const [newPlayerName, setNewPlayerName] = useState("");
+  const [playerID, setPlayerID] = useState("");
   const [gameType, setGameType] = useState("");
   const [newGameID, setNewGameID] = useState([]);
   const [state, setState] = useState(states.NOT_IN_GAME);
@@ -33,6 +34,7 @@ export function Start() {
               setNewGameID(newGameID)
               setState(states.IN_GAME_NOT_MANAGER)
               setGameType (gameType)
+              setPlayerID(res.data.playerID)
             },
             error => {
               console.log(error);
@@ -50,6 +52,7 @@ export function Start() {
               setNewGameID(ID)
               setState(states.IN_GAME_AS_MANAGER)
               setGameType (gameType)
+              setPlayerID(res.data.playerID)
             },
             error => {
               console.log(error);
@@ -88,10 +91,10 @@ export function Start() {
   else {
     console.log(gameType)
 if ( gameType===gameTypes.TAKE_SIX)
-    return (<TakeSix gameID={newGameID.toString()} playerName={newPlayerName}
+    return (<TakeSix gameID={newGameID.toString()} playerID={playerID}
      isManager={state === states.IN_GAME_AS_MANAGER ? true : false} socket={socket} endPoint={endPoint} />)
 else
-return (<Taki gameID={newGameID.toString()} playerName={newPlayerName}
+return (<Taki gameID={newGameID.toString()} playerID={playerID}
      isManager={state === states.IN_GAME_AS_MANAGER ? true : false} socket={socket} endPoint={endPoint} />)
 
   }

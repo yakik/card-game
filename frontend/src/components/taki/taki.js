@@ -6,11 +6,11 @@ import { socketMsgTypes } from '../../constants'
 
 
 
-export function Taki({ gameID, socket, playerName, isManager }) {
+export function Taki({ gameID, socket, playerName, playerID, isManager }) {
 
   const [game, setGame] = useState({});
   const getLastCard = () => {
-    return game.players.find(player => player.name === playerName).newCard
+    return game.players.find(player => player.ID === playerID).newCard
   }
   if (game.players === undefined)
     socket.emit(socketMsgTypes.REFRESH, { gameID: gameID });
@@ -30,11 +30,11 @@ export function Taki({ gameID, socket, playerName, isManager }) {
       <div className="App" >
         <h1>Taki, the remote version</h1>
         <h3>Game ID: {gameID}</h3>
-        <Management gameState={game.state} playerName={playerName} gameID={gameID} socket={socket} isManager={isManager} players={game.players} />
-        <button onClick={() => socket.emit(socketMsgTypes.TAKE_CARD_BACK, { gameID: gameID, playerName: playerName })}>החזר קלף</button>
-        <button class="takeCard" onClick={() => socket.emit(socketMsgTypes.TAKE_CARD, { gameID: gameID, playerName: playerName })}>קח קלף</button>
+        <Management gameState={game.state} playerID={playerID} playerName={playerName} gameID={gameID} socket={socket} isManager={isManager} players={game.players} />
+        <button onClick={() => socket.emit(socketMsgTypes.TAKE_CARD_BACK, { gameID: gameID, playerID: playerID })}>החזר קלף</button>
+        <button class="takeCard" onClick={() => socket.emit(socketMsgTypes.TAKE_CARD, { gameID: gameID, playerID: playerID })}>קח קלף</button>
         
-        <CardSelection gameState={game.state} playerName={playerName} gameID={gameID} socket={socket} players={game.players} />
+        <CardSelection gameState={game.state} playerID={playerID} gameID={gameID} socket={socket} players={game.players} />
         <div>{game.lastAction}</div>
         <div  class={getLastCard().color}>{"הקלף האחרון שקיבלת: " + getLastCard().type}</div>
         <div  class={game.onTable[game.onTable.length - 1].color}>{"הקלף שבראש הערמה על השולחן: " + game.onTable[game.onTable.length - 1].type}</div>

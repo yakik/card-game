@@ -16,16 +16,17 @@ var corsOptions = {
 
 router.post(routes.START_NEW_GAME, cors(corsOptions), (req, res) => {
   let newID = addGame(req.body.gameType)
-  addPlayer(newID,req.body.playerName)
-  return res.json({ success: true, gameID: newID });
+  let playerID = addPlayer(newID,req.body.playerName)
+  return res.json({ success: true, gameID: newID, playerID:playerID });
 });
 
 router.post(routes.JOIN_GAME, cors(corsOptions), (req, res) => {
   let exist = doesGameIDExist(req.body.gameID)
   let status = true
+  let playerID
   if (exist)
-    status=addPlayer(req.body.gameID,req.body.playerName)
-  return res.json({ success: status, exist: exist });
+    playerID=addPlayer(req.body.gameID,req.body.playerName)
+  return res.json({ success: status, exist: exist, playerID:playerID });
 });
 
 const sendState=(io, gameID, game)=>{
@@ -54,7 +55,8 @@ module.exports = function (io) {
       sendState(io,msg.gameID,getGame(msg.gameID))
     });
     socket.on(socketMsgTypes.REMOVE_PLAYER, function (msg) {
-      removePlayer(msg.gameID,msg.playerName)
+      console.log(msg)
+      removePlayer(msg.gameID,msg.playerID)
       sendState(io,msg.gameID,getGame(msg.gameID))
     });
     socket.on(socketMsgTypes.REVEAL_CARDS, function (msg) {
@@ -74,11 +76,11 @@ module.exports = function (io) {
     });
 
     socket.on(socketMsgTypes.TAKE_CARD, function (msg) {
-      takeCard(getGame(msg.gameID),msg.playerName)
+      takeCard(getGame(msg.gameID),msg.playerID)
       sendState(io,msg.gameID,getGame(msg.gameID))
     });
     socket.on(socketMsgTypes.TAKE_CARD_BACK, function (msg) {
-      takeCardBack(getGame(msg.gameID),msg.playerName)
+      takeCardBack(getGame(msg.gameID),msg.playerID)
       sendState(io,msg.gameID,getGame(msg.gameID))
     });
     socket.on(socketMsgTypes.RESHUFFLE_USED_CARDS, function (msg) {

@@ -2,11 +2,11 @@ import React, {useState} from 'react';
 import {states,socketMsgTypes} from '../../constants'
 
 
-export function CardSelection({ playerName, gameID,socket, players , gameState}) {
+export function CardSelection({ playerName, playerID, gameID,socket, players , gameState}) {
     const [playerSelection, setPlayerSelection] = useState("");
 
     const onClickCard = (socket,card) => {
-        socket.emit(socketMsgTypes.SELECT_CARDS, { gameID: gameID, playerName: playerName, selectedCard: card });
+        socket.emit(socketMsgTypes.SELECT_CARDS, { gameID: gameID, playerID: playerID, selectedCard: card });
     
       }
     
@@ -21,13 +21,13 @@ export function CardSelection({ playerName, gameID,socket, players , gameState})
     return (
         <div>{players.length > 0 &&
             players.map(player => {
-              if (player.name === playerName)
+              if (player.ID === playerID)
                 return (
-                  <div key={player.name}>
+                  <div key={player.ID}>
                     <p>{getCardsButtons(socket,player.cards)}</p>
                   </div>
                 )
-              else return <div key={player.name}></div>
+              else return <div key={player.ID}></div>
             })}
          <br></br></div>)
           

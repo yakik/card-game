@@ -7,7 +7,7 @@ import {socketMsgTypes} from '../constants'
 
 
 
-export function TakeSix({gameID, socket, playerName, isManager}) {
+export function TakeSix({gameID, socket, playerID, playerName, isManager}) {
   
   const [game, setGame] = useState({});
 
@@ -29,8 +29,8 @@ export function TakeSix({gameID, socket, playerName, isManager}) {
       <div className="App" >
         <h1>take six, the remote version</h1>
         <h3>Game ID: {gameID}</h3>
-        <Management gameState={game.state} playerName={playerName} gameID={gameID} socket={socket} isManager={isManager} players={game.players} />
-        <CardSelection gameState={game.state} playerName={playerName} gameID={gameID} socket={socket} players={game.players} />
+        <Management gameState={game.state} playerID={playerID} playerName={playerName} gameID={gameID} socket={socket} isManager={isManager} players={game.players} />
+        <CardSelection gameState={game.state} playerID={playerID} playerName={playerName} gameID={gameID} socket={socket} players={game.players} />
         <Piles piles={game.piles} />
         <br></br>
         <PlayersList players={game.players} />

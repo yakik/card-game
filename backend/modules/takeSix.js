@@ -6,6 +6,7 @@ import {states} from '../constants'
 export function getNewGame() {
     let game = {}
     game.players = []
+    game.lastPlayerID = 0
     game.allowSelection = true
     game.state = states.SELECTING_CARDS
     reshuffle(game)
@@ -23,8 +24,9 @@ export function addNewPlayer(game, name) {
     let a = getCardsForPlayer(game.pack)
     cards = a.cards
     game.pack = a.pack
-    game.players.push({ name: name, changeThisTurn: 0,score: 0, cards: cards, selectedCard: { number: "X", sign: "", show: '--' } })
-    return true
+    let ID = game.lastPlayerID++
+    game.players.push({ name: name, ID:ID, changeThisTurn: 0,score: 0, cards: cards, selectedCard: { number: "X", sign: "", show: '--' } })
+    return ID
 }
 
 
@@ -58,7 +60,7 @@ export function newGame(game) {
 export function selectCard(game, msg) {
 
     game.players.map(player => {
-        if (player.name == msg.playerName) {
+        if (player.ID == msg.playerID) {
             player.selectedCard = msg.selectedCard
             player.selectedCard.show = "?"
         }
@@ -73,15 +75,11 @@ export function selectCard(game, msg) {
 
 }
 
-export function removePlayer(game, playerName) {
+export function removePlayer(game, playerID) {
     let newPlayers = []
-    console.log('YYYYYYYYY')
-    console.log(game.pack.length)
-    console.log(game.pack)
-    console.log('XXXXXXXX')
 
     game.players.map(player => {
-        if (player.name !== playerName)
+        if (player.ID !== playerID)
             newPlayers.push(player)
         else{
             player.cards.map(card=>{
@@ -90,9 +88,6 @@ export function removePlayer(game, playerName) {
         }
     })
     game.players = newPlayers
-    console.log(game.pack.length)
-    console.log(game.pack)
-    console.log('---------')
 }
 
 
