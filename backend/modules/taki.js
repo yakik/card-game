@@ -1,9 +1,11 @@
+import {takiCardTypes,takiColors} from '../constants'
+
 
 export function getNewGame() {
     let game = {}
     game.players = []
     game.state = "new"
-    game.lastAction="משחק מתחיל"
+    game.lastAction = "משחק מתחיל"
     game.lastPlayerID = 0
     game.onTable = []
     reshuffle(game)
@@ -24,7 +26,7 @@ export function addNewPlayer(game, name) {
     cards = a.cards.sort(sortCards)
     game.pack = a.pack
     let ID = game.lastPlayerID++
-    game.players.push({ name: name, ID:ID, cards: cards, newCard:{color:"noCard",type:"--"} })
+    game.players.push({ name: name, ID: ID, cards: cards })
     return ID
 }
 
@@ -32,39 +34,34 @@ function getShuffledPack() {
     let pack = []
     let id = 0
     let colorCounter = 0
-    let colors = ["greenCard","yellowCard","blueCard","redCard"]
+    let colors = [takiColors.GREEN, takiColors.YELLOW, takiColors.BLUE, takiColors.RED]
 
     colors.map(color => {
         colorCounter++
         for (let j = 0; j < 2; j++) {
-           
+
             for (let i = 1; i < 10; i++) {
                 if (i !== 2)
-                    pack.push({ id: id++, kind: colorCounter * 100 + i, color: color, type: i })
+                    pack.push({ ID: id++, forSorting: colorCounter * 100 + i, color: color, number: i, type: takiCardTypes.NUMBER })
                 else
-                    pack.push({ id: id++, kind: colorCounter * 100 + i, color: color, type: "+2" })
+                    pack.push({ ID: id++, forSorting: colorCounter * 100 + i, color: color, type: takiCardTypes.PLUS_TWO })
             }
-            pack.push({ id: id++, kind: colorCounter * 100 + 30, color: color, type: "עצור" })
-            pack.push({ id: id++, kind: colorCounter * 100 + 31, color: color, type: "שנה כיוון" })
-            pack.push({ id: id++, kind: colorCounter * 100 + 32, color: color, type: "פלוס" })
-            pack.push({ id: id++, kind: colorCounter * 100 + 33, color: color, type: "טאקי" })
-
+            pack.push({ ID: id++, forSorting: colorCounter * 100 + 30, color: color, type: takiCardTypes.STOP })
+            pack.push({ ID: id++, forSorting: colorCounter * 100 + 31, color: color, type: takiCardTypes.CHANGE_DIRECTION })
+            pack.push({ ID: id++, forSorting: colorCounter * 100 + 32, color: color, type: takiCardTypes.PLUS })
+            pack.push({ ID: id++, forSorting: colorCounter * 100 + 33, color: color, type: takiCardTypes.TAKI })
         }
 
     })
 
-    pack.push({ id: id++, kind: 1001, color: "specialCard", type: "שנה צבע" })
-    pack.push({ id: id++, kind: 1002, color: "specialCard", type: "שנה צבע" })
-    pack.push({ id: id++, kind: 1003, color: "specialCard", type: "שנה צבע" })
-    pack.push({ id: id++, kind: 1004, color: "specialCard", type: "שנה צבע" })
-    pack.push({ id: id++, kind: 1005, color: "specialCard", type: "מלך" })
-    pack.push({ id: id++, kind: 1006, color: "specialCard", type: "מלך" })
-    pack.push({ id: id++, kind: 1007, color: "specialCard", type: "שובר פלוס שלוש" })
-    pack.push({ id: id++, kind: 1008, color: "specialCard", type: "שובר פלוס שלוש" })
-    pack.push({ id: id++, kind: 1009, color: "specialCard", type: "שובר פלוס שלוש" })
-    pack.push({ id: id++, kind: 1010, color: "specialCard", type: "+3" })
-    pack.push({ id: id++, kind: 1011, color: "specialCard", type: "+3" })
-    pack.push({ id: id++, kind: 1012, color: "specialCard", type: "+3" })
+    for (let i = 0; i < 4; i++)
+        pack.push({ ID: id++, forSorting: 1001, type: takiCardTypes.CHANGE_COLOR })
+    pack.push({ ID: id++, forSorting: 1005, type: takiCardTypes.KING })
+    pack.push({ ID: id++, forSorting: 1006, type: takiCardTypes.KING })
+    for (let i = 0; i < 3; i++)
+        pack.push({ ID: id++, forSorting: 1007, type: takiCardTypes.PLUS_THREE_BREAK })
+    for (let i = 0; i < 3; i++)
+        pack.push({ ID: id++, forSorting: 1012, type: takiCardTypes.PLUS_THREE })
     for (let f = 0; f < 300; f++) {
         let cardIndexA = Math.round(Math.random() * (pack.length - 1))
         let cardIndexB = Math.round(Math.random() * (pack.length - 1))
@@ -103,7 +100,7 @@ export function selectCard(game, msg) {
     }
     game.onTable.push(msg.selectedCard)
     game.lastPlayerPlacedCard = msg.playerID
-    game.lastAction= msg.playerName + " הניח קלף "
+    game.lastAction = msg.playerName + " הניח קלף "
 
 }
 
@@ -115,17 +112,28 @@ export function takeCard(game, playerID) {
             player.newCard = game.pack.pop()
             player.cards.push(player.newCard)
             player.cards = player.cards.sort(sortCards)
-            game.lastAction= player.name + " לקח קלף "
+            game.lastAction = player.name + " לקח קלף "
         }
     })
 }
+
+function resetCard(card){
+    newCard={...card}
+    if (card.type = takiCardTypes.KING)
+        card.kingSelection = undefined
+    if (card.type = takiCardTypes.CHANGE_COLOR)
+        card.changeColorSelection = undefined
+    return newCard
+
+}
+
 export function takeCardBack(game, playerID) {
     if (playerID === game.lastPlayerPlacedCard) {
         game.players.map(player => {
-            if (player.ID === playerID){
+            if (player.ID === playerID) {
                 player.newCard = game.onTable.pop()
-                player.cards.push(player.newCard)
-                game.lastAction= player.name + " לקח קלף בחזרה "
+                player.cards.push(resetCard(player.newCard))
+                game.lastAction = player.name + " לקח קלף בחזרה "
             }
         })
         game.lastPlayerPlacedCard = undefined
@@ -134,7 +142,7 @@ export function takeCardBack(game, playerID) {
 export function reshuffleUsedCards(game) {
     let cardsOnTable = game.onTable.length - 1
     for (let i = 0; i < cardsOnTable; i++)
-        game.pack.push(game.onTable.shift())
+        game.pack.push(resetCard(game.onTable.shift()))
     for (let f = 0; f < 300; f++) {
         let cardIndexA = Math.round(Math.random() * (game.pack.length - 1))
         let cardIndexB = Math.round(Math.random() * (game.pack.length - 1))
@@ -143,10 +151,10 @@ export function reshuffleUsedCards(game) {
         game.pack[cardIndexB] = p
         f = f + 1
     }
-    game.lastAction=" הכררטיסים מוחזרו "
+    game.lastAction = " הכררטיסים מוחזרו "
 }
 
-const sortCards = (a, b) => { return (a.kind) - (b.kind) }
+const sortCards = (a, b) => { return (a.forSorting) - (b.forSorting) }
 
 export function reshuffle(game) {
     game.pack = getShuffledPack()

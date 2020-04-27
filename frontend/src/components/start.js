@@ -4,11 +4,11 @@ import io from "socket.io-client"
 import './App.css';
 import { TakeSix } from './takeSix'
 import { Taki } from './taki/taki'
-import {routes, states, gameTypes, endPoints, envTyoes} from '../constants'
+import {routes, states, gameTypes, endPoints, envTypes} from '../constants'
 
 let endPoint = endPoints.LOCAL_HOST
 
-if (process.env.NODE_ENV === envTyoes.PRODUCTION) {
+if (process.env.NODE_ENV === envTypes.PRODUCTION) {
   endPoint = endPoints.PRODUCTION
 }
 

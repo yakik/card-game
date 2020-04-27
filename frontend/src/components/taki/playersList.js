@@ -8,7 +8,7 @@ export function PlayersList({ players }) {
     let key = 0
     col.push(<textarea disabled={true} cols={width} rows="1" className="cell" key={key} value={title}></textarea>)
     players.map(player => {
-      if (anotherFieldName==2){
+      if (anotherFieldName===2){
         col.push(<textarea cols={width} rows="1"key={++key} disabled={true} className="cell" value={player.cards.length}/>)
       } else {
       if (anotherFieldName === undefined)

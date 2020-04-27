@@ -48,10 +48,8 @@ module.exports = function (io) {
 
     socket.on(socketMsgTypes.UPDATE_PILES_AND_SCORES, function (msg) {
       let remainingCards = updatePilesAndScores(getGame(msg.gameID),msg.selectedPile, msg.playersToProcess)
-      console.log(remainingCards)
       if (remainingCards==0)
         updateState(msg.gameID,states.SELECTING_CARDS)
-      console.log(getGame(msg.gameID).state)
       sendState(io,msg.gameID,getGame(msg.gameID))
     });
     socket.on(socketMsgTypes.REMOVE_PLAYER, function (msg) {

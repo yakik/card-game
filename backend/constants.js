@@ -37,15 +37,26 @@ export const endPoints = {
     PRODUCTION : "https://card-game989.herokuapp.com"
     }
 
-export const envTyoes = {
+export const envTypes = {
     PRODUCTION : 'production'
 }
     
-export const takiCardType = {
+export const takiCardTypes = {
     STOP : 'stop',
-    CHANGE_ORDER :'change_order',
+    CHANGE_DIRECTION :'change_order',
     PLUS : 'plus',
+    PLUS_TWO: 'plus_two',
     NUMBER: 'number',
     CHANGE_COLOR: 'change_color',
-    TAKI:'taki'
+    TAKI:'taki',
+    KING: 'king',
+    PLUS_THREE: 'plus_three',
+    PLUS_THREE_BREAK: 'plus_three_break'
+}
+
+export const takiColors = {
+    GREEN : 'green',
+    YELLOW :'yellow',
+    RED : 'red',
+    BLUE: 'blue'
 }

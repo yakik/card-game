@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import {socketMsgTypes, states} from '../../constants'
+import React from 'react';
+import {socketMsgTypes} from '../../constants'
 
 
-export function Management({ gameID, socket, players, isManager, gameState }) {
+export function Management({ gameID, socket, players, isManager }) {
 
 
 

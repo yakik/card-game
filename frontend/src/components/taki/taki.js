@@ -3,6 +3,7 @@ import { PlayersList } from "./playersList";
 import { Management } from "./management";
 import { CardSelection } from "./cardSelection";
 import { socketMsgTypes } from '../../constants'
+import {getCardClass, getCardText} from './cards'
 
 
 
@@ -36,8 +37,8 @@ export function Taki({ gameID, socket, playerName, playerID, isManager }) {
         
         <CardSelection gameState={game.state} playerID={playerID} gameID={gameID} socket={socket} players={game.players} />
         <div>{game.lastAction}</div>
-        <div  class={getLastCard().color}>{"הקלף האחרון שקיבלת: " + getLastCard().type}</div>
-        <div  class={game.onTable[game.onTable.length - 1].color}>{"הקלף שבראש הערמה על השולחן: " + game.onTable[game.onTable.length - 1].type}</div>
+        <div  class={getCardClass(getLastCard())}>{"הקלף האחרון שקיבלת: " + getCardText(getLastCard())}</div>
+        <div  class={getCardClass(game.onTable[game.onTable.length - 1])}>{"הקלף שבראש הערמה על השולחן: " + getCardText(game.onTable[game.onTable.length - 1])}</div>
         <div>{"מספר הקלפים בחפיסה: " + game.pack.length}</div>
         <br></br>
         <PlayersList players={game.players} />
