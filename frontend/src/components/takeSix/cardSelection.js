@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {states,socketMsgTypes} from '../constants'
+import {states,socketMsgTypes} from '../../constants'
 
 
 export function CardSelection({ playerID, gameID,socket, players , gameState}) {

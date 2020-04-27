@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from "axios"
 import io from "socket.io-client"
 import './App.css';
-import { TakeSix } from './takeSix'
+import { TakeSix } from './takeSix/takeSix'
 import { Taki } from './taki/taki'
 import {routes, states, gameTypes, endPoints, envTypes} from '../constants'
 

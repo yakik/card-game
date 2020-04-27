@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {socketMsgTypes, states} from '../constants'
+import {socketMsgTypes, states} from '../../constants'
 
 
 export function Management({ gameID, socket, players, isManager, gameState }) {

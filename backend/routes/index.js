@@ -53,7 +53,6 @@ module.exports = function (io) {
       sendState(io,msg.gameID,getGame(msg.gameID))
     });
     socket.on(socketMsgTypes.REMOVE_PLAYER, function (msg) {
-      console.log(msg)
       removePlayer(msg.gameID,msg.playerID)
       sendState(io,msg.gameID,getGame(msg.gameID))
     });

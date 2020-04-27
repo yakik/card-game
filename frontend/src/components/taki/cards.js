@@ -34,7 +34,7 @@ export function getCardClass(card) {
     }
       switch (card.type){
           case takiCardTypes.STOP : return 'עצור'
-          case takiCardTypes.CHANGE_DIRECTION : return 'שה כיוון'
+          case takiCardTypes.CHANGE_DIRECTION : return 'שנה כיוון'
           case takiCardTypes.PLUS : return '+'
           case takiCardTypes.PLUS_TWO: return '+2'
           case takiCardTypes.NUMBER: return card.number

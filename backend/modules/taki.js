@@ -1,4 +1,4 @@
-import {takiCardTypes,takiColors} from '../constants'
+import { takiCardTypes, takiColors } from '../constants'
 
 
 export function getNewGame() {
@@ -70,7 +70,6 @@ function getShuffledPack() {
         pack[cardIndexB] = p
         f = f + 1
     }
-    console.log(pack)
     return pack
 }
 export function removePlayer(game, playerID) {
@@ -87,38 +86,33 @@ export function removePlayer(game, playerID) {
     })
     game.players = newPlayers
 }
+
+const getPlayer = (game, ID) => {
+    return game.players.find((player) => player.ID === ID)
+}
+
 export function selectCard(game, msg) {
-    for (let playerIndex = 0; playerIndex < game.players.length; playerIndex++) {
-        if (game.players[playerIndex].ID === msg.playerID) {
-            let newCards = []
-            game.players[playerIndex].cards.map(card => {
-                if (msg.selectedCard.id !== card.id)
-                    newCards.push(card)
-            })
-            game.players[playerIndex].cards = newCards.sort(sortCards)
-        }
-    }
+    let player = getPlayer(game, msg.playerID)
+    let newCards = player.cards.filter((card)=> card.ID!==msg.selectedCard.ID)
+    player.cards = newCards.sort(sortCards)
     game.onTable.push(msg.selectedCard)
     game.lastPlayerPlacedCard = msg.playerID
-    game.lastAction = msg.playerName + " הניח קלף "
+    game.lastAction = player.name + " הניח קלף "
 
 }
 
 export function takeCard(game, playerID) {
     if (game.pack.length === 0)
         return
-    game.players.map(player => {
-        if (player.ID === playerID) {
-            player.newCard = game.pack.pop()
-            player.cards.push(player.newCard)
-            player.cards = player.cards.sort(sortCards)
-            game.lastAction = player.name + " לקח קלף "
-        }
-    })
+    let player = getPlayer(game, playerID)
+    player.newCard = game.pack.pop()
+    player.cards.push(player.newCard)
+    player.cards = player.cards.sort(sortCards)
+    game.lastAction = player.name + " לקח קלף "
 }
 
-function resetCard(card){
-    newCard={...card}
+function resetCard(card) {
+    let newCard = { ...card }
     if (card.type = takiCardTypes.KING)
         card.kingSelection = undefined
     if (card.type = takiCardTypes.CHANGE_COLOR)
@@ -129,13 +123,11 @@ function resetCard(card){
 
 export function takeCardBack(game, playerID) {
     if (playerID === game.lastPlayerPlacedCard) {
-        game.players.map(player => {
-            if (player.ID === playerID) {
-                player.newCard = game.onTable.pop()
-                player.cards.push(resetCard(player.newCard))
-                game.lastAction = player.name + " לקח קלף בחזרה "
-            }
-        })
+        let player = getPlayer(game, playerID)
+        player.newCard = game.onTable.pop()
+        player.cards.push(resetCard(player.newCard))
+        game.lastAction = player.name + " לקח קלף בחזרה "
+        player.cards = player.cards.sort(sortCards)
         game.lastPlayerPlacedCard = undefined
     }
 }
@@ -158,7 +150,7 @@ const sortCards = (a, b) => { return (a.forSorting) - (b.forSorting) }
 
 export function reshuffle(game) {
     game.pack = getShuffledPack()
-
+    
     game.players.map(player => {
         let a = getCardsForPlayer(game.pack)
         let cards = a.cards

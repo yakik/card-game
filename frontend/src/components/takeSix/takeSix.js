@@ -3,7 +3,7 @@ import { Piles } from "./piles";
 import { PlayersList } from "./playersList";
 import { Management } from "./management";
 import { CardSelection } from "./cardSelection";
-import {socketMsgTypes} from '../constants'
+import {socketMsgTypes} from '../../constants'
 
 
 
