@@ -1,3 +1,17 @@
+
+.taki-content { grid-area: content; }
+.taki-padding-left { grid-area: padding-left; }
+.taki-padding-right { grid-area: padding-right; }
+
+
+.taki-grid-container {
+  display: grid;
+  grid-template-areas:
+    'padding-left padding-left content padding-right padding-right';
+  grid-gap: 10px;
+  padding: 10px;
+}
+
 .App {
   text-align: center;
 }
@@ -13,31 +27,32 @@
   }
 }
 .flexGrid {
-
   display: flex;
-
   flex-direction: row;
-
   border: 5px;
-
   border-color: #282c34;
-
   justify-content: center
-
 }
 
-
+.flexCol {
+  display: flex;
+  flex-direction: column;
+  border: 5px;
+  border-color: #282c34;
+}
 
 .flexRow {
-
   display: flex;
-
   flex-direction: row;
-
   border: 5px;
-
   border-color: #282c34;
-
+}
+.flexColCenter {
+  display: flex;
+  flex-direction: col;
+  border: 5px;
+  border-color: #282c34;
+  justify-content: center
 }
 
 .cell {
@@ -60,17 +75,7 @@
   resize: none;
 }
 
-.flexCol {
 
-  display: flex;
-
-  flex-direction: column;
-
-  border: 5px;
-
-  border-color: #282c34;
-
-}
 
 .App-header {
   background-color: #282c34;

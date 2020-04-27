@@ -1,5 +1,5 @@
 import React from 'react';
-import {socketMsgTypes} from '../../constants'
+import { socketMsgTypes } from '../../constants'
 
 
 export function Management({ gameID, socket, players, isManager }) {
@@ -7,7 +7,7 @@ export function Management({ gameID, socket, players, isManager }) {
 
 
     const removePlayer = (socket, playerID) => {
-        socket.emit(socketMsgTypes.REMOVE_PLAYER, { gameID: gameID, playerID:playerID });
+        socket.emit(socketMsgTypes.REMOVE_PLAYER, { gameID: gameID, playerID: playerID });
     };
 
     const reshuffle = (socket) => {
@@ -19,22 +19,21 @@ export function Management({ gameID, socket, players, isManager }) {
         return (
             <div>
                 <button onClick={() => reshuffle(socket)}>ערבב מחדש</button>
-               
+                <button onClick={() => socket.emit(socketMsgTypes.RESHUFFLE_USED_CARDS, { gameID: gameID })}>מחזר קלפים</button>
                 <br></br>
                 <div>
-
                     {players.length > 0 &&
                         players.map(player => {
                             return (
-                                <div>
-                                <button key={player.name} onClick={() => removePlayer(socket, player.ID)}>{player.name}</button>
-                                <button  onClick={() => socket.emit(socketMsgTypes.RESHUFFLE_USED_CARDS, { gameID: gameID})}>מחזר קלפים</button>
-                            </div>
+                                <div key={player.ID}>
+                                    <button  onClick={() => removePlayer(socket, player.ID)}>{player.name}</button>
+                                </div>
                             )
                         })
                     }
                 </div>
-            </div>)
+            </div>
+        )
     else
         return <div></div>
 }

@@ -36,7 +36,6 @@ const sendState=(io, gameID, game)=>{
 module.exports = function (io) {
   //Socket.IO
   io.on(socketMsgTypes.CONNECTION, function (socket) {
-    console.log('User has connected to Index');
     //ON Events
     socket.on(socketMsgTypes.REFRESH, function (msg) {
       io.emit(socketMsgTypes.SET_GAME_STATE, {gameID:msg.gameID,game:getGame(msg.gameID)});
