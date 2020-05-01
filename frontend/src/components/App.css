@@ -24,6 +24,13 @@
   text-align: center;
 }
 
+.players-list {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  background-color: #2196F3;
+  padding: 10px;
+}
+
 .scaled {
   transform: scale(1.5); /* Equal to scaleX(0.7) scaleY(0.7) */
 }

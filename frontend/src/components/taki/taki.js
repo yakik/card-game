@@ -12,38 +12,21 @@ export function Taki({ gameID, socket, playerName, playerID, isManager }) {
 
   const [game, setGame] = useState({});
   const [player, setPlayer] = useState({});
-  const [modalIsOpen, setIsOpen] = React.useState(false);
 
-  const getPlayer =() =>{
+  const getPlayer = () => {
     return game.players.find((player) => player.ID === playerID)
   }
 
-
-  const getAdditionInformationModal = () => {
-    if (player !== undefined && player.requiredAction !== undefined) {
-      return (<div>
-        <h2 >בחר צבע</h2>
-        <button className="greenCard" onClick={() => { return takiColors.GREEN }}>ירוק</button>
-        <button className="blueCard" onClick={() => { return takiColors.BLUE }}>ירוק</button>
-        <button className="yellowCard" onClick={() => { return takiColors.YELLOW }}>ירוק</button>
-        <button className="redCard" onClick={() => { return takiColors.RED }}>ירוק</button>
-        <button onClick={() => { }}>close</button>
-
-      </div>)
-
-    }
-    else return
-  }
-
   const getPack = (deckOnTable) => {
-    let deckSize = deckOnTable.length
-    return <div className={getCardClass(game.onTable[deckSize - 1])}>{getCardText(game.onTable[deckSize - 1])}</div>
+    let deckSize = deckOnTable.length-1
+    let cardsOnTable=[]
+    for (let i=deckSize;i>Math.max(0,deckSize-6);i--)
+      cardsOnTable.push(<div key={i} className={getCardClass(game.onTable[i])}>{getCardText(game.onTable[i])}</div>)
+    return <div className="flexCol">{cardsOnTable}</div>
   }
 
   if (game.players === undefined)
     socket.emit(socketMsgTypes.REFRESH, { gameID: gameID });
-
-
 
   useEffect(() => {
     socket.on(socketMsgTypes.SET_GAME_STATE, msg => {
@@ -67,12 +50,12 @@ export function Taki({ gameID, socket, playerName, playerID, isManager }) {
         </div>
         <div className="taki-cards">
           <button onClick={() => socket.emit(socketMsgTypes.TAKE_CARD_BACK, { gameID: gameID, playerID: playerID })}>החזר קלף</button>
-    <button className="takeCard" onClick={() => socket.emit(socketMsgTypes.TAKE_CARD, { gameID: gameID, playerID: playerID })}>{"קח קלף, נותרו " + game.pack.length }</button>
+          <button className="takeCard" onClick={() => socket.emit(socketMsgTypes.TAKE_CARD, { gameID: gameID, playerID: playerID })}>{"קח קלף, נותרו " + game.pack.length}</button>
           <CardSelection gameState={game.state} playerID={playerID} gameID={gameID} socket={socket} player={getPlayer()} />
           <div>{game.lastAction}</div>
         </div>
         <div className="taki-cards-on-table">
-        <div >{"הערמה על השולחן "} </div>
+          <h2>{"קלפים שהונחו"} </h2>
           {getPack(game.onTable)}
         </div>
         <div className="taki-players" >

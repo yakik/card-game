@@ -145,7 +145,7 @@ export function takeCardBack(game, playerID) {
 }
 export function reshuffleUsedCards(game) {
     let cardsOnTable = game.onTable.length - 1
-    for (let i = 0; i < cardsOnTable; i++)
+    for (let i = 0; i < cardsOnTable-1; i++)
         game.pack.push(resetCard(game.onTable.shift()))
     for (let f = 0; f < 300; f++) {
         let cardIndexA = Math.round(Math.random() * (game.pack.length - 1))
@@ -161,6 +161,7 @@ export function reshuffleUsedCards(game) {
 const sortCards = (a, b) => { return (a.forSorting) - (b.forSorting) }
 
 export function reshuffle(game) {
+    game.onTable=[]
     game.pack = getShuffledPack()
     
     game.players.map(player => {
