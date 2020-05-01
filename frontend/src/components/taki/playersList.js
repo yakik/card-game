@@ -22,8 +22,8 @@ export function PlayersList({ players }) {
   const getGrid = (players) => {
     let rows = []
     let colKey = 0
-    rows.push(getCol(++colKey,10, "Name", "name", players))
-    rows.push(getCol(++colKey,10, "Cards", "", players,2))
+    rows.push(getCol(++colKey,10, "שחקן", "name", players))
+    rows.push(getCol(++colKey,10, "קלפים", "", players,2))
    
     return (<div className="flexGrid">{rows}</div>)
   }

@@ -60,3 +60,7 @@ export const takiColors = {
     RED : 'red',
     BLUE: 'blue'
 }
+
+export const takiSpecialAction = {
+    SELECT_COLOR : 'select_color'
+}

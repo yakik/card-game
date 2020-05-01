@@ -1,4 +1,4 @@
-import { takiCardTypes, takiColors } from '../constants'
+import { takiCardTypes, takiColors, takiSpecialAction } from '../constants'
 
 
 export function getNewGame() {
@@ -95,6 +95,8 @@ export function selectCard(game, msg) {
     let player = getPlayer(game, msg.playerID)
     let newCards = player.cards.filter((card)=> card.ID!==msg.selectedCard.ID)
     player.cards = newCards.sort(sortCards)
+    if (msg.selectedCard.type===takiCardTypes.CHANGE_COLOR || msg.selectedCard.type===takiCardTypes.KING)
+        player.requiredAction=takiSpecialAction.SELECT_COLOR
     game.onTable.push(msg.selectedCard)
     game.lastPlayerPlacedCard = msg.playerID
     game.lastAction = player.name + " הניח קלף "

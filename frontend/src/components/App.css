@@ -1,13 +1,38 @@
 
-.taki-content { grid-area: content; }
-.taki-padding-left { grid-area: padding-left; }
-.taki-padding-right { grid-area: padding-right; }
+.taki-title {
+  grid-area: grid-title; 
+  text-align: center;
+}
+.taki-management {
+  grid-area: grid-management; 
+  text-align: center;
+}
+.taki-cards {
+  grid-area: grid-cards;
+  text-align: center;
+}
+.taki-sprcial-action {
+  grid-area: grid-special-action; 
+  text-align: center;
+}
+.taki-players {
+  grid-area: grid-players; 
+  text-align: center;
+}
+.taki-cards-on-table {
+  grid-area: grid-cards-on-table; 
+  text-align: center;
+}
 
 
 .taki-grid-container {
   display: grid;
   grid-template-areas:
-    'padding-left padding-left content padding-right padding-right';
+    'grid-title grid-title'
+    'grid-management grid-management'
+    'grid-cards grid-cards'
+    'grid-special-action grid-special-action'
+    'grid-players grid-cards-on-table';
   grid-gap: 10px;
   padding: 10px;
 }

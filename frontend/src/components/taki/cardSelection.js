@@ -1,9 +1,9 @@
 import React from 'react';
 import { socketMsgTypes } from '../../constants'
 
-import {getCardClass, getCardText} from './cards'
+import { getCardClass, getCardText } from './cards'
 
-export function CardSelection({ playerID, gameID, socket, players }) {
+export function CardSelection({ playerID, gameID, socket, player }) {
 
   const onClickCard = (socket, card) => {
     socket.emit(socketMsgTypes.SELECT_CARDS, { gameID: gameID, playerID: playerID, selectedCard: card });
@@ -15,17 +15,12 @@ export function CardSelection({ playerID, gameID, socket, players }) {
       <button className={getCardClass(card)} key={i++} onClick={() => onClickCard(socket, card)}>{getCardText(card)}</button>
     ))
   }
-  return (
-    <div>{players.length > 0 &&
-      players.map(player => {
-        if (player.ID === playerID)
-          return (
-            <div key={player.ID}>
-              <p>{getCardsButtons(socket, player.cards)}</p>
-            </div>
-          )
-        else return <div key={player.ID}></div>
-      })}
-      <br></br></div>)
+  if (player !== undefined)
+    return (<div>
+      <p>{getCardsButtons(socket, player.cards)}</p>
+    </div>
+    )
+  else
+    return <div></div>
 
 }
