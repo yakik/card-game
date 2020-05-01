@@ -24,11 +24,25 @@
   text-align: center;
 }
 
+.cards-list {
+  display: grid;
+  grid-template-columns: repeat(1, auto);
+  grid-gap: 10px;
+  background-color: #2196F3;
+  padding: 10px;
+}
+
 .players-list {
   display: grid;
   grid-template-columns: repeat(2, auto);
+  grid-gap: 10px;
   background-color: #2196F3;
   padding: 10px;
+}
+
+.players-list > div {
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
 }
 
 .scaled {
