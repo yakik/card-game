@@ -11,9 +11,15 @@ export function CardSelection({ playerID, gameID, socket, player }) {
 
   const getCardsButtons = (socket, cards) => {
     let i = 0
-    return cards.map(card => (
-      <button className={getCardClass(card)} key={i++} onClick={() => onClickCard(socket, card)}>{getCardText(card)}</button>
-    ))
+    return cards.map(card => {
+      let scaleCSS = ""
+      if (player.newCard !== undefined && card.ID === player.newCard.ID) {
+        scaleCSS = " scaled"
+      }
+      return (
+        <button className={getCardClass(card) + scaleCSS} key={i++} onClick={() => onClickCard(socket, card)}>{getCardText(card)}</button>
+      )
+    })
   }
   if (player !== undefined)
     return (<div>

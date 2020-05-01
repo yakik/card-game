@@ -92,6 +92,7 @@ const getPlayer = (game, ID) => {
 }
 
 export function selectCard(game, msg) {
+    game.players = resetTakenCards(game.players)
     let player = getPlayer(game, msg.playerID)
     let newCards = player.cards.filter((card)=> card.ID!==msg.selectedCard.ID)
     player.cards = newCards.sort(sortCards)
@@ -103,7 +104,16 @@ export function selectCard(game, msg) {
 
 }
 
+const resetTakenCards=(players)=>{
+    return players.map(player=>{
+        let newPlayer = {...player}
+        newPlayer.newCard = undefined
+        return newPlayer
+    })
+}
+
 export function takeCard(game, playerID) {
+    game.players = resetTakenCards(game.players)
     if (game.pack.length === 0)
         return
     let player = getPlayer(game, playerID)

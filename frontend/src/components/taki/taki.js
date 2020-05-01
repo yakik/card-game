@@ -18,17 +18,6 @@ export function Taki({ gameID, socket, playerName, playerID, isManager }) {
     return game.players.find((player) => player.ID === playerID)
   }
 
-  const getLastCardDiv = () => {
-    if (player !== undefined)
-      return <div className="flexColCenter">
-        <div className={getCardClass(player.newCard)}>{getCardText(player.newCard)}</div>
-        <div >{"הקלף האחרון שקיבלת "}</div>
-      </div>
-    else
-      return <div className="flexRowCenter">
-      </div>
-  }
-
 
   const getAdditionInformationModal = () => {
     if (player !== undefined && player.requiredAction !== undefined) {
@@ -81,7 +70,6 @@ export function Taki({ gameID, socket, playerName, playerID, isManager }) {
     <button className="takeCard" onClick={() => socket.emit(socketMsgTypes.TAKE_CARD, { gameID: gameID, playerID: playerID })}>{"קח קלף, נותרו " + game.pack.length }</button>
           <CardSelection gameState={game.state} playerID={playerID} gameID={gameID} socket={socket} player={getPlayer()} />
           <div>{game.lastAction}</div>
-          {getLastCardDiv()}
         </div>
         <div className="taki-cards-on-table">
         <div >{"הערמה על השולחן "} </div>
