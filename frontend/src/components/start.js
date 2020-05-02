@@ -89,7 +89,6 @@ export function Start() {
     )
   }
   else {
-    console.log(gameType)
 if ( gameType===gameTypes.TAKE_SIX)
     return (<TakeSix gameID={newGameID.toString()} playerID={playerID}
      isManager={state === states.IN_GAME_AS_MANAGER ? true : false} socket={socket} endPoint={endPoint} />)

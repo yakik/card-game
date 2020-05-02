@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Modal from 'react-modal';
 import { PlayersList } from "./playersList"
 import { Management } from "./management"
 import { CardSelection } from "./cardSelection"
@@ -49,7 +48,6 @@ export function Taki({ gameID, socket, playerName, playerID, isManager }) {
           <button onClick={() => socket.emit(socketMsgTypes.TAKE_CARD_BACK, { gameID: gameID, playerID: playerID })}>החזר קלף</button>
           <button className="takeCard" onClick={() => socket.emit(socketMsgTypes.TAKE_CARD, { gameID: gameID, playerID: playerID })}>{"קח קלף, נותרו " + game.pack.length}</button>
           <CardSelection gameState={game.state} playerID={playerID} gameID={gameID} socket={socket} player={getPlayer()} />
-          <div>{game.lastAction}</div>
         </div>
         <div className="taki-cards-on-table">
           {getPack(game.onTable)}

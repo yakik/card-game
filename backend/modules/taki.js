@@ -4,8 +4,7 @@ import { takiCardTypes, takiColors, takiSpecialAction } from '../constants'
 export function getNewGame() {
     let game = {}
     game.players = []
-    game.state = "new"
-    game.lastAction = "משחק מתחיל"
+    game.state = {}
     game.lastPlayerID = 0
     game.onTable = []
     reshuffle(game)
@@ -98,9 +97,8 @@ export function selectCard(game, msg) {
     player.cards = newCards.sort(sortCards)
     if (msg.selectedCard.type===takiCardTypes.CHANGE_COLOR || msg.selectedCard.type===takiCardTypes.KING)
         player.requiredAction=takiSpecialAction.SELECT_COLOR
-    game.onTable.push(msg.selectedCard)
+    game.onTable.push({...msg.selectedCard, player:player.name})
     game.lastPlayerPlacedCard = msg.playerID
-    game.lastAction = player.name + " הניח קלף "
 
 }
 
@@ -120,15 +118,15 @@ export function takeCard(game, playerID) {
     player.newCard = game.pack.pop()
     player.cards.push(player.newCard)
     player.cards = player.cards.sort(sortCards)
-    game.lastAction = player.name + " לקח קלף "
 }
 
 function resetCard(card) {
     let newCard = { ...card }
-    if (card.type = takiCardTypes.KING)
-        card.kingSelection = undefined
-    if (card.type = takiCardTypes.CHANGE_COLOR)
-        card.changeColorSelection = undefined
+    if (newCard.type = takiCardTypes.KING)
+        newCard.kingSelection = undefined
+    if (newCard.type = takiCardTypes.CHANGE_COLOR)
+        newCard.changeColorSelection = undefined
+    newCard.player = undefined
     return newCard
 
 }
@@ -138,7 +136,6 @@ export function takeCardBack(game, playerID) {
         let player = getPlayer(game, playerID)
         player.newCard = game.onTable.pop()
         player.cards.push(resetCard(player.newCard))
-        game.lastAction = player.name + " לקח קלף בחזרה "
         player.cards = player.cards.sort(sortCards)
         game.lastPlayerPlacedCard = undefined
     }
@@ -155,7 +152,6 @@ export function reshuffleUsedCards(game) {
         game.pack[cardIndexB] = p
         f = f + 1
     }
-    game.lastAction = " הכררטיסים מוחזרו "
 }
 
 const sortCards = (a, b) => { return (a.forSorting) - (b.forSorting) }
