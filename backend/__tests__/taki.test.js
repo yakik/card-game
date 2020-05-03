@@ -4,7 +4,7 @@ import { takiCardTypes, takiColors, takiSpecialAction } from '../constants'
 
 
 
-describe("taki tests", () => {
+describe("taki add remove player and pack management tests", () => {
 
 
     test("add player", () => {
