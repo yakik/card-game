@@ -1,4 +1,5 @@
 import { takiCardTypes, takiColors, takiSpecialAction } from '../constants'
+import { getShuffledPack} from './cards'
 
 
 export function getNewGame() {
@@ -7,7 +8,7 @@ export function getNewGame() {
     game.state = {}
     game.lastPlayerID = 0
     game.onTable = []
-    reshuffle(game)
+    //reshuffle(game)
 
     return game
 }
@@ -20,16 +21,16 @@ export function getCardsForPlayer(oldPack) {
     return { cards: cards, pack: pack }
 }
 export function addNewPlayer(game, name) {
-    let cards
+    /*let cards
     let a = getCardsForPlayer(game.pack)
     cards = a.cards.sort(sortCards)
-    game.pack = a.pack
+    game.pack = a.pack*/
     let ID = game.lastPlayerID++
-    game.players.push({ name: name, ID: ID, cards: cards })
+    game.players.push({ name: name, ID: ID/*, cards: cards*/ })
     return ID
 }
 
-function getShuffledPack() {
+function getTakiPack() {
     let pack = []
     let id = 0
     let colorCounter = 0
@@ -38,7 +39,6 @@ function getShuffledPack() {
     colors.map(color => {
         colorCounter++
         for (let j = 0; j < 2; j++) {
-
             for (let i = 1; i < 10; i++) {
                 if (i !== 2)
                     pack.push({ ID: id++, forSorting: colorCounter * 100 + i, color: color, number: i, type: takiCardTypes.NUMBER })
@@ -50,27 +50,22 @@ function getShuffledPack() {
             pack.push({ ID: id++, forSorting: colorCounter * 100 + 32, color: color, type: takiCardTypes.PLUS })
             pack.push({ ID: id++, forSorting: colorCounter * 100 + 33, color: color, type: takiCardTypes.TAKI })
         }
-
     })
 
-    for (let i = 0; i < 4; i++)
+    for (let i = 0; i < 6; i++)
         pack.push({ ID: id++, forSorting: 1001, type: takiCardTypes.CHANGE_COLOR })
     pack.push({ ID: id++, forSorting: 1005, type: takiCardTypes.KING })
     pack.push({ ID: id++, forSorting: 1006, type: takiCardTypes.KING })
-    for (let i = 0; i < 3; i++)
+    for (let i = 0; i < 2; i++)
         pack.push({ ID: id++, forSorting: 1007, type: takiCardTypes.PLUS_THREE_BREAK })
-    for (let i = 0; i < 3; i++)
+    for (let i = 0; i < 2; i++)
         pack.push({ ID: id++, forSorting: 1012, type: takiCardTypes.PLUS_THREE })
-    for (let f = 0; f < 300; f++) {
-        let cardIndexA = Math.round(Math.random() * (pack.length - 1))
-        let cardIndexB = Math.round(Math.random() * (pack.length - 1))
-        let p = pack[cardIndexA]
-        pack[cardIndexA] = pack[cardIndexB]
-        pack[cardIndexB] = p
-        f = f + 1
-    }
+   
     return pack
 }
+
+
+
 export function removePlayer(game, playerID) {
     let newPlayers = []
 
@@ -158,7 +153,7 @@ const sortCards = (a, b) => { return (a.forSorting) - (b.forSorting) }
 
 export function reshuffle(game) {
     game.onTable=[]
-    game.pack = getShuffledPack()
+    game.pack = getShuffledPack(getTakiPack())
     
     game.players.map(player => {
         let a = getCardsForPlayer(game.pack)

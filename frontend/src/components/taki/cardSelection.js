@@ -21,7 +21,7 @@ export function CardSelection({ playerID, gameID, socket, player }) {
       )
     })
   }
-  if (player !== undefined)
+  if (player!==undefined && player.cards!==undefined)
     return (<div>
       <p>{getCardsButtons(socket, player.cards)}</p>
     </div>

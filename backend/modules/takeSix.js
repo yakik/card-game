@@ -1,4 +1,4 @@
-import { getShuffledPack, getCardsForPlayer } from './cards'
+import { getShuffledPack,  getCardsForPlayer } from './cards'
 import {states} from '../constants'
 
 //select_cards -> all_selected -> cards_to_piles -> select cards
@@ -29,11 +29,33 @@ export function addNewPlayer(game, name) {
     return ID
 }
 
+export function getTakeSixPack() {
+    let pack = []
+    for (let r = 0; r < 104; r++) {
+      pack.push({ number: (r + 1), sign: '', points: 0, show: '--' })
+      if (pack[r] == 55)
+        pack[r].sign += "*******"
+      else {
+        pack[r].sign += "*"
+        if ((r + 1) % 11 == 0)
+          pack[r].sign += "****"
+        if ((r + 1) % 10 == 0)
+          pack[r].sign += "**"
+        if ((r + 1) % 5 == 0 && (r + 1) % 10 != 0)
+          pack[r].sign += "*"
+        pack[r].points = pack[r].sign.length
+      }
+  
+    }
+  
+    return pack
+  }
+
 
 
 export function reshuffle(game) {
     let cards
-    game.pack = getShuffledPack()
+    game.pack = getShuffledPack(getTakeSixPack())
 
     game.players.map(player => {
         let a = getCardsForPlayer(game.pack)
@@ -51,7 +73,7 @@ export function reshuffle(game) {
 
 export function newGame(game) {
     game.players = []
-    game.pack = getShuffledPack()
+    game.pack = getShuffledPack(getTakeSixPack())
     game.piles = [[], [], [], []]
     for (let i = 0; i < 4; i++)
         game.piles[i].push(game.pack.pop())

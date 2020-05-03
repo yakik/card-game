@@ -16,11 +16,20 @@ export function Taki({ gameID, socket, playerName, playerID, isManager }) {
   }
 
   const getPack = (deckOnTable) => {
-    let deckSize = deckOnTable.length-1
-    let cardsOnTable=[]
-    for (let i=deckSize;i>=Math.max(0,deckSize-6);i--)
+    let deckSize = deckOnTable.length - 1
+    let cardsOnTable = []
+    for (let i = deckSize; i >= Math.max(0, deckSize - 6); i--)
       cardsOnTable.push(<div key={i} className={getCardClass(game.onTable[i])}>{getCardText(game.onTable[i])}</div>)
     return <div className="cards-list">{cardsOnTable}</div>
+  }
+
+  const getTakiCards = () => {
+    if (getPlayer().cards!=undefined)
+    return (
+      <div><button onClick={() => socket.emit(socketMsgTypes.TAKE_CARD_BACK, { gameID: gameID, playerID: playerID })}>החזר קלף</button>
+        <button className="takeCard" onClick={() => socket.emit(socketMsgTypes.TAKE_CARD, { gameID: gameID, playerID: playerID })}>{"קח קלף, נותרו " + game.pack.length}</button>
+        <CardSelection gameState={game.state} playerID={playerID} gameID={gameID} socket={socket} player={getPlayer()} /></div>
+    )
   }
 
   if (game.players === undefined)
@@ -44,13 +53,13 @@ export function Taki({ gameID, socket, playerName, playerID, isManager }) {
         <div className="taki-management">
           <Management gameState={game.state} playerID={playerID} playerName={playerName} gameID={gameID} socket={socket} isManager={isManager} players={game.players} />
         </div>
+
         <div className="taki-cards">
-          <button onClick={() => socket.emit(socketMsgTypes.TAKE_CARD_BACK, { gameID: gameID, playerID: playerID })}>החזר קלף</button>
-          <button className="takeCard" onClick={() => socket.emit(socketMsgTypes.TAKE_CARD, { gameID: gameID, playerID: playerID })}>{"קח קלף, נותרו " + game.pack.length}</button>
-          <CardSelection gameState={game.state} playerID={playerID} gameID={gameID} socket={socket} player={getPlayer()} />
+          {getTakiCards()}
         </div>
+
         <div className="taki-cards-on-table">
-          {getPack(game.onTable)}
+          {game.onTable !== undefined ? getPack(game.onTable) : <div></div>}
         </div>
         <div className="taki-players" >
           <PlayersList players={game.players} />

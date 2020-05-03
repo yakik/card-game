@@ -7,36 +7,22 @@ export function getCardsForPlayer(oldPack) {
   for (let u = 0; u < 10; u++)
     cards.push(pack.pop())
   cards = cards.sort(function (a, b) { return a.number - b.number })
-  return {cards:cards, pack:pack}
+  return { cards: cards, pack: pack }
 }
 
 
-export function getShuffledPack() {
-  let pack = []
-  for (let r = 0; r < 104; r++) {
-    pack.push({number:(r + 1), sign:'', points:0, show:'--'})
-    if (pack[r] == 55)
-      pack[r].sign +=  "*******"
-    else {
-      pack[r].sign+=  "*"
-      if ((r + 1) % 11 == 0)
-        pack[r].sign +=  "****"
-      if ((r + 1) % 10 == 0)
-        pack[r].sign+= "**"
-      if ((r + 1) % 5 == 0 && (r + 1) % 10 != 0)
-        pack[r].sign+= "*"
-      pack[r].points = pack[r].sign.length
-    }
 
-  }
+
+export function getShuffledPack(pack){
+  let newPack = [...pack]
   for (let f = 0; f < 300; f++) {
-    let a = Math.round(Math.random() * 103)
-    let b = Math.round(Math.random() * 103)
-    let p = pack[a]
-    pack[a] = pack[b]
-    pack[b] = p
+    let cardIndexA = Math.round(Math.random() * (newPack.length - 1))
+    let cardIndexB = Math.round(Math.random() * (newPack.length - 1))
+    let p = newPack[cardIndexA]
+    newPack[cardIndexA] = newPack[cardIndexB]
+    newPack[cardIndexB] = p
     f = f + 1
   }
-  return pack
+  return newPack
 }
 
