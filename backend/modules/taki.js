@@ -7,6 +7,7 @@ export function getNewGame() {
     game.players = []
     game.state = {}
     game.lastPlayerID = 0
+    game.pack=[]
     game.onTable = []
 
     return game
@@ -22,7 +23,7 @@ export function assignCardsForPlayers(game) {
 
 export function addNewPlayer(game, name) {
     let ID = game.lastPlayerID++
-    game.players.push({ name: name, ID: ID/*, cards: cards*/ })
+    game.players.push({ name: name, ID: ID, cards: [] })
     return ID
 }
 
@@ -110,6 +111,7 @@ export function takeCard(game, playerID, criterion) {
     let card = pullCardFromPack(game, criterion)
     let player = getPlayer(game, playerID)
     player.newCard = card
+    
     player.cards.push(player.newCard)
     player.cards = player.cards.sort(sortCards)
 }

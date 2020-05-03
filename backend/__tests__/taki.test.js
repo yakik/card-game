@@ -1,4 +1,4 @@
-import { pullCardFromPack, getTakiPack,setGamePack, getPlayer, addNewPlayer as addNewTakiPlayer, 
+import { takeCard, pullCardFromPack, getTakiPack,setGamePack, getPlayer, addNewPlayer as addNewTakiPlayer, 
     getNewGame as getNewTakiGame, removePlayer as removeTakiPlayer, selectCard as selectCardTaki } from '../modules/taki'
 import { takiCardTypes, takiColors, takiSpecialAction } from '../constants'
 
@@ -35,6 +35,21 @@ describe("taki add remove player and pack management tests", () => {
         expect(game.players.length).toBe(1)
         expect(playerOne).toBe(undefined)
         expect(playerTwo.name).toBe("player two")
+    })
+
+    test("add card to player", () => {
+        let game = getNewTakiGame()
+        setGamePack(game,getTakiPack())
+        let playerOneID = addNewTakiPlayer(game, "player one")
+        
+        let playerOne = getPlayer(game, playerOneID)
+        expect(playerOne.cards.length).toBe(0)
+        takeCard(game,playerOneID,{color: takiColors.BLUE, number:5,type:takiCardTypes.NUMBER})
+        playerOne = getPlayer(game, playerOneID)
+        expect(playerOne.cards.length).toBe(1)
+        expect(playerOne.newCard.color).toBe(takiColors.BLUE)
+        expect(playerOne.newCard.number).toBe(5)
+        expect(playerOne.newCard.type).toBe(takiCardTypes.NUMBER)
     })
 
     test("take last card from the pack no criterion", () => {
