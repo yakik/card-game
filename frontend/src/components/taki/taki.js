@@ -24,7 +24,7 @@ export function Taki({ gameID, socket, playerName, playerID, isManager }) {
   }
 
   const getTakiCards = () => {
-    if (getPlayer().cards!=undefined)
+    if (getPlayer().cards!==undefined && game.pack!==undefined)
     return (
       <div><button onClick={() => socket.emit(socketMsgTypes.TAKE_CARD_BACK, { gameID: gameID, playerID: playerID })}>החזר קלף</button>
         <button className="takeCard" onClick={() => socket.emit(socketMsgTypes.TAKE_CARD, { gameID: gameID, playerID: playerID })}>{"קח קלף, נותרו " + game.pack.length}</button>

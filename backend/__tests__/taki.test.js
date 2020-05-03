@@ -1,134 +1,90 @@
-import { takiCardTypes } from '../constants'
-let hafoc=1
-let bonosgadol=1
-const setNextPlayer = (game, currentPlayerCardType) =>{
-    let bonosplus=1
-    let somer=0
-    if (currentPlayerCardType==takiCardTypes.STOP){
-        bonosgadol=2
-    }
-    if (currentPlayerCardType==takiCardTypes.CHANGE_ORDER){
-        hafoc= -1*hafoc
-    }
-    if (currentPlayerCardType==takiCardTypes.PLUS){
-        somer=1
-    }
-    bonosplus=1*bonosgadol*hafoc
-    bonosgadol=1
-    game.prevPlayer=game.currentPlayerIndex
-    game.nextPlayer=game.players[(game.currentPlayerIndex+bonosplus)%(game.players.length)]
-    if (somer==1){
-        game.nextPlayer=game.prevPlayer
-    }
-    
-} 
+import { pullCardFromPack, getTakiPack,setGamePack, getPlayer, addNewPlayer as addNewTakiPlayer, 
+    getNewGame as getNewTakiGame, removePlayer as removeTakiPlayer, selectCard as selectCardTaki } from '../modules/taki'
+import { takiCardTypes, takiColors, takiSpecialAction } from '../constants'
+
 
 
 describe("taki tests", () => {
 
 
-    test("who's next stop", () => {
-
-
-        let game = {}
-        game.prevPlayer = 0
-        game.currentPlayerIndex = 1
-        game.players=[0,1,2]
-
-        setNextPlayer(game, takiCardTypes.STOP)
+    test("add player", () => {
+        let game = getNewTakiGame()
+        let playerOneID = addNewTakiPlayer(game, "player one")
+        let playerOne = getPlayer(game, playerOneID)
        
-        expect(game.nextPlayer).toBe(0)
-        expect(game.prevPlayer).toBe(1)
-
+        expect(playerOne.ID).toBe(playerOneID)
+        expect(playerOne.name).toBe("player one")
     })
 
-    test("who's next change order", () => {
-
-
-        let game = {}
-        game.prevPlayer = 0
-        game.currentPlayerIndex = 1
-        game.players=[0,1,2]
-
-        setNextPlayer(game, takiCardTypes.CHANGE_ORDER)
-
-        expect(game.nextPlayer).toBe(0)
-        expect(game.prevPlayer).toBe(1)
-    })
-    test("who's next change order upList", () => {
-
-
-        let game = {}
-        game.prevPlayer = 2
-        game.currentPlayerIndex = 1
-        game.players=[0,1,2]
-
-        setNextPlayer(game, takiCardTypes.CHANGE_ORDER)
-
-        expect(game.nextPlayer).toBe(2)
-        expect(game.prevPlayer).toBe(1)
-
+    test("remove player", () => {
+        let game = getNewTakiGame()
+        let playerOneID = addNewTakiPlayer(game, "player one")
+        removeTakiPlayer(game,playerOneID)
+       
+        expect(game.players.length).toBe(0)
     })
 
-    test("who's next plus", () => {
+    test("remove player, 2 players", () => {
+        let game = getNewTakiGame()
+        let playerOneID = addNewTakiPlayer(game, "player one")
+        let playerTwoID = addNewTakiPlayer(game, "player two")
+        removeTakiPlayer(game,playerOneID)
+        let playerOne = getPlayer(game, playerOneID)
+        let playerTwo = getPlayer(game, playerTwoID)
+       
+        expect(game.players.length).toBe(1)
+        expect(playerOne).toBe(undefined)
+        expect(playerTwo.name).toBe("player two")
+    })
 
+    test("take last card from the pack no criterion", () => {
+        let game = getNewTakiGame()
+        setGamePack(game,getTakiPack())
 
-       let game = {}
-        game.prevPlayer = 0
-        game.currentPlayerIndex = 1
-        game.players=[0,1,2]
-
-        setNextPlayer(game, takiCardTypes.PLUS)
+        expect(game.pack.length).toBe(116)
+        let cardInPack = game.pack[game.pack.length-1]
+        let card = pullCardFromPack(game)
         
-        expect(game.nextPlayer).toBe(1)
-        expect(game.prevPlayer).toBe(1)
-
+        expect(game.pack.length).toBe(115)
+        expect(card).toBe(cardInPack)
+       
     })
 
-    test("who's next number", () => {
-
-    let game = {}
-        game.prevPlayer = 0
-        game.currentPlayerIndex = 1
-        game.players=[0,1,2]
-
-        setNextPlayer(game, takiCardTypes.NUMBER)
-        
-        expect(game.nextPlayer).toBe(2)
-        expect(game.prevPlayer).toBe(1)
-
-
-    })
-    test("who's next number upList", () => {
-
-
-    let game = {}
-        game.prevPlayer = 2
-        game.currentPlayerIndex = 1
-        game.players=[0,1,2]
-        hafoc=-1
-        setNextPlayer(game, takiCardTypes.NUMBER)
-        
-        expect(game.nextPlayer).toBe(0)
-        expect(game.prevPlayer).toBe(1)
-
-
+    test("take a card from the pack NUMBER", () => {
+        let game = getNewTakiGame()
+        setGamePack(game,getTakiPack())
+        expect(game.pack.length).toBe(116)
+        let card = pullCardFromPack(game,{color: takiColors.BLUE, number:5,type:takiCardTypes.NUMBER})
+       
+        expect(game.pack.length).toBe(115)
+        expect(card.color).toBe(takiColors.BLUE)
+        expect(card.number).toBe(5)
+        expect(card.type).toBe(takiCardTypes.NUMBER)
     })
 
-    test("who's next change color", () => {
-
-    let game = {}
-        game.prevPlayer = 0
-        game.currentPlayerIndex = 1
-        game.players=[0,1,2]
-        hafoc=1
-        setNextPlayer(game, takiCardTypes.CHANGE_COLOR)
-        
-        expect(game.nextPlayer).toBe(2)
-        expect(game.prevPlayer).toBe(1)
-
-
+    test("take a card from the pack NON NUMBER - change direction", () => {
+        let game = getNewTakiGame()
+        setGamePack(game,getTakiPack())
+        expect(game.pack.length).toBe(116)
+        let card = pullCardFromPack(game,{color: takiColors.BLUE, type:takiCardTypes.CHANGE_DIRECTION})
+       
+        expect(game.pack.length).toBe(115)
+        expect(card.color).toBe(takiColors.BLUE)
+        expect(card.type).toBe(takiCardTypes.CHANGE_DIRECTION)
     })
+
+    test("take a card from the pack NON NUMBER - king", () => {
+        let game = getNewTakiGame()
+        setGamePack(game,getTakiPack())
+        expect(game.pack.length).toBe(116)
+        let card = pullCardFromPack(game,{color: takiColors.NOT_APPLICABLE, type:takiCardTypes.KING})
+       
+        expect(game.pack.length).toBe(115)
+        expect(card.color).toBe(takiColors.NOT_APPLICABLE)
+        expect(card.type).toBe(takiCardTypes.KING)
+    })
+
+   
 
 
 })

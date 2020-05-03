@@ -59,7 +59,8 @@ export const takiColors = {
     GREEN : 'green',
     YELLOW :'yellow',
     RED : 'red',
-    BLUE: 'blue'
+    BLUE: 'blue',
+    NOT_APPLICABLE: 'not_applicable'
 }
 
 export const takiSpecialAction = {

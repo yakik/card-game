@@ -1,5 +1,5 @@
 import { takiCardTypes, takiColors, takiSpecialAction } from '../constants'
-import { getShuffledPack} from './cards'
+import { getShuffledPack } from './cards'
 
 
 export function getNewGame() {
@@ -8,29 +8,25 @@ export function getNewGame() {
     game.state = {}
     game.lastPlayerID = 0
     game.onTable = []
-    //reshuffle(game)
 
     return game
 }
-export function getCardsForPlayer(oldPack) {
-    let pack = oldPack.slice()
-    let cards = []
-    for (let u = 0; u < 8; u++)
-        cards.push(pack.pop())
-    cards = cards.sort(function (a, b) { return a.number - b.number })
-    return { cards: cards, pack: pack }
+export function assignCardsForPlayers(game) {
+    game.players.forEach(player => {
+        player.cards=[]
+        for (let i=0;i<8;i++)
+            player.cards.push(pullCardFromPack(game))
+        player.cards = player.cards.sort(sortCards)
+    })
 }
+
 export function addNewPlayer(game, name) {
-    /*let cards
-    let a = getCardsForPlayer(game.pack)
-    cards = a.cards.sort(sortCards)
-    game.pack = a.pack*/
     let ID = game.lastPlayerID++
     game.players.push({ name: name, ID: ID/*, cards: cards*/ })
     return ID
 }
 
-function getTakiPack() {
+export function getTakiPack() {
     let pack = []
     let id = 0
     let colorCounter = 0
@@ -53,14 +49,14 @@ function getTakiPack() {
     })
 
     for (let i = 0; i < 6; i++)
-        pack.push({ ID: id++, forSorting: 1001, type: takiCardTypes.CHANGE_COLOR })
-    pack.push({ ID: id++, forSorting: 1005, type: takiCardTypes.KING })
-    pack.push({ ID: id++, forSorting: 1006, type: takiCardTypes.KING })
+        pack.push({ ID: id++, forSorting: 1001, color: takiColors.NOT_APPLICABLE, type: takiCardTypes.CHANGE_COLOR })
+    pack.push({ ID: id++, forSorting: 1005, color: takiColors.NOT_APPLICABLE, type: takiCardTypes.KING })
+    pack.push({ ID: id++, forSorting: 1006, color: takiColors.NOT_APPLICABLE, type: takiCardTypes.KING })
     for (let i = 0; i < 2; i++)
-        pack.push({ ID: id++, forSorting: 1007, type: takiCardTypes.PLUS_THREE_BREAK })
+        pack.push({ ID: id++, forSorting: 1007, color: takiColors.NOT_APPLICABLE, type: takiCardTypes.PLUS_THREE_BREAK })
     for (let i = 0; i < 2; i++)
-        pack.push({ ID: id++, forSorting: 1012, type: takiCardTypes.PLUS_THREE })
-   
+        pack.push({ ID: id++, forSorting: 1012, color: takiColors.NOT_APPLICABLE, type: takiCardTypes.PLUS_THREE })
+
     return pack
 }
 
@@ -73,33 +69,35 @@ export function removePlayer(game, playerID) {
         if (player.ID !== playerID)
             newPlayers.push(player)
         else {
-            player.cards.map(card => {
-                game.pack.push(card)
-            })
+            if (player.cards !== undefined) {
+                player.cards.forEach(card => {
+                    game.pack.push(card)
+                })
+            }
         }
     })
     game.players = newPlayers
 }
 
-const getPlayer = (game, ID) => {
+export function getPlayer(game, ID) {
     return game.players.find((player) => player.ID === ID)
 }
 
 export function selectCard(game, msg) {
     game.players = resetTakenCards(game.players)
     let player = getPlayer(game, msg.playerID)
-    let newCards = player.cards.filter((card)=> card.ID!==msg.selectedCard.ID)
+    let newCards = player.cards.filter((card) => card.ID !== msg.selectedCard.ID)
     player.cards = newCards.sort(sortCards)
-    if (msg.selectedCard.type===takiCardTypes.CHANGE_COLOR || msg.selectedCard.type===takiCardTypes.KING)
-        player.requiredAction=takiSpecialAction.SELECT_COLOR
-    game.onTable.push({...msg.selectedCard, player:player.name})
+    if (msg.selectedCard.type === takiCardTypes.CHANGE_COLOR || msg.selectedCard.type === takiCardTypes.KING)
+        player.requiredAction = takiSpecialAction.SELECT_COLOR
+    game.onTable.push({ ...msg.selectedCard, player: player.name })
     game.lastPlayerPlacedCard = msg.playerID
 
 }
 
-const resetTakenCards=(players)=>{
-    return players.map(player=>{
-        let newPlayer = {...player}
+const resetTakenCards = (players) => {
+    return players.map(player => {
+        let newPlayer = { ...player }
         newPlayer.newCard = undefined
         return newPlayer
     })
@@ -109,8 +107,9 @@ export function takeCard(game, playerID) {
     game.players = resetTakenCards(game.players)
     if (game.pack.length === 0)
         return
+    let card = pullCardFromPack(game)
     let player = getPlayer(game, playerID)
-    player.newCard = game.pack.pop()
+    player.newCard = card
     player.cards.push(player.newCard)
     player.cards = player.cards.sort(sortCards)
 }
@@ -137,7 +136,7 @@ export function takeCardBack(game, playerID) {
 }
 export function reshuffleUsedCards(game) {
     let cardsOnTable = game.onTable.length - 1
-    for (let i = 0; i < cardsOnTable-1; i++)
+    for (let i = 0; i < cardsOnTable - 1; i++)
         game.pack.push(resetCard(game.onTable.shift()))
     for (let f = 0; f < 300; f++) {
         let cardIndexA = Math.round(Math.random() * (game.pack.length - 1))
@@ -151,19 +150,30 @@ export function reshuffleUsedCards(game) {
 
 const sortCards = (a, b) => { return (a.forSorting) - (b.forSorting) }
 
+export function setGamePack(game, pack) {
+    game.pack = pack
+}
+
 export function reshuffle(game) {
-    game.onTable=[]
-    game.pack = getShuffledPack(getTakiPack())
-    
-    game.players.map(player => {
-        let a = getCardsForPlayer(game.pack)
-        let cards = a.cards
-        game.pack = a.pack
-        player.cards = cards.sort(sortCards)
+    game.onTable = []
+    setGamePack(game, getShuffledPack(getTakiPack()))
+    assignCardsForPlayers(game)
+    game.onTable.push(pullCardFromPack(game))
+}
 
-    })
-    game.onTable.push(game.pack.pop())
+export function pullCardFromPack(game, criterion) {
+    if (criterion === undefined)
+        return game.pack.pop()
+    else {
+        let cardIndex
+        if (criterion.type === takiCardTypes.NUMBER)
+            cardIndex = game.pack.findIndex((card) => (card.type === criterion.type && card.color === criterion.color && card.number === criterion.number))
+        else
+            cardIndex = game.pack.findIndex((card) => (card.color === criterion.color && card.type === criterion.type))
 
+        let card = game.pack.splice(cardIndex, 1)[0]
+        return card
+    }
 }
 
 

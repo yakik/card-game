@@ -3,6 +3,7 @@ import React from 'react';
 
 export function PlayersList({ players }) {
 
+  
   const getGrid = (players) => {
     let cells = []
     let key = 0
@@ -13,7 +14,7 @@ export function PlayersList({ players }) {
       if (player.cards !== undefined)
         cells.push(<div key={key++}><h3>{player.cards.length}</h3></div>)
       else
-        cells.push(<div></div>)
+        cells.push(<div key={key++}></div>)
     })
     return (<div className="players-list">{cells}</div>)
   }
