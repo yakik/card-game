@@ -118,9 +118,9 @@ export function takeCard(game, playerID, criterion) {
 
 function resetCard(card) {
     let newCard = { ...card }
-    if (newCard.type = takiCardTypes.KING)
+    if (newCard.type === takiCardTypes.KING)
         newCard.kingSelection = undefined
-    if (newCard.type = takiCardTypes.CHANGE_COLOR)
+    if (newCard.type === takiCardTypes.CHANGE_COLOR)
         newCard.changeColorSelection = undefined
     newCard.player = undefined
     return newCard
@@ -130,23 +130,25 @@ function resetCard(card) {
 export function takeCardBack(game, playerID) {
     if (playerID === game.lastPlayerPlacedCard) {
         let player = getPlayer(game, playerID)
-        player.newCard = game.onTable.pop()
-        player.cards.push(resetCard(player.newCard))
+        let card = game.onTable.pop()
+        player.cards.push(resetCard(card))
         player.cards = player.cards.sort(sortCards)
         game.lastPlayerPlacedCard = undefined
     }
 }
 export function reshuffleUsedCards(game) {
     let cardsOnTable = game.onTable.length - 1
-    for (let i = 0; i < cardsOnTable - 1; i++)
+    for (let i = 0; i < cardsOnTable; i++)
         game.pack.push(resetCard(game.onTable.shift()))
-    for (let f = 0; f < 300; f++) {
-        let cardIndexA = Math.round(Math.random() * (game.pack.length - 1))
-        let cardIndexB = Math.round(Math.random() * (game.pack.length - 1))
-        let p = game.pack[cardIndexA]
-        game.pack[cardIndexA] = game.pack[cardIndexB]
-        game.pack[cardIndexB] = p
-        f = f + 1
+    if (game.pack.length > 1) {
+        for (let f = 0; f < 300; f++) {
+            let cardIndexA = Math.round(Math.random() * (game.pack.length - 1))
+            let cardIndexB = Math.round(Math.random() * (game.pack.length - 1))
+            let p = game.pack[cardIndexA]
+            game.pack[cardIndexA] = game.pack[cardIndexB]
+            game.pack[cardIndexB] = p
+            f = f + 1
+        }
     }
 }
 
