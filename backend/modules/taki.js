@@ -85,6 +85,8 @@ export function getPlayer(game, ID) {
 }
 
 export function selectCard(game, msg) {
+    if (game.turn !== undefined && game.turn.player !== msg.playerID)
+        return
     game.players = resetTakenCards(game.players)
     let player = getPlayer(game, msg.playerID)
     let newCards = player.cards.filter((card) => card.ID !== msg.selectedCard.ID)
@@ -105,6 +107,8 @@ const resetTakenCards = (players) => {
 }
 
 export function takeCard(game, playerID, criterion) {
+    if (game.turn!==undefined && game.turn.player!==playerID)
+        return
     game.players = resetTakenCards(game.players)
     if (game.pack.length === 0)
         return
@@ -126,7 +130,9 @@ function resetCard(card) {
     return newCard
 
 }
-
+export function setTurn(game,turn){
+    game.turn = turn
+}
 export function takeCardBack(game, playerID) {
     if (playerID === game.lastPlayerPlacedCard) {
         let player = getPlayer(game, playerID)
