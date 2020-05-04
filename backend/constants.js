@@ -66,3 +66,8 @@ export const takiColors = {
 export const takiSpecialAction = {
     SELECT_COLOR : 'select_color'
 }
+
+export const userActions = {
+    TAKE_CARD : 'take_card',
+    SELECT_CARD : 'select_card'
+}

@@ -1,4 +1,12 @@
 
+.divider{
+  width:20px;
+  height:auto;
+  display:inline-block;
+}
+
+
+
 .taki-title {
   grid-area: grid-title; 
   text-align: center;
@@ -96,9 +104,17 @@
   border: 5px;
   border-color: #282c34;
 }
+
+.flexRowCenter {
+  display: flex;
+  flex-direction: row;
+  border: 5px;
+  border-color: #282c34;
+  justify-content: center;
+}
 .flexColCenter {
   display: flex;
-  flex-direction: col;
+  flex-direction: column;
   border: 5px;
   border-color: #282c34;
   justify-content: center
@@ -140,6 +156,12 @@
 .takeCard {
   padding: 15px 15px;
   font-size:20px ; 
+}
+
+.card {
+  background-color: rgb(255, 255, 255);
+  padding: 15px 15px;
+  font-size:20px ;
 }
 
 .greenCard {

@@ -1,8 +1,9 @@
-import { setTurn, takeCardBack, selectCard, takeCard, getPlayer, addNewPlayer as addNewTakiPlayer, 
+import { takeCardBack, selectCard, takeCard, getPlayer, addNewPlayer as addNewTakiPlayer, 
     getNewGame as getNewTakiGame, removePlayer as removeTakiPlayer, selectCard as selectCardTaki } from '../modules/taki'
 import { reshuffleUsedCards, pullCardFromPack, setGamePack } from "../modules/takiPack"
 import { getTakiPack } from "../modules/takiPack"
 import { takiCardTypes, takiColors, takiSpecialAction } from '../constants'
+import { setTurn } from '../modules/takiTurns'
 
 
 

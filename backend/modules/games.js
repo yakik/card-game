@@ -1,7 +1,8 @@
 import { reshuffle as reshuffleTakeSix, removePlayer as removeTakeSixPlayer, 
     addNewPlayer as addNewTakeSixPlayer, getNewGame as getNewTakeSixGame, selectCard as selectCardTakeSix } from './takeSix'
-import { reshuffle as reshuffleTaki, addNewPlayer as addNewTakiPlayer, 
+import {  addNewPlayer as addNewTakiPlayer, 
     getNewGame as getNewTakiGame, removePlayer as removeTakiPlayer, selectCard as selectCardTaki } from './taki'
+    import {reshuffle as reshuffleTaki} from './takiPack'
 import {gameTypes} from '../constants'
 
 let games = []

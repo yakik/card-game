@@ -1,5 +1,6 @@
-import { takiCardTypes, takiSpecialAction } from '../constants'
+import { userActions, takiCardTypes, takiSpecialAction } from '../constants'
 import { pullCardFromPack } from './takiPack'
+import { allowed } from './takiTurns'
 
 
 export function getNewGame() {
@@ -49,7 +50,7 @@ export function getPlayer(game, ID) {
 }
 
 export function selectCard(game, msg) {
-    if (game.turn !== undefined && game.turn.player !== msg.playerID)
+    if (!allowed(game,msg.playerID,userActions.SELECT_CARD))
         return
     game.players = resetTakenCards(game.players)
     let player = getPlayer(game, msg.playerID)
@@ -71,7 +72,7 @@ const resetTakenCards = (players) => {
 }
 
 export function takeCard(game, playerID, criterion) {
-    if (game.turn!==undefined && game.turn.player!==playerID)
+    if (!allowed(game, playerID, userActions.TAKE_CARD))
         return
     game.players = resetTakenCards(game.players)
     if (game.pack.length === 0)
@@ -79,7 +80,7 @@ export function takeCard(game, playerID, criterion) {
     let card = pullCardFromPack(game, criterion)
     let player = getPlayer(game, playerID)
     player.newCard = card
-    
+
     player.cards.push(player.newCard)
     player.cards = player.cards.sort(sortCards)
 }
@@ -94,9 +95,7 @@ export function resetCard(card) {
     return newCard
 
 }
-export function setTurn(game,turn){
-    game.turn = turn
-}
+
 export function takeCardBack(game, playerID) {
     if (playerID === game.lastPlayerPlacedCard) {
         let player = getPlayer(game, playerID)
