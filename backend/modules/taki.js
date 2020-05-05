@@ -1,6 +1,7 @@
 import { userActions, takiCardTypes, takiSpecialAction } from '../constants'
 import { pullCardFromPack } from './takiPack'
 import { allowed } from './takiTurns'
+import {specialCardValidated} from './takiSpecialCards'
 
 
 export function getNewGame() {
@@ -51,6 +52,8 @@ export function getPlayer(game, ID) {
 
 export function selectCard(game, msg) {
     if (!allowed(game,msg.playerID,userActions.SELECT_CARD))
+        return
+    if (!specialCardValidated(game,msg.playerID, msg.selectedCard))
         return
     game.players = resetTakenCards(game.players)
     let player = getPlayer(game, msg.playerID)

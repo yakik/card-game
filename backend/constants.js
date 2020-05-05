@@ -71,3 +71,10 @@ export const userActions = {
     TAKE_CARD : 'take_card',
     SELECT_CARD : 'select_card'
 }
+
+export const instructionTypes = {
+    SELECT_COLOR : 'select_color',
+    SELECT_TYPE_FOR_KING : 'select_type_for_king',
+    SIGNAL_END_OF_TAKI_CARDS : 'signal_end_of_taki_cards',
+    TAKE_CARDS : 'take_cards'
+}

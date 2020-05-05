@@ -40,8 +40,12 @@ export function pullCardFromPack(game, criterion) {
             else
                 cardIndex = game.pack.findIndex((card) => (card.type === criterion.type && card.color === criterion.color && card.number === criterion.number));
         }
-        else
-            cardIndex = game.pack.findIndex((card) => (card.color === criterion.color && card.type === criterion.type));
+        else {
+            if (criterion.color !== undefined)
+                cardIndex = game.pack.findIndex((card) => (card.color === criterion.color && card.type === criterion.type));
+            else
+                cardIndex = game.pack.findIndex((card) => (card.type === criterion.type));
+        }
         let card = game.pack.splice(cardIndex, 1)[0];
         return card;
     }
