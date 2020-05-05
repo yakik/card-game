@@ -26,8 +26,8 @@ describe("Special cards", () => {
         selectCard(game, { playerID: playerOneID, selectedCard: getPlayer(game, playerOneID).cards[0] })
 
         expect(getPlayer(game, playerOneID).cards.length).toBe(1) //card not taken
-        expect(game.specialInstructions[0].playerID).toBe(playerOneID)
-        expect(game.specialInstructions[0].instructionType).toBe(instructionTypes.SELECT_COLOR)
+        expect(game.selectCardInstructions[0].playerID).toBe(playerOneID)
+        expect(game.selectCardInstructions[0].instructionType).toBe(instructionTypes.SELECT_COLOR)
     })
 
     test("change color with color", () => {
@@ -50,6 +50,71 @@ describe("Special cards", () => {
         })
 
         expect(getPlayer(game, playerOneID).cards.length).toBe(0) //card taken
-        expect(game.specialInstructions.length).toBe(0)
+        expect(game.selectCardInstructions.length).toBe(0)
     })
+    
+    test("king no type", () => {
+        let game = getNewTakiGame()
+        let gameJustForPack = getNewTakiGame()
+        setGamePack(gameJustForPack, getTakiPack())
+
+        game.pack.push(pullCardFromPack(gameJustForPack, { type: takiCardTypes.KING }))
+
+        let playerOneID = addNewTakiPlayer(game, "player one")
+
+        takeCard(game, playerOneID)
+
+        selectCard(game, { playerID: playerOneID, selectedCard: getPlayer(game, playerOneID).cards[0] })
+
+        expect(getPlayer(game, playerOneID).cards.length).toBe(1) //card not taken
+        expect(game.selectCardInstructions[0].playerID).toBe(playerOneID)
+        expect(game.selectCardInstructions[0].instructionType).toBe(instructionTypes.SELECT_TYPE_FOR_KING)
+    })
+
+    test("king change color no color", () => {
+        let game = getNewTakiGame()
+        let gameJustForPack = getNewTakiGame()
+        setGamePack(gameJustForPack, getTakiPack())
+
+        game.pack.push(pullCardFromPack(gameJustForPack, { type: takiCardTypes.KING }))
+
+        let playerOneID = addNewTakiPlayer(game, "player one")
+
+        takeCard(game, playerOneID)
+
+        selectCard(game, { playerID: playerOneID,
+            selectedCard: {
+                ...getPlayer(game, playerOneID).cards[0],
+                configuration: { type: takiCardTypes.CHANGE_COLOR}
+            }})
+
+        expect(getPlayer(game, playerOneID).cards.length).toBe(1) //card not taken
+        expect(game.selectCardInstructions[0].playerID).toBe(playerOneID)
+        expect(game.selectCardInstructions[0].instructionType).toBe(instructionTypes.SELECT_TYPE_FOR_KING)
+        expect(game.selectCardInstructions[1].playerID).toBe(playerOneID)
+        expect(game.selectCardInstructions[1].instructionType).toBe(instructionTypes.SELECT_COLOR)
+    })
+
+    test("king change color take card", () => {
+        let game = getNewTakiGame()
+        let gameJustForPack = getNewTakiGame()
+        setGamePack(gameJustForPack, getTakiPack())
+
+        game.pack.push(pullCardFromPack(gameJustForPack, { type: takiCardTypes.KING }))
+
+        let playerOneID = addNewTakiPlayer(game, "player one")
+
+        takeCard(game, playerOneID)
+
+        selectCard(game, { playerID: playerOneID,
+            selectedCard: {
+                ...getPlayer(game, playerOneID).cards[0],
+                configuration: { type: takiCardTypes.CHANGE_COLOR, color: takiColors.BLUE}
+            }})
+
+        expect(getPlayer(game, playerOneID).cards.length).toBe(0) //card taken
+        expect(game.selectCardInstructions.length).toBe(0)
+    })
+
+
 })
