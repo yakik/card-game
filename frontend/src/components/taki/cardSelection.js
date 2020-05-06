@@ -95,7 +95,7 @@ export function CardSelection({ packLength, playerID, gameID, socket, player }) 
             checked={selectedKingType === takiCardTypes.TAKI}
             onChange={() => { setShouldSelectColor(true); setSelectedKingType(takiCardTypes.TAKI) }}
           />
-          <span className="card">טאקי</span>
+          <span className="card-no-padding">טאקי</span>
           <span className="divider" />
           <input
             type="radio"
@@ -103,7 +103,7 @@ export function CardSelection({ packLength, playerID, gameID, socket, player }) 
             checked={selectedKingType === takiCardTypes.PLUS_TWO}
             onChange={() => { setShouldSelectColor(true); setSelectedKingType(takiCardTypes.PLUS_TWO) }}
           />
-          <span className="card">+2</span>
+          <span className="card-no-padding">+2</span>
           <span className="divider" />
 
           <input
@@ -112,7 +112,7 @@ export function CardSelection({ packLength, playerID, gameID, socket, player }) 
             checked={selectedKingType === takiCardTypes.CHANGE_COLOR}
             onChange={() => { setShouldSelectColor(true); setSelectedKingType(takiCardTypes.CHANGE_COLOR) }}
           />
-          <span className="card">שנה צבע</span>
+          <span className="card-no-padding">שנה צבע</span>
           <span className="divider" />
 
           <input
@@ -121,7 +121,7 @@ export function CardSelection({ packLength, playerID, gameID, socket, player }) 
             checked={selectedKingType === takiCardTypes.CHANGE_DIRECTION}
             onChange={() => { setShouldSelectColor(true); setSelectedKingType(takiCardTypes.CHANGE_DIRECTION) }}
           />
-          <span className="card">שנה כיוון</span>
+          <span className="card-no-padding">שנה כיוון</span>
           <span className="divider" />
 
           <input
@@ -130,7 +130,7 @@ export function CardSelection({ packLength, playerID, gameID, socket, player }) 
             checked={selectedKingType === takiCardTypes.STOP}
             onChange={() => { setShouldSelectColor(true); setSelectedKingType(takiCardTypes.STOP) }}
           />
-          <span className="card">עצור</span>
+          <span className="card-no-padding">עצור</span>
           <span className="divider" />
         </div>)
   }

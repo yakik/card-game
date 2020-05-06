@@ -164,6 +164,12 @@
   font-size:20px ;
 }
 
+.card-no-padding {
+  background-color: rgb(255, 255, 255);
+  
+  font-size:20px ;
+}
+
 .greenCard {
   background-color: #4CAF50;
   padding: 15px 15px;
