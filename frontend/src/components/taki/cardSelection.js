@@ -13,7 +13,7 @@ export function CardSelection({ packLength, playerID, gameID, socket, player }) 
     if (cardToConfigure.type === takiCardTypes.CHANGE_COLOR) {
       socket.emit(socketMsgTypes.SELECT_CARDS, {
         gameID: gameID, playerID: playerID,
-        selectedCard: {...cardToConfigure, configuration: { color: color }}
+        selectedCard: { ...cardToConfigure, configuration: { color: color } }
       })
       setShouldSelectColor(false)
       setCardToConfigure(undefined)
@@ -24,7 +24,7 @@ export function CardSelection({ packLength, playerID, gameID, socket, player }) 
 
       socket.emit(socketMsgTypes.SELECT_CARDS, {
         gameID: gameID, playerID: playerID,
-        selectedCard: {...cardToConfigure, configuration: { type: selectedKingType, color: color }}
+        selectedCard: { ...cardToConfigure, configuration: { type: selectedKingType, color: color } }
       })
       setShouldSelectColor(false)
       setShouldSelectKingType(false)
@@ -34,14 +34,14 @@ export function CardSelection({ packLength, playerID, gameID, socket, player }) 
   }
 
   const sendKingWithoutColor = (type) => {
-   
-      socket.emit(socketMsgTypes.SELECT_CARDS, {
-        gameID: gameID, playerID: playerID,
-        selectedCard: {...cardToConfigure, configuration: { type: type }}
-      })
-      setShouldSelectKingType(false)
-      setCardToConfigure(undefined)
-    
+
+    socket.emit(socketMsgTypes.SELECT_CARDS, {
+      gameID: gameID, playerID: playerID,
+      selectedCard: { ...cardToConfigure, configuration: { type: type } }
+    })
+    setShouldSelectKingType(false)
+    setCardToConfigure(undefined)
+
   }
 
   const onClickCard = (socket, card) => {
@@ -63,6 +63,9 @@ export function CardSelection({ packLength, playerID, gameID, socket, player }) 
       gameID: gameID, playerID: playerID,
       selectedCard: card
     })
+    setShouldSelectColor(false)
+    setShouldSelectKingType(false)
+    setCardToConfigure(undefined)
   }
 
   const getCardsButtons = (socket, cards) => {
@@ -155,11 +158,16 @@ export function CardSelection({ packLength, playerID, gameID, socket, player }) 
         </div>)
   }
 
-
+  const takeCard = () => {
+    socket.emit(socketMsgTypes.TAKE_CARD, { gameID: gameID, playerID: playerID })
+    setShouldSelectColor(false)
+    setShouldSelectKingType(false)
+    setCardToConfigure(undefined)
+  }
 
   if (player !== undefined && player.cards !== undefined)
     return (<div><button onClick={() => socket.emit(socketMsgTypes.TAKE_CARD_BACK, { gameID: gameID, playerID: playerID })}>החזר קלף</button>
-      <button className="takeCard" onClick={() => socket.emit(socketMsgTypes.TAKE_CARD, { gameID: gameID, playerID: playerID })}>{"קח קלף, נותרו " + packLength}</button>
+      <button className="takeCard" onClick={() => takeCard()}>{"קח קלף, נותרו " + packLength}</button>
       <div>
         <p>{getCardsButtons(socket, player.cards)}</p>
       </div>
