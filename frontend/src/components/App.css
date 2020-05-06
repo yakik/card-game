@@ -54,7 +54,7 @@
 }
 
 .scaled {
-  transform: scale(1.5); /* Equal to scaleX(0.7) scaleY(0.7) */
+  transform: scale(1.1); /* Equal to scaleX(0.7) scaleY(0.7) */
 }
 
 .taki-grid-container {

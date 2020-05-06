@@ -1,18 +1,16 @@
 import {
-    takeCardBack, selectCard, takeCard, getPlayer, addNewPlayer as addNewTakiPlayer,
+    selectCard, takeCard, getPlayer, addNewPlayer as addNewTakiPlayer,
     getNewGame as getNewTakiGame, removePlayer as removeTakiPlayer, selectCard as selectCardTaki
 } from '../modules/taki'
-import { reshuffleUsedCards, pullCardFromPack, setGamePack } from "../modules/takiPack"
-import { getTakiPack } from "../modules/takiPack"
-import { instructionTypes, takiCardTypes, takiColors, takiSpecialAction } from '../constants'
-import { setTurn } from '../modules/takiTurns'
+import { getTakiPack, pullCardFromPack, setGamePack } from "../modules/takiPack"
+import { instructionTypes, takiCardTypes, takiColors, errors } from '../constants'
 
 
 
 describe("Special cards", () => {
 
 
-    test("change color no color", () => {
+    test("change color", () => {
         let game = getNewTakiGame()
         let gameJustForPack = getNewTakiGame()
         setGamePack(gameJustForPack, getTakiPack())
@@ -26,20 +24,8 @@ describe("Special cards", () => {
         selectCard(game, { playerID: playerOneID, selectedCard: getPlayer(game, playerOneID).cards[0] })
 
         expect(getPlayer(game, playerOneID).cards.length).toBe(1) //card not taken
-        expect(game.selectCardInstructions[0].playerID).toBe(playerOneID)
-        expect(game.selectCardInstructions[0].instructionType).toBe(instructionTypes.SELECT_COLOR)
-    })
-
-    test("change color with color", () => {
-        let game = getNewTakiGame()
-        let gameJustForPack = getNewTakiGame()
-        setGamePack(gameJustForPack, getTakiPack())
-
-        game.pack.push(pullCardFromPack(gameJustForPack, { type: takiCardTypes.CHANGE_COLOR }))
-
-        let playerOneID = addNewTakiPlayer(game, "player one")
-
-        takeCard(game, playerOneID)
+        expect(getPlayer(game, playerOneID).error.playerID).toBe(playerOneID)
+        expect(getPlayer(game, playerOneID).error.error).toBe(errors.CHANGE_COLOR_MISSING_COLOR_SELECTION)
 
         selectCard(game, {
             playerID: playerOneID,
@@ -50,10 +36,10 @@ describe("Special cards", () => {
         })
 
         expect(getPlayer(game, playerOneID).cards.length).toBe(0) //card taken
-        expect(game.selectCardInstructions.length).toBe(0)
+        expect(getPlayer(game, playerOneID).error).toBe(undefined)
     })
     
-    test("king no type", () => {
+    test("king", () => {
         let game = getNewTakiGame()
         let gameJustForPack = getNewTakiGame()
         setGamePack(gameJustForPack, getTakiPack())
@@ -67,20 +53,9 @@ describe("Special cards", () => {
         selectCard(game, { playerID: playerOneID, selectedCard: getPlayer(game, playerOneID).cards[0] })
 
         expect(getPlayer(game, playerOneID).cards.length).toBe(1) //card not taken
-        expect(game.selectCardInstructions[0].playerID).toBe(playerOneID)
-        expect(game.selectCardInstructions[0].instructionType).toBe(instructionTypes.SELECT_TYPE_FOR_KING)
-    })
-
-    test("king change color no color", () => {
-        let game = getNewTakiGame()
-        let gameJustForPack = getNewTakiGame()
-        setGamePack(gameJustForPack, getTakiPack())
-
-        game.pack.push(pullCardFromPack(gameJustForPack, { type: takiCardTypes.KING }))
-
-        let playerOneID = addNewTakiPlayer(game, "player one")
-
-        takeCard(game, playerOneID)
+        expect(getPlayer(game, playerOneID).error.playerID).toBe(playerOneID)
+        expect(getPlayer(game, playerOneID).error.error).toBe(errors.KING_MISSING_SELECTED_TYPE)
+  
 
         selectCard(game, { playerID: playerOneID,
             selectedCard: {
@@ -89,22 +64,9 @@ describe("Special cards", () => {
             }})
 
         expect(getPlayer(game, playerOneID).cards.length).toBe(1) //card not taken
-        expect(game.selectCardInstructions[0].playerID).toBe(playerOneID)
-        expect(game.selectCardInstructions[0].instructionType).toBe(instructionTypes.SELECT_TYPE_FOR_KING)
-        expect(game.selectCardInstructions[1].playerID).toBe(playerOneID)
-        expect(game.selectCardInstructions[1].instructionType).toBe(instructionTypes.SELECT_COLOR)
-    })
-
-    test("king change color take card", () => {
-        let game = getNewTakiGame()
-        let gameJustForPack = getNewTakiGame()
-        setGamePack(gameJustForPack, getTakiPack())
-
-        game.pack.push(pullCardFromPack(gameJustForPack, { type: takiCardTypes.KING }))
-
-        let playerOneID = addNewTakiPlayer(game, "player one")
-
-        takeCard(game, playerOneID)
+        expect(getPlayer(game, playerOneID).error.playerID).toBe(playerOneID)
+        expect(getPlayer(game, playerOneID).error.error).toBe(errors.KING_MISSING_COLOR_SELECTION)
+ 
 
         selectCard(game, { playerID: playerOneID,
             selectedCard: {
@@ -113,7 +75,7 @@ describe("Special cards", () => {
             }})
 
         expect(getPlayer(game, playerOneID).cards.length).toBe(0) //card taken
-        expect(game.selectCardInstructions.length).toBe(0)
+        expect(getPlayer(game, playerOneID).error).toBe(undefined)
     })
 
 

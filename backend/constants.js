@@ -72,9 +72,10 @@ export const userActions = {
     SELECT_CARD : 'select_card'
 }
 
-export const instructionTypes = {
-    SELECT_COLOR : 'select_color',
-    SELECT_TYPE_FOR_KING : 'select_type_for_king',
-    SIGNAL_END_OF_TAKI_CARDS : 'signal_end_of_taki_cards',
-    TAKE_CARDS : 'take_cards'
+
+
+export const errors = {
+    KING_MISSING_SELECTED_TYPE : '10_king_missing_selected_type',
+    KING_MISSING_COLOR_SELECTION : '11_king_missing_color_selection',
+    CHANGE_COLOR_MISSING_COLOR_SELECTION : '20_change_color_missing_color_selection',
 }

@@ -72,3 +72,11 @@ export const userActions = {
     TAKE_CARD : 'take_card',
     SELECT_CARD : 'select_card'
 }
+
+
+
+export const errors = {
+    KING_MISSING_SELECTED_TYPE : '10_king_missing_selected_type',
+    KING_MISSING_COLOR_SELECTION : '11_king_missing_color_selection',
+    CHANGE_COLOR_MISSING_COLOR_SELECTION : '20_change_color_missing_color_selection',
+}
