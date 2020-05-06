@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PlayersList } from "./playersList"
 import { Management } from "./management"
 import { CardSelection } from "./cardSelection"
-import { instructionTypes, socketMsgTypes } from '../../constants'
+import { socketMsgTypes } from '../../constants'
 import { getCardClass, getCardText } from './cards'
 
 
