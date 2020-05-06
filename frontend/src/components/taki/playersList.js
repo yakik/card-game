@@ -7,12 +7,12 @@ export function PlayersList({ players }) {
   const getGrid = (players) => {
     let cells = []
     let key = 0
-    cells.push(<div key={key++}><h2>שחקן</h2></div>)
-    cells.push(<div key={key++}><h2>קלפים</h2></div>)
+    cells.push(<div className="card-no-padding" key={key++}>שחקן</div>)
+    cells.push(<div className="card-no-padding" key={key++}>קלפים</div>)
     players.forEach(player => {
-      cells.push(<div key={key++}><h3>{player.name}</h3></div>)
+      cells.push(<div className="card-no-padding" key={key++}>{player.name}</div>)
       if (player.cards !== undefined)
-        cells.push(<div key={key++}><h3>{player.cards.length}</h3></div>)
+        cells.push(<div className="card-no-padding" key={key++}>{player.cards.length}</div>)
       else
         cells.push(<div key={key++}></div>)
     })
