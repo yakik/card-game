@@ -1,4 +1,4 @@
-import { userActions, takiCardTypes, takiSpecialAction } from '../constants'
+import { userActions, takiCardTypes, takiSpecialAction, takiColors } from '../constants'
 import { pullCardFromPack } from './takiPack'
 import { allowed } from './takiTurns'
 import {selectCardValidation} from './takiValidations'
@@ -64,8 +64,6 @@ export function selectCard(game, msg) {
         return
     let error=selectCardValidation(game,msg.playerID, msg.selectedCard)
     if (error!=undefined){
-        console.log(msg)
-        console.log(error)
         getPlayer(game,msg.playerID).error = error
         return
     }
@@ -125,6 +123,50 @@ export function takeCardBack(game, playerID) {
     }
 }
 
-const sortCards = (a, b) => { return (a.forSorting) - (b.forSorting) }
+const getCardValueForSorting=(card)=>{
+    let value = 0;
+    switch (card.color){
+        case takiColors.NOT_APPLICABLE: value+=1000
+        break
+        case takiColors.BLUE: value+=100
+        break
+        case takiColors.RED: value+=200
+        break
+        case takiColors.YELLOW: value+=300
+        break
+        case takiColors.GREEN: value+=400
+        break
+    }
+
+    switch (card.type){
+        case takiCardTypes.NUMBER: value+=card.number
+        break
+        case takiCardTypes.PLUS_TWO: value+=2
+        break
+        case takiCardTypes.TAKI: value+=20
+        break
+        case takiCardTypes.STOP: value+=25
+        break
+        case takiCardTypes.CHANGE_DIRECTION: value+=30
+        break
+        case takiCardTypes.PLUS: value+=35
+        break
+        case takiCardTypes.CHANGE_COLOR: value+=40
+        break
+        case takiCardTypes.KING: value+=45
+        break
+        case takiCardTypes.PLUS_THREE: value+=50
+        break
+        case takiCardTypes.PLUS_THREE_BREAK: value+=55
+        break
+    }
+    return value
+}
+
+const sortCards = (a, b) => {
+    
+    return getCardValueForSorting(a) - getCardValueForSorting(b)
+
+}
 
 

@@ -81,3 +81,8 @@ export const errors = {
     KING_MISSING_COLOR_SELECTION : '11_king_missing_color_selection',
     CHANGE_COLOR_MISSING_COLOR_SELECTION : '20_change_color_missing_color_selection',
 }
+
+export const turnDirections = {
+    LEFT_TO_RIGHT: 'left_to_right',
+    RIGHT_TO_LEFT: 'right_to_left'
+}

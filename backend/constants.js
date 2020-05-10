@@ -73,6 +73,11 @@ export const userActions = {
     SELECT_CARD : 'select_card'
 }
 
+export const turnDirections = {
+    LEFT_TO_RIGHT: 'left_to_right',
+    RIGHT_TO_LEFT: 'right_to_left'
+}
+
 
 
 export const errors = {

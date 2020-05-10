@@ -1,6 +1,8 @@
 import { takiCardTypes, takiColors } from '../constants';
 import { getShuffledPack } from './cards';
 import { resetCard, assignCardsForPlayers } from './taki';
+
+
 export function reshuffleUsedCards(game) {
     let cardsOnTable = game.onTable.length - 1;
     for (let i = 0; i < cardsOnTable; i++)
@@ -51,9 +53,19 @@ export function pullCardFromPack(game, criterion) {
     }
 }
 
+let cardID=0
+
+export function getTakiCard(type,options) {
+    let card = { ID: cardID++, type: type }
+    if (options.color !== undefined)
+        card = { ...card, color: options.color }
+    if (options.number !== undefined)
+        card = { ...card, number: options.number }
+        return card
+}
+
 export function getTakiPack() {
     let pack = [];
-    let id = 0;
     let colorCounter = 0;
     let colors = [takiColors.GREEN, takiColors.YELLOW, takiColors.BLUE, takiColors.RED];
     colors.map(color => {
@@ -61,24 +73,24 @@ export function getTakiPack() {
         for (let j = 0; j < 2; j++) {
             for (let i = 1; i < 10; i++) {
                 if (i !== 2)
-                    pack.push({ ID: id++, forSorting: colorCounter * 100 + i, color: color, number: i, type: takiCardTypes.NUMBER });
+                    pack.push(getTakiCard(takiCardTypes.NUMBER,{number:i,color:color} ));
                 else
-                    pack.push({ ID: id++, forSorting: colorCounter * 100 + i, color: color, type: takiCardTypes.PLUS_TWO });
+                    pack.push(getTakiCard(takiCardTypes.PLUS_TWO,{color:color}));
             }
-            pack.push({ ID: id++, forSorting: colorCounter * 100 + 30, color: color, type: takiCardTypes.STOP });
-            pack.push({ ID: id++, forSorting: colorCounter * 100 + 31, color: color, type: takiCardTypes.CHANGE_DIRECTION });
-            pack.push({ ID: id++, forSorting: colorCounter * 100 + 32, color: color, type: takiCardTypes.PLUS });
-            pack.push({ ID: id++, forSorting: colorCounter * 100 + 33, color: color, type: takiCardTypes.TAKI });
+            pack.push(getTakiCard(takiCardTypes.STOP,{color:color}));
+            pack.push(getTakiCard(takiCardTypes.CHANGE_DIRECTION,{color:color}));
+            pack.push(getTakiCard(takiCardTypes.PLUS,{color:color}));
+            pack.push(getTakiCard(takiCardTypes.TAKI,{color:color}));
         }
     });
     for (let i = 0; i < 6; i++)
-        pack.push({ ID: id++, forSorting: 1001, color: takiColors.NOT_APPLICABLE, type: takiCardTypes.CHANGE_COLOR });
-    pack.push({ ID: id++, forSorting: 1005, color: takiColors.NOT_APPLICABLE, type: takiCardTypes.KING });
-    pack.push({ ID: id++, forSorting: 1006, color: takiColors.NOT_APPLICABLE, type: takiCardTypes.KING });
+        pack.push(getTakiCard(takiCardTypes.CHANGE_COLOR,{color: takiColors.NOT_APPLICABLE} ));
+    pack.push(getTakiCard(takiCardTypes.KING,{color: takiColors.NOT_APPLICABLE} ));
+    pack.push(getTakiCard(takiCardTypes.KING,{color: takiColors.NOT_APPLICABLE} ));
     for (let i = 0; i < 2; i++)
-        pack.push({ ID: id++, forSorting: 1007, color: takiColors.NOT_APPLICABLE, type: takiCardTypes.PLUS_THREE_BREAK });
+        pack.push(getTakiCard(takiCardTypes.PLUS_THREE_BREAK,{color: takiColors.NOT_APPLICABLE} ));
     for (let i = 0; i < 2; i++)
-        pack.push({ ID: id++, forSorting: 1012, color: takiColors.NOT_APPLICABLE, type: takiCardTypes.PLUS_THREE });
+        pack.push(getTakiCard(takiCardTypes.PLUS_THREE,{color: takiColors.NOT_APPLICABLE} ));
     return pack;
 }
 

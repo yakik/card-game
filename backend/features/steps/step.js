@@ -5,17 +5,17 @@ import {
   getNewGame as getNewTakiGame, removePlayer as removeTakiPlayer, selectCard as selectCardTaki
 } from '../../modules/taki'
 import { getTakiPack, pullCardFromPack, setGamePack } from "../../modules/takiPack"
-import { instructionTypes, takiCardTypes, takiColors, errors } from '../../constants'
+import {  takiCardTypes, turnDirections } from '../../constants'
+import {setTurn} from '../../modules/takiTurns'
 
-console.log('VVVVVV')
-Given("an empty game", function() {
+Given("a game with players:", function(dataTable) {
   this.game = getNewTakiGame()
-  this.gameJustForPack = getNewTakiGame()
-  setGamePack(this.gameJustForPack, getTakiPack())
+  dataTable.rawTable[0].forEach(player=>addNewTakiPlayer(this.game, player))
 });
 
-Given("pack has card of type {string}", function(cardType) {
-  this.game.pack.push(pullCardFromPack(this.gameJustForPack, { type: takiCardTypes[cardType] }))
+
+Given("it is {string} turn, direction is {string}", function(playerName,turnDirection) {
+  setTurn(this.game,getPlayerID(this.game,playerName,turnDirections[turnDirection]))
 });
 
 Given("player {string} joins the game", function(playerName) {
