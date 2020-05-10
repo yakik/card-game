@@ -50,6 +50,14 @@ export function getPlayer(game, ID) {
     return game.players.find((player) => player.ID === ID)
 }
 
+export function getPlayerID(game, name) {
+    return game.players.find((player) => player.name === name).ID
+}
+
+export function handleEndTakiSeries(game,playerID){
+    game.state={...game.state,inTakiSeries:false,inTakiSeriesPlayerID:undefined}
+}
+
 export function selectCard(game, msg) {
     getPlayer(game,msg.playerID).error=undefined
     if (!allowed(game,msg.playerID,userActions.SELECT_CARD))
@@ -61,13 +69,14 @@ export function selectCard(game, msg) {
         getPlayer(game,msg.playerID).error = error
         return
     }
-    
+    if (msg.selectedCard.type===takiCardTypes.TAKI ||
+        msg.selectedCard.type===takiCardTypes.KING && msg.selectedCard.configuration.type===takiCardTypes.TAKI){
+            game.state={...game.state,inTakiSeries:true,inTakiSeriesPlayerID:msg.playerID}
+        }
     game.players = resetTakenCards(game.players)
     let player = getPlayer(game, msg.playerID)
     let newCards = player.cards.filter((card) => card.ID !== msg.selectedCard.ID)
     player.cards = newCards.sort(sortCards)
-    if (msg.selectedCard.type === takiCardTypes.CHANGE_COLOR || msg.selectedCard.type === takiCardTypes.KING)
-        player.requiredAction = takiSpecialAction.SELECT_COLOR
     game.onTable.push({ ...msg.selectedCard, player: player.name })
     game.lastPlayerPlacedCard = msg.playerID
 

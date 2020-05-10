@@ -16,7 +16,8 @@ export const socketMsgTypes ={
     TAKE_CARD:"take_card",
     TAKE_CARD_BACK:"take_card_back",
     RESHUFFLE_USED_CARDS:"reshuffle_used_cards",
-    TAKI_SPECIAL_CARD:"taki_Special_card"
+    TAKI_SPECIAL_CARD:"taki_Special_card",
+    TAKI_END_TAKI_SERIES:"taki_end_taki_series"
 }
 
 export const states = {

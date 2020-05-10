@@ -1,7 +1,7 @@
 
 
 import {  revealCards,  updatePilesAndScores} from '../modules/takeSix'
-import {  takeCard, takeCardBack,reshuffleUsedCards, handleSpecialCard} from '../modules/taki'
+import {  handleEndTakiSeries, takeCard, takeCardBack,reshuffleUsedCards, handleSpecialCard} from '../modules/taki'
 import { reshuffle ,getGame, addGame, doesGameIDExist, addPlayer, removePlayer,updateState,selectCard} from '../modules/games'
 import {routes,socketMsgTypes,states} from '../constants'
 var cors = require('cors')
@@ -68,6 +68,11 @@ module.exports = function (io) {
 
     socket.on(socketMsgTypes.TAKI_SPECIAL_CARD, function (msg) {
       handleSpecialCard(msg)
+      sendState(io,msg.gameID,getGame(msg.gameID))
+    });
+
+    socket.on(socketMsgTypes.TAKI_END_TAKI_SERIES, function (msg) {
+      handleEndTakiSeries(getGame(msg.gameID),msg.playerID)
       sendState(io,msg.gameID,getGame(msg.gameID))
     });
    

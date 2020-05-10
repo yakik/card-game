@@ -3,7 +3,7 @@ import { socketMsgTypes, takiColors, takiCardTypes } from '../../constants'
 
 import { getCardClass, getCardText } from './cards'
 
-export function CardSelection({ packLength, playerID, gameID, socket, player }) {
+export function CardSelection({ showDoneTakiButton, packLength, playerID, gameID, socket, player }) {
   const [shouldSelectColor, setShouldSelectColor] = useState(false);
   const [shouldSelectKingType, setShouldSelectKingType] = useState(false);
   const [selectedKingType, setSelectedKingType] = useState('')
@@ -158,6 +158,11 @@ export function CardSelection({ packLength, playerID, gameID, socket, player }) 
         </div>)
   }
 
+  const endTakiSeriesButton=()=>{
+    if (showDoneTakiButton)
+      return <div><button onClick={() => socket.emit(socketMsgTypes.TAKI_END_TAKI_SERIES, { gameID: gameID, playerID: playerID })}>סיים רצף טאקי</button></div>
+  }
+
   const takeCard = () => {
     socket.emit(socketMsgTypes.TAKE_CARD, { gameID: gameID, playerID: playerID })
     setShouldSelectColor(false)
@@ -172,8 +177,8 @@ export function CardSelection({ packLength, playerID, gameID, socket, player }) 
         <p>{getCardsButtons(socket, player.cards)}</p>
       </div>
       {kingSelection()}
-      <br></br>
       {colorSelection()}
+      {endTakiSeriesButton()}
     </div>
     )
   else
