@@ -1,4 +1,4 @@
-import { takiCardTypes, errors } from "../constants"
+import { takiCardTypes, errors } from "../../constants"
 
 export function selectCardValidation(game, playerID, card) {
     if (card.type === takiCardTypes.KING) {

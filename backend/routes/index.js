@@ -1,7 +1,7 @@
 
 
-import {  revealCards,  updatePilesAndScores} from '../modules/takeSix'
-import {  handleEndTakiSeries, takeCard, takeCardBack,reshuffleUsedCards, handleSpecialCard} from '../modules/taki'
+import {  handleEndTakiSeries, revealCards,  updatePilesAndScores} from '../modules/takeSix'
+import {  takeCard, takeCardBack,reshuffleUsedCards, handleSpecialCard} from '../modules/taki'
 import { reshuffle ,getGame, addGame, doesGameIDExist, addPlayer, removePlayer,updateState,selectCard} from '../modules/games'
 import {routes,socketMsgTypes,states} from '../constants'
 var cors = require('cors')

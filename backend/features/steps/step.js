@@ -1,12 +1,12 @@
 const { Given, When, Then } = require("cucumber");
 const { expect } = require("chai");
 import {
-  addCardToPlayer,getPlayerID,selectCard, takeCard, getPlayer, addNewPlayer as addNewTakiPlayer,
+  getPlayerName,addCardToPlayer,getPlayerID,selectCard, takeCard, getPlayer, addNewPlayer as addNewTakiPlayer,
   getNewGame as getNewTakiGame, removePlayer as removeTakiPlayer, selectCard as selectCardTaki
-} from '../../modules/taki'
-import { getTakiCard } from "../../modules/takiPack"
+} from '../../modules/taki/taki'
+import { getTakiCard } from "../../modules/taki/takiPack"
 import {  takiCardTypes, turnDirections } from '../../constants'
-import {setTurn, getCurrentTurnPlayerID} from '../../modules/takiTurns'
+import {handleEndTakiSeries, setTurn, getCurrentTurnPlayerID} from '../../modules/taki/takiTurns'
 
 Given("a game with players:", function(dataTable) {
   this.game = getNewTakiGame()
@@ -24,8 +24,19 @@ When('{string} places a {string} {int} card on the table', function (playerName,
   
 });
 
+When('{string} places a {string} {string} card on the table', function (playerName, color, cardType) {
+  let card = getTakiCard(takiCardTypes[cardType],{color:color})
+  addCardToPlayer(this.game,getPlayerID(this.game,playerName),card)
+  selectCard(this.game, { playerID: getPlayerID(this.game,playerName), selectedCard: card })
+  
+});
+
+When('{string} indicates Taki series is done', function (playerName) {
+  handleEndTakiSeries(this.game,getPlayerID(this.game,playerName))
+});
+
 Then('next player is {string}', function (playerName) {
-  expect(getCurrentTurnPlayerID(this.game)).to.eql(getPlayerID(this.game,playerName))
+  expect(getPlayerName(this.game,getCurrentTurnPlayerID(this.game))).to.eql(playerName)
 });
 
  

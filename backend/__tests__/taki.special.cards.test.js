@@ -1,8 +1,8 @@
 import {
     selectCard, takeCard, getPlayer, addNewPlayer as addNewTakiPlayer,
     getNewGame as getNewTakiGame, removePlayer as removeTakiPlayer, selectCard as selectCardTaki
-} from '../modules/taki'
-import { getTakiPack, pullCardFromPack, setGamePack } from "../modules/takiPack"
+} from '../modules/taki/taki'
+import { getTakiPack, pullCardFromPack, setGamePack } from "../modules/taki/takiPack"
 import { instructionTypes, takiCardTypes, takiColors, errors } from '../constants'
 
 

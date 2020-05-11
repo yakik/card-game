@@ -1,4 +1,4 @@
-import { userActions, takiCardTypes, takiSpecialAction, takiColors } from '../constants'
+import { userActions, takiCardTypes, takiSpecialAction, takiColors } from '../../constants'
 import { pullCardFromPack } from './takiPack'
 import { allowed, updateTurnAfterSeletingCard } from './takiTurns'
 import {selectCardValidation} from './takiValidations'
@@ -7,7 +7,6 @@ import {selectCardValidation} from './takiValidations'
 export function getNewGame() {
     let game = {}
     game.players = []
-    game.state = {}
     game.lastPlayerID = 0
     game.pack=[]
     game.onTable = []
@@ -54,9 +53,11 @@ export function getPlayerID(game, name) {
     return game.players.find((player) => player.name === name).ID
 }
 
-export function handleEndTakiSeries(game,playerID){
-    game.state={...game.state,inTakiSeries:false,inTakiSeriesPlayerID:undefined}
+export function getPlayerName(game, ID) {
+    return game.players.find((player) => player.ID === ID).name
 }
+
+
 
 export function selectCard(game, msg) {
     getPlayer(game,msg.playerID).error=undefined
@@ -68,10 +69,7 @@ export function selectCard(game, msg) {
         getPlayer(game,msg.playerID).error = error
         return
     }
-    if (msg.selectedCard.type===takiCardTypes.TAKI ||
-        msg.selectedCard.type===takiCardTypes.KING && msg.selectedCard.configuration.type===takiCardTypes.TAKI){
-            game.state={...game.state,inTakiSeries:true,inTakiSeriesPlayerID:msg.playerID}
-        }
+ 
     
     game.players = resetTakenCards(game.players)
     moveCardFromPlayerToTable(game,msg.playerID,msg.selectedCard)

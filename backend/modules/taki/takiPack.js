@@ -1,6 +1,6 @@
-import { takiCardTypes, takiColors } from '../constants';
-import { getShuffledPack } from './cards';
-import { resetCard, assignCardsForPlayers } from './taki/taki';
+import { takiCardTypes, takiColors } from '../../constants';
+import { getShuffledPack } from '../cards';
+import { resetCard, assignCardsForPlayers } from './taki';
 
 
 export function reshuffleUsedCards(game) {

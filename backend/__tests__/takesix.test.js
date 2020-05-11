@@ -1,6 +1,6 @@
 import {whichPileToAdd, updatePilesAndScores
 
-} from "../modules/takeSix";
+} from "../modules/takeSix/takeSix";
 
 
 

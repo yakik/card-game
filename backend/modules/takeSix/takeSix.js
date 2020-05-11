@@ -1,5 +1,5 @@
-import { getShuffledPack,  getCardsForPlayer } from './cards'
-import {states} from '../constants'
+import { getShuffledPack,  getCardsForPlayer } from '../cards'
+import {states} from '../../constants'
 
 //select_cards -> all_selected -> cards_to_piles -> select cards
 
