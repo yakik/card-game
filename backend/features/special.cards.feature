@@ -5,7 +5,7 @@ Feature: special cards
     |player1|player2|player3|
     And it is "player1" turn, direction is "LEFT_TO_RIGHT"
     When "player1" places a "RED" 8 card on the table
-   # Then next player is "player2"
+    Then next player is "player2"
 
   #Scenario: change direction card
   #  Given a game with players "player1", "player2", "player3"

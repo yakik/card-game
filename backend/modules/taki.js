@@ -1,6 +1,6 @@
 import { userActions, takiCardTypes, takiSpecialAction, takiColors } from '../constants'
 import { pullCardFromPack } from './takiPack'
-import { allowed } from './takiTurns'
+import { allowed, updateTurnAfterSeletingCard } from './takiTurns'
 import {selectCardValidation} from './takiValidations'
 
 
@@ -60,6 +60,7 @@ export function handleEndTakiSeries(game,playerID){
 
 export function selectCard(game, msg) {
     getPlayer(game,msg.playerID).error=undefined
+   
     if (!allowed(game,msg.playerID,userActions.SELECT_CARD))
         return
     let error=selectCardValidation(game,msg.playerID, msg.selectedCard)
@@ -71,13 +72,18 @@ export function selectCard(game, msg) {
         msg.selectedCard.type===takiCardTypes.KING && msg.selectedCard.configuration.type===takiCardTypes.TAKI){
             game.state={...game.state,inTakiSeries:true,inTakiSeriesPlayerID:msg.playerID}
         }
+    
     game.players = resetTakenCards(game.players)
-    let player = getPlayer(game, msg.playerID)
-    let newCards = player.cards.filter((card) => card.ID !== msg.selectedCard.ID)
-    player.cards = newCards.sort(sortCards)
-    game.onTable.push({ ...msg.selectedCard, player: player.name })
+    moveCardFromPlayerToTable(game,msg.playerID,msg.selectedCard)
+    updateTurnAfterSeletingCard(game,msg.playerID,msg.selectedCard)
     game.lastPlayerPlacedCard = msg.playerID
+}
 
+const moveCardFromPlayerToTable=(game,playerID,cardToMove)=>{
+    let player = getPlayer(game, playerID)
+    let newCards = player.cards.filter((card) => card.ID !== cardToMove.ID)
+    game.onTable.push({ ...cardToMove, player: player.name })
+    player.cards = newCards.sort(sortCards)
 }
 
 const resetTakenCards = (players) => {
@@ -88,6 +94,13 @@ const resetTakenCards = (players) => {
     })
 }
 
+export function addCardToPlayer(game,playerID,card){
+    let player = getPlayer(game, playerID)
+    player.newCard = card
+    player.cards.push(card)
+
+}
+
 export function takeCard(game, playerID, criterion) {
     if (!allowed(game, playerID, userActions.TAKE_CARD))
         return
@@ -96,9 +109,9 @@ export function takeCard(game, playerID, criterion) {
         return
     let card = pullCardFromPack(game, criterion)
     let player = getPlayer(game, playerID)
-    player.newCard = card
+    
+    addCardToPlayer(game,playerID,card)
 
-    player.cards.push(player.newCard)
     player.cards = player.cards.sort(sortCards)
 }
 
