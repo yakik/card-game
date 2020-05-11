@@ -40,9 +40,20 @@ export function updateTurnAfterSeletingCard(game, playerID, selectedCard) {
     if (selectedCard.type === takiCardTypes.TAKI ||
         selectedCard.type === takiCardTypes.KING && selectedCard.configuration.type === takiCardTypes.TAKI) {
         game.turn = { ...game.turn, inTakiSeries: true, inTakiSeriesPlayerID: playerID }
+        return
     }
-    else
-        if (!game.turn.inTakiSeries)
+
+    if (selectedCard.type === takiCardTypes.PLUS ||
+        selectedCard.type === takiCardTypes.KING && selectedCard.configuration.type === takiCardTypes.PLUS) {
+        game.turn = { ...game.turn, inPlus: true, inPlusPlayerID: playerID }
+        return
+    }
+
+    if (game.turn.inPlus){
+        game.turn = { ...game.turn, inPlus: false, inPlusPlayerID: undefined }
+    }
+    
+    if (!game.turn.inTakiSeries)
             setNextPlayer(game, getNextPlayerID(game.turn.playerID, game.players, game.turn.direction, selectedCard.type))
 }
 
