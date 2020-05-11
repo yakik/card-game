@@ -28,7 +28,13 @@ When('{string} places a {string} {string} card on the table', function (playerNa
   let card = getTakiCard(takiCardTypes[cardType],{color:color})
   addCardToPlayer(this.game,getPlayerID(this.game,playerName),card)
   selectCard(this.game, { playerID: getPlayerID(this.game,playerName), selectedCard: card })
-  
+});
+
+When('{string} places a King {string} {string} card on the table', function (playerName, color, cardType) {
+  let card = getTakiCard(takiCardTypes.KING)
+  addCardToPlayer(this.game,getPlayerID(this.game,playerName),card)
+  selectCard(this.game, { playerID: getPlayerID(this.game,playerName),
+    selectedCard: {...card,configuration:{type:takiCardTypes[cardType],color:color}}})
 });
 
 When('{string} indicates Taki series is done', function (playerName) {

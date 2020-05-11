@@ -7,6 +7,7 @@
     "startDev": "nodemon --exec babel-node ./bin/www ",
     "test": "jest --watchAll",
     "cucumber": "./node_modules/.bin/cucumber-js --require-module @babel/register",
+    "cucumberOne": "./node_modules/.bin/cucumber-js --tags @active --require-module @babel/register",
     "jenkinsTest": "jest"
   },
   "dependencies": {

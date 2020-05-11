@@ -18,6 +18,11 @@ export function reshuffleUsedCards(game) {
         }
     }
 }
+
+export function getTopCardOnTable(game){
+    return game.onTable[game.onTable.length-1]
+}
+
 export function setOnTable(game, card) {
     game.onTable = [];
     game.onTable.push(card);
@@ -55,14 +60,17 @@ export function pullCardFromPack(game, criterion) {
 
 let cardID=0
 
-export function getTakiCard(type,options) {
+export function getTakiCard(type, options) {
     let card = { ID: cardID++, type: type }
-    if (options.color !== undefined)
-        card = { ...card, color: options.color }
-    if (options.number !== undefined)
-        card = { ...card, number: options.number }
-        return card
+    if (options !== undefined) {
+        if (options.color !== undefined)
+            card = { ...card, color: options.color }
+        if (options.number !== undefined)
+            card = { ...card, number: options.number }
+    }
+    return card
 }
+
 
 export function getTakiPack() {
     let pack = [];
