@@ -35,15 +35,18 @@ export function handleEndTakiSeries(game, playerID) {
     updateTurnAfterSeletingCard(game, playerID, getTopCardOnTable(game), true)
 }
 
+export function setDefaultTurn (game){
+    if (game.turn === undefined) {
+        game.turn = { playerID: game.players[0].ID, direction: turnDirections.LEFT_TO_RIGHT }
+    }
+}
 
 
 export function updateTurnAfterSeletingCard(game, playerID, selectedCard, lastTakiCard) {
     if (lastTakiCard === undefined)
         lastTakiCard = false
 
-    if (game.turn === undefined) {
-        game.turn = { playerID: game.players[0].ID, direction: turnDirections.LEFT_TO_RIGHT }
-    }
+        setDefaultTurn(game)
 
     if (!game.turn.inTakiSeries && getCardType(selectedCard) === takiCardTypes.CHANGE_DIRECTION)
         changeDirection(game)
@@ -67,6 +70,7 @@ export function updateTurnAfterSeletingCard(game, playerID, selectedCard, lastTa
 }
 
 export function updateTurnAfterTakingCard(game, playerID) {
+    setDefaultTurn(game)
     setNextPlayer(game, getNextPlayerID(game.turn.playerID, game.players, game.turn.direction))
 }
 
