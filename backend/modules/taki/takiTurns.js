@@ -35,7 +35,7 @@ export function handleEndTakiSeries(game, playerID) {
     updateTurnAfterSeletingCard(game, playerID, getTopCardOnTable(game), true)
 }
 
-export function setDefaultTurn (game){
+export function setDefaultTurn(game) {
     if (game.turn === undefined) {
         game.turn = { playerID: game.players[0].ID, direction: turnDirections.LEFT_TO_RIGHT }
     }
@@ -46,18 +46,10 @@ export function updateTurnAfterSeletingCard(game, playerID, selectedCard, lastTa
     if (lastTakiCard === undefined)
         lastTakiCard = false
 
-        setDefaultTurn(game)
-
-    if (!game.turn.inTakiSeries && getCardType(selectedCard) === takiCardTypes.CHANGE_DIRECTION)
-        changeDirection(game)
+    setDefaultTurn(game)
 
     if (!lastTakiCard && getCardType(selectedCard) === takiCardTypes.TAKI) {
         game.turn = { ...game.turn, inTakiSeries: true, inTakiSeriesPlayerID: playerID }
-        return
-    }
-
-    if (getCardType(selectedCard) === takiCardTypes.PLUS) {
-        game.turn = { ...game.turn, inPlus: true, inPlusPlayerID: playerID }
         return
     }
 
@@ -65,13 +57,32 @@ export function updateTurnAfterSeletingCard(game, playerID, selectedCard, lastTa
         game.turn = { ...game.turn, inPlus: false, inPlusPlayerID: undefined }
     }
 
-    if (!game.turn.inTakiSeries)
+    if (!game.turn.inTakiSeries) {
+        if (getCardType(selectedCard) === takiCardTypes.CHANGE_DIRECTION)
+            changeDirection(game)
+
+        if (getCardType(selectedCard) === takiCardTypes.PLUS_TWO){
+            if (game.turn.plusTwo === undefined)
+                game.turn.plusTwo = 0
+            game.turn.plusTwo+=2
+        }
+
+        if (getCardType(selectedCard) === takiCardTypes.PLUS) {
+            game.turn = { ...game.turn, inPlus: true, inPlusPlayerID: playerID }
+            return
+        }
+
         setNextPlayer(game, getNextPlayerID(game.turn.playerID, game.players, game.turn.direction, getCardType(selectedCard)))
+    }
 }
 
 export function updateTurnAfterTakingCard(game, playerID) {
     setDefaultTurn(game)
-    setNextPlayer(game, getNextPlayerID(game.turn.playerID, game.players, game.turn.direction))
+
+    if (game.turn.plusTwo !== undefined && game.turn.plusTwo > 1)
+        game.turn.plusTwo -= 1
+    else
+        setNextPlayer(game, getNextPlayerID(game.turn.playerID, game.players, game.turn.direction))
 }
 
 export function getNextPlayerID(currentPlayerID, players, direction, cardType) {

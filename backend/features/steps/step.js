@@ -30,6 +30,11 @@ When('{string} takes a card from the pack', function (playerName) {
   takeCard(this.game, getPlayerID(this.game,playerName))
 });
 
+When('{string} takes {int} cards from the pack', function (playerName, numberOfCards) {
+  for (let i=0;i<numberOfCards;i++)
+    takeCard(this.game, getPlayerID(this.game,playerName))
+  });
+
 When('{string} places a {string} {string} card on the table', function (playerName, color, cardType) {
   let card = getTakiCard(takiCardTypes[cardType],{color:color})
   addCardToPlayer(this.game,getPlayerID(this.game,playerName),card)
