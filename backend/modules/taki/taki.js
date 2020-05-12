@@ -1,6 +1,6 @@
 import { userActions, takiCardTypes, takiSpecialAction, takiColors } from '../../constants'
 import { pullCardFromPack } from './takiPack'
-import { allowed, updateTurnAfterSeletingCard } from './takiTurns'
+import { allowed, updateTurnAfterSeletingCard, updateTurnAfterTakingCard} from './takiTurns'
 import {selectCardValidation} from './takiValidations'
 
 
@@ -69,7 +69,6 @@ export function selectCard(game, msg) {
         getPlayer(game,msg.playerID).error = error
         return
     }
- 
     
     game.players = resetTakenCards(game.players)
     moveCardFromPlayerToTable(game,msg.playerID,msg.selectedCard)
@@ -109,6 +108,8 @@ export function takeCard(game, playerID, criterion) {
     let player = getPlayer(game, playerID)
     
     addCardToPlayer(game,playerID,card)
+
+    updateTurnAfterTakingCard(game,playerID)
 
     player.cards = player.cards.sort(sortCards)
 }

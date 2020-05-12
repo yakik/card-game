@@ -1,5 +1,5 @@
 import { turnDirections, takiCardTypes } from "../../constants";
-import {getTopCardOnTable} from "./takiPack"
+import { getTopCardOnTable } from "./takiPack"
 
 export function allowed(game, playerID, action) {
     return (game.turn === undefined || game.turn.playerID === playerID);
@@ -17,8 +17,8 @@ const setNextPlayer = (game, nextPlayerID) => {
     game.turn.playerID = nextPlayerID
 }
 
-const getCardType = (card)=> {
-    if (card.type===takiCardTypes.KING)
+const getCardType = (card) => {
+    if (card.type === takiCardTypes.KING)
         return card.configuration.type
     return card.type
 }
@@ -32,18 +32,20 @@ const changeDirection = (game) => {
 
 export function handleEndTakiSeries(game, playerID) {
     game.turn = { ...game.turn, inTakiSeries: false, inTakiSeriesPlayerID: undefined }
-    updateTurnAfterSeletingCard(game,playerID,getTopCardOnTable(game),true)
+    updateTurnAfterSeletingCard(game, playerID, getTopCardOnTable(game), true)
 }
 
+
+
 export function updateTurnAfterSeletingCard(game, playerID, selectedCard, lastTakiCard) {
-    if (lastTakiCard===undefined)
-        lastTakiCard=false
+    if (lastTakiCard === undefined)
+        lastTakiCard = false
 
     if (game.turn === undefined) {
         game.turn = { playerID: game.players[0].ID, direction: turnDirections.LEFT_TO_RIGHT }
     }
 
-    if (!game.turn.inTakiSeries&&getCardType(selectedCard) === takiCardTypes.CHANGE_DIRECTION)
+    if (!game.turn.inTakiSeries && getCardType(selectedCard) === takiCardTypes.CHANGE_DIRECTION)
         changeDirection(game)
 
     if (!lastTakiCard && getCardType(selectedCard) === takiCardTypes.TAKI) {
@@ -56,20 +58,26 @@ export function updateTurnAfterSeletingCard(game, playerID, selectedCard, lastTa
         return
     }
 
-    if (game.turn.inPlus){
+    if (game.turn.inPlus) {
         game.turn = { ...game.turn, inPlus: false, inPlusPlayerID: undefined }
     }
-    
+
     if (!game.turn.inTakiSeries)
-            setNextPlayer(game, getNextPlayerID(game.turn.playerID, game.players, game.turn.direction, getCardType(selectedCard)))
+        setNextPlayer(game, getNextPlayerID(game.turn.playerID, game.players, game.turn.direction, getCardType(selectedCard)))
+}
+
+export function updateTurnAfterTakingCard(game, playerID) {
+    setNextPlayer(game, getNextPlayerID(game.turn.playerID, game.players, game.turn.direction))
 }
 
 export function getNextPlayerID(currentPlayerID, players, direction, cardType) {
     let currentPlayerIndex = players.findIndex((player) => player.ID === currentPlayerID)
     let nextPlayerIndex
     let steps = 1
-    if (cardType === takiCardTypes.STOP)
-        steps = 2
+    if (cardType !== undefined) {
+        if (cardType === takiCardTypes.STOP)
+            steps = 2
+    }
     if (direction === turnDirections.LEFT_TO_RIGHT)
         nextPlayerIndex = (currentPlayerIndex + steps) % (players.length)
     else

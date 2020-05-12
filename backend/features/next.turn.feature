@@ -1,4 +1,4 @@
-Feature: special cards
+Feature: next turn
 
   Scenario: regular number card
     Given a game with players:
@@ -7,7 +7,13 @@ Feature: special cards
     When "player1" places a "RED" 8 card on the table
     Then next player is "player2"
 
- 
+  Scenario: regular number card
+    Given a game with players:
+    |player1|player2|player3|
+    And it is "player1" turn, direction is "LEFT_TO_RIGHT"
+    When "player1" takes a card from the pack
+    Then next player is "player2"
+
 
   Scenario: plus two card
     Given a game with players:
@@ -72,7 +78,6 @@ Feature: special cards
     When "player1" indicates Taki series is done
     Then next player is "player3"
 
-  @active
   Scenario: end of king taki change direction card
     Given a game with players:
     |player1|player2|player3|

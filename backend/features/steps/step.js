@@ -4,12 +4,14 @@ import {
   getPlayerName,addCardToPlayer,getPlayerID,selectCard, takeCard, getPlayer, addNewPlayer as addNewTakiPlayer,
   getNewGame as getNewTakiGame, removePlayer as removeTakiPlayer, selectCard as selectCardTaki
 } from '../../modules/taki/taki'
-import { getTakiCard } from "../../modules/taki/takiPack"
+import { getTakiPack, getTakiCard, setGamePack } from "../../modules/taki/takiPack"
 import {  takiCardTypes, turnDirections } from '../../constants'
 import {handleEndTakiSeries, setTurn, getCurrentTurnPlayerID} from '../../modules/taki/takiTurns'
+import { getShuffledPack } from '../../modules/cards';
 
 Given("a game with players:", function(dataTable) {
   this.game = getNewTakiGame()
+  setGamePack(this.game, getShuffledPack(getTakiPack()));
   dataTable.rawTable[0].forEach(player=>addNewTakiPlayer(this.game, player))
 });
 
@@ -22,6 +24,10 @@ When('{string} places a {string} {int} card on the table', function (playerName,
   addCardToPlayer(this.game,getPlayerID(this.game,playerName),card)
   selectCard(this.game, { playerID: getPlayerID(this.game,playerName), selectedCard: card })
   
+});
+
+When('{string} takes a card from the pack', function (playerName) {
+  takeCard(this.game, getPlayerID(this.game,playerName))
 });
 
 When('{string} places a {string} {string} card on the table', function (playerName, color, cardType) {
