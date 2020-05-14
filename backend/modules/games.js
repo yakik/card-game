@@ -1,7 +1,7 @@
 import { reshuffle as reshuffleTakeSix, removePlayer as removeTakeSixPlayer, 
-    addNewPlayer as addNewTakeSixPlayer, getNewGame as getNewTakeSixGame, selectCard as selectCardTakeSix } from './takeSix'
+    addNewPlayer as addNewTakeSixPlayer, getNewGame as getNewTakeSixGame, selectCard as selectCardTakeSix } from './takeSix/takeSix'
 import {  addNewPlayer as addNewTakiPlayer, 
-    getNewGame as getNewTakiGame, removePlayer as removeTakiPlayer, selectCard as selectCardTaki } from './taki'
+    getNewGame as getNewTakiGame, removePlayer as removeTakiPlayer, selectCard as selectCardTaki } from './taki/taki'
     import {reshuffle as reshuffleTaki} from './takiPack'
 import {gameTypes} from '../constants'
 
@@ -66,6 +66,10 @@ export function removePlayer(gameID, playerID){
         return removeTakiPlayer(game.game, playerID)
 }
 
+export function getGameType(gameID){
+    let game = getGameObject(gameID)
+        return game.type
+}
 
 export function addGame(type)
 {

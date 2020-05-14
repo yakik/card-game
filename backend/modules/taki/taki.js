@@ -10,6 +10,7 @@ export function getNewGame() {
     game.lastPlayerID = 0
     game.pack=[]
     game.onTable = []
+    game.turn = {inTakiSeries:false}
 
     return game
 }
@@ -22,9 +23,14 @@ export function assignCardsForPlayers(game) {
     })
 }
 
+
+
 export function addNewPlayer(game, name) {
     let ID = game.lastPlayerID++
     game.players.push({ name: name, ID: ID, cards: [] })
+    if (game.turn.playerID===undefined)
+        game.turn.playerID=ID
+    
     return ID
 }
 

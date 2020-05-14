@@ -1,5 +1,6 @@
 import { turnDirections, takiCardTypes, userActions } from "../../constants";
 import { getTopCardOnTable } from "./takiPack"
+import {getPlayerName} from "./taki"
 
 export function allowed(game, playerID, action, selectedCard) {
 
@@ -15,14 +16,21 @@ export function allowed(game, playerID, action, selectedCard) {
                 return true
         }
         else {
-            if (getCardType(selectedCard)!==takiCardTypes.PLUS_THREE_BREAK)
+            if (getCardType(selectedCard)!==takiCardTypes.PLUS_THREE_BREAK){
+                game.message("אסור להניח קלף כשצריכים לקחת קלפים לפלוס שלוש")
                 return false
+            }
             else
                 return true
         }
     }
 
-    return (game.turn === undefined || game.turn.playerID === playerID);
+    if (game.turn === undefined || game.turn.playerID === playerID){
+        return true
+    }
+    else
+        game.message="לא תורך"
+        return false
 }
 
 export function setTurn(game, playerID, direction) {
@@ -111,6 +119,8 @@ export function updateTurnAfterSeletingCard(game, playerID, selectedCard, lastTa
 
 
         setNextPlayer(game, getNextPlayerID(game.turn.playerID, game.players, game.turn.direction, getCardType(selectedCard)))
+       
+                game.message = "תורו של " + getPlayerName(game, game.turn.playerID)
     }
 }
 
@@ -148,6 +158,7 @@ export function updateTurnAfterTakingCard(game, playerID) {
         else
             setNextPlayer(game, getNextPlayerID(game.turn.playerID, game.players, game.turn.direction))
     }
+    game.message = "תורו של " + getPlayerName(game, game.turn.playerID)
 }
 
 export function getNextPlayerID(currentPlayerID, players, direction, cardType) {

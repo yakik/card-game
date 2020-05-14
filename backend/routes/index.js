@@ -1,9 +1,10 @@
 
 
-import {  handleEndTakiSeries, revealCards,  updatePilesAndScores} from '../modules/takeSix'
-import {  takeCard, takeCardBack,reshuffleUsedCards, handleSpecialCard} from '../modules/taki'
-import { reshuffle ,getGame, addGame, doesGameIDExist, addPlayer, removePlayer,updateState,selectCard} from '../modules/games'
-import {routes,socketMsgTypes,states} from '../constants'
+import {   revealCards,  updatePilesAndScores} from '../modules/takeSix/takeSix'
+import { takeCard, takeCardBack,reshuffleUsedCards, handleSpecialCard} from '../modules/taki/taki'
+import { handleEndTakiSeries} from '../modules/taki/takiTurns'
+import { getGameType,reshuffle ,getGame, addGame, doesGameIDExist, addPlayer, removePlayer,updateState,selectCard} from '../modules/games'
+import {gameTypes,routes,socketMsgTypes,states} from '../constants'
 var cors = require('cors')
 var express = require('express');
 var router = express.Router();

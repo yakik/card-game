@@ -16,7 +16,7 @@ export function Taki({ gameID, socket, playerName, playerID, isManager }) {
   }
 
   const showDoneTakiButton = () => {
-    return game.state.inTakiSeries && game.state.inTakiSeriesPlayerID === playerID
+    return game.turn.inTakiSeries && game.turn.inTakiSeriesPlayerID === playerID
   }
 
   const getPack = (deckOnTable) => {
@@ -53,10 +53,12 @@ export function Taki({ gameID, socket, playerName, playerID, isManager }) {
 
         <div className="taki-cards">
         <CardSelection showDoneTakiButton={showDoneTakiButton()} packLength={game.pack.length} gameState={game.state} playerID={playerID} gameID={gameID} socket={socket} player={getPlayer()} />
+        <div>{game.message}</div>
         </div>
 
         <div className="taki-cards-on-table">
           {game.onTable !== undefined ? getPack(game.onTable) : <div></div>}
+          
         </div>
         <div className="taki-players" >
           <PlayersList players={game.players} />
