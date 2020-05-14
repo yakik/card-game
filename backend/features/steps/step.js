@@ -41,6 +41,19 @@ When('{string} places a {string} {string} card on the table', function (playerNa
   selectCard(this.game, { playerID: getPlayerID(this.game,playerName), selectedCard: card })
 });
 
+When('{string} places a plus three card on the table', function (playerName) {
+  let card = getTakiCard(takiCardTypes.PLUS_THREE)
+  addCardToPlayer(this.game,getPlayerID(this.game,playerName),card)
+  selectCard(this.game, { playerID: getPlayerID(this.game,playerName), selectedCard: card })
+});
+
+When('{string} suddenly comes up with a plus three break card and places it on the table', function (playerName) {
+  let card = getTakiCard(takiCardTypes.PLUS_THREE_BREAK)
+  addCardToPlayer(this.game,getPlayerID(this.game,playerName),card)
+  selectCard(this.game, { playerID: getPlayerID(this.game,playerName), selectedCard: card })
+});
+
+
 When('{string} places a King {string} {string} card on the table', function (playerName, color, cardType) {
   let card = getTakiCard(takiCardTypes.KING)
   addCardToPlayer(this.game,getPlayerID(this.game,playerName),card)
@@ -54,6 +67,18 @@ When('{string} indicates Taki series is done', function (playerName) {
 
 Then('next player is {string}', function (playerName) {
   expect(getPlayerName(this.game,getCurrentTurnPlayerID(this.game))).to.eql(playerName)
+});
+
+Then('it is still {string} turn. The following players need to take cards:', function (playerName, dataTable) {
+  expect(getPlayerName(this.game, getCurrentTurnPlayerID(this.game))).to.eql(playerName,"Player name check")
+  expect(this.game.turn.plusThreePlayersToTakeCards.length).to.eql(dataTable.rawTable.length,"number of players to take cards")
+  dataTable.rawTable.forEach(playerToTakeCards => {
+    let playerID = getPlayerID(this.game, playerToTakeCards[0])
+    let cardsToTake = playerToTakeCards[1]
+    expect(parseInt(cardsToTake, 10)).to.eql(
+      this.game.turn.plusThreePlayersToTakeCards.find(player => player.playerID === playerID).remainingCardsToTake,"number of cards to take for player ID:"+playerID)
+  })
+
 });
 
  

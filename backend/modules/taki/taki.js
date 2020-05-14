@@ -62,7 +62,7 @@ export function getPlayerName(game, ID) {
 export function selectCard(game, msg) {
     getPlayer(game,msg.playerID).error=undefined
    
-    if (!allowed(game,msg.playerID,userActions.SELECT_CARD))
+    if (!allowed(game,msg.playerID,userActions.SELECT_CARD,msg.selectCard))
         return
     let error=selectCardValidation(game,msg.playerID, msg.selectedCard)
     if (error!=undefined){
@@ -110,6 +110,7 @@ export function takeCard(game, playerID, criterion) {
     addCardToPlayer(game,playerID,card)
 
     updateTurnAfterTakingCard(game,playerID)
+    
 
     player.cards = player.cards.sort(sortCards)
 }

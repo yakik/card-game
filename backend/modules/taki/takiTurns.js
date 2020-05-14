@@ -1,7 +1,27 @@
-import { turnDirections, takiCardTypes } from "../../constants";
+import { turnDirections, takiCardTypes, userActions } from "../../constants";
 import { getTopCardOnTable } from "./takiPack"
 
-export function allowed(game, playerID, action) {
+export function allowed(game, playerID, action, selectedCard) {
+
+    if (game.turn.inPlusThree) {
+        if (action = userActions.SELECT_CARD) {
+            let allowed = false
+            game.turn.plusThreePlayersToTakeCards.forEach(playerToTake => {
+                if (playerToTake.playerID === playerID && playerToTake.remainingCardsToTake > 0)
+                    allowed = true
+            })
+
+            if (allowed)
+                return true
+        }
+        else {
+            if (getCardType(selectedCard)!==takiCardTypes.PLUS_THREE_BREAK)
+                return false
+            else
+                return true
+        }
+    }
+
     return (game.turn === undefined || game.turn.playerID === playerID);
 }
 
@@ -61,10 +81,10 @@ export function updateTurnAfterSeletingCard(game, playerID, selectedCard, lastTa
         if (getCardType(selectedCard) === takiCardTypes.CHANGE_DIRECTION)
             changeDirection(game)
 
-        if (getCardType(selectedCard) === takiCardTypes.PLUS_TWO){
+        if (getCardType(selectedCard) === takiCardTypes.PLUS_TWO) {
             if (game.turn.plusTwo === undefined)
                 game.turn.plusTwo = 0
-            game.turn.plusTwo+=2
+            game.turn.plusTwo += 2
         }
 
         if (getCardType(selectedCard) === takiCardTypes.PLUS) {
@@ -72,17 +92,62 @@ export function updateTurnAfterSeletingCard(game, playerID, selectedCard, lastTa
             return
         }
 
+        if (getCardType(selectedCard) === takiCardTypes.PLUS_THREE) {
+            game.turn = { ...game.turn, inPlusThree: true, plusThreeInitiator: playerID }
+            let plusThreePlayersToTakeCards = []
+            game.players.forEach(player => {
+                if (player.ID !== game.turn.plusThreeInitiator)
+                    plusThreePlayersToTakeCards.push({ playerID: player.ID, remainingCardsToTake: 3 })
+            })
+            game.turn = { ...game.turn, plusThreePlayersToTakeCards: plusThreePlayersToTakeCards }
+            return
+        }
+
+        if (getCardType(selectedCard) === takiCardTypes.PLUS_THREE_BREAK && game.turn.inPlusThree) {
+            game.turn = { ...game.turn,
+                plusThreePlayersToTakeCards: [{playerID:game.turn.plusThreeInitiator,remainingCardsToTake:3}] }
+            return
+        }
+
+
         setNextPlayer(game, getNextPlayerID(game.turn.playerID, game.players, game.turn.direction, getCardType(selectedCard)))
     }
 }
 
 export function updateTurnAfterTakingCard(game, playerID) {
     setDefaultTurn(game)
+    if (game.turn.inPlusThree) {
 
-    if (game.turn.plusTwo !== undefined && game.turn.plusTwo > 1)
-        game.turn.plusTwo -= 1
-    else
-        setNextPlayer(game, getNextPlayerID(game.turn.playerID, game.players, game.turn.direction))
+        let allPlayersTookTheirThree = true
+        let newPlusThreePlayersToTakeCards = []
+        
+        game.turn.plusThreePlayersToTakeCards.forEach(playerToTake => {
+
+            if (playerToTake.playerID === playerID) {
+                playerToTake.remainingCardsToTake -= 1
+            }
+            if (playerToTake.remainingCardsToTake > 0){
+                allPlayersTookTheirThree = false
+                newPlusThreePlayersToTakeCards.push(playerToTake)
+            }
+        })
+
+        if (allPlayersTookTheirThree) {
+            game.turn = {
+                ...game.turn, inPlusThree: false,
+                plusThreeInitiator: undefined, plusThreePlayersToTakeCards: undefined
+            }
+        }
+        else
+            game.turn = {...game.turn, plusThreePlayersToTakeCards:newPlusThreePlayersToTakeCards}
+    }
+
+    if (!game.turn.inPlusThree) {
+        if (game.turn.plusTwo !== undefined && game.turn.plusTwo > 1)
+            game.turn.plusTwo -= 1
+        else
+            setNextPlayer(game, getNextPlayerID(game.turn.playerID, game.players, game.turn.direction))
+    }
 }
 
 export function getNextPlayerID(currentPlayerID, players, direction, cardType) {
