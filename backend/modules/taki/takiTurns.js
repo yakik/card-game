@@ -93,6 +93,7 @@ export function updateTurnAfterSeletingCard(game, playerID, selectedCard, lastTa
             if (game.turn.plusTwo === undefined)
                 game.turn.plusTwo = 0
             game.turn.plusTwo += 2
+            game.message = "נא לקחת " + game.turn.plusTwo + " קלפים"
         }
 
         if (getCardType(selectedCard) === takiCardTypes.PLUS) {
@@ -108,13 +109,15 @@ export function updateTurnAfterSeletingCard(game, playerID, selectedCard, lastTa
                     plusThreePlayersToTakeCards.push({ playerID: player.ID, remainingCardsToTake: 3 })
             })
             game.turn = { ...game.turn, plusThreePlayersToTakeCards: plusThreePlayersToTakeCards }
+            game.message = "כולם חוץ מ " + getPlayerName(game,playerID) + "לקחת שלושה קלפים" 
             return
         }
 
         if (getCardType(selectedCard) === takiCardTypes.PLUS_THREE_BREAK && game.turn.inPlusThree) {
             game.turn = { ...game.turn,
                 plusThreePlayersToTakeCards: [{playerID:game.turn.plusThreeInitiator,remainingCardsToTake:3}] }
-            return
+                game.message = "רק " + getPlayerName(game,playerID) + " צריך לקחת שלושה קלפים" 
+                return
         }
 
 
