@@ -4,7 +4,7 @@ import {   revealCards,  updatePilesAndScores} from '../modules/takeSix/takeSix'
 import { takeCard, takeCardBack,reshuffleUsedCards, handleSpecialCard} from '../modules/taki/taki'
 import { handleEndTakiSeries} from '../modules/taki/takiTurns'
 import { getGameType,reshuffle ,getGame, addGame, doesGameIDExist, addPlayer, removePlayer,updateState,selectCard} from '../modules/games'
-import {gameTypes,routes,socketMsgTypes,states} from '../constants'
+import {gameTypes,routes,socketMsgTypes,states, envTypes} from '../constants'
 var cors = require('cors')
 var express = require('express');
 var router = express.Router();
@@ -14,6 +14,16 @@ var corsOptions = {
   optionsSuccessStatus: 200
 }
 
+if (process.env.NODE_ENV!==envTypes.PRODUCTION){
+  router.post(routes.START_TESTING_NEW_GAME, cors(corsOptions), (req, res) => {
+    let newID = addGame(req.body.gameType,999)
+    addPlayer(newID,"player 1",0)
+    addPlayer(newID,"player 2",1)
+    addPlayer(newID,"player 3",2)
+    addPlayer(newID,"player 4",3)
+    return res.json({ success: true, gameID: 999, });
+  });
+}
 
 router.post(routes.START_NEW_GAME, cors(corsOptions), (req, res) => {
   let newID = addGame(req.body.gameType)
@@ -45,6 +55,12 @@ module.exports = function (io) {
       updateState(msg.gameID,states.SELECTING_CARDS)
       io.emit(socketMsgTypes.SET_GAME_STATE, {gameID:msg.gameID,game:getGame(msg.gameID)});
     });
+    if (process.env.NODE_ENV!==envTypes.PRODUCTION){
+      socket.on(socketMsgTypes.TESTING_ADD_CARD_TO_PLAYER, function (msg) {
+        updateState(msg.gameID,states.SELECTING_CARDS)
+        io.emit(socketMsgTypes.SET_GAME_STATE, {gameID:msg.gameID,game:getGame(msg.gameID)});
+      });
+    }
 
     socket.on(socketMsgTypes.UPDATE_PILES_AND_SCORES, function (msg) {
       let remainingCards = updatePilesAndScores(getGame(msg.gameID),msg.selectedPile, msg.playersToProcess)

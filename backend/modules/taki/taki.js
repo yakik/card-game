@@ -25,8 +25,12 @@ export function assignCardsForPlayers(game) {
 
 
 
-export function addNewPlayer(game, name) {
-    let ID = game.lastPlayerID++
+export function addNewPlayer(game, name, playerID) {
+    let ID
+    if (playerID===undefined)
+        ID = game.lastPlayerID++
+    else
+        ID = playerID
     game.players.push({ name: name, ID: ID, cards: [] })
     if (game.turn.playerID===undefined)
         game.turn.playerID=ID

@@ -1,6 +1,7 @@
 export const routes = {
     START_NEW_GAME: '/startNewGame',
-    JOIN_GAME: '/joinGame'
+    JOIN_GAME: '/joinGame',
+    START_TESTING_NEW_GAME: '/newTestingGame'
 }
 
 export const socketMsgTypes ={
@@ -17,7 +18,8 @@ export const socketMsgTypes ={
     TAKE_CARD_BACK:"take_card_back",
     RESHUFFLE_USED_CARDS:"reshuffle_used_cards",
     TAKI_SPECIAL_CARD:"taki_Special_card",
-    TAKI_END_TAKI_SERIES:"taki_end_taki_series"
+    TAKI_END_TAKI_SERIES:"taki_end_taki_series",
+    TESTING_ADD_CARD_TO_PLAYER:"testing_add_card_to_player"
 }
 
 export const states = {

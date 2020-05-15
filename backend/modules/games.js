@@ -50,12 +50,12 @@ export function selectCard(gameID, msg){
 }
 
 
-export function addPlayer(gameID, name) {
+export function addPlayer(gameID, name, playerID) {
     let game = getGameObject(gameID)
     if (game.type === gameTypes.TAKE_SIX)
-        return addNewTakeSixPlayer(game.game, name)
+        return addNewTakeSixPlayer(game.game, name, playerID)
     if (game.type === gameTypes.TAKI)
-        return addNewTakiPlayer(game.game, name)
+        return addNewTakiPlayer(game.game, name, playerID)
 }
 
 export function removePlayer(gameID, playerID){
@@ -71,9 +71,16 @@ export function getGameType(gameID){
         return game.type
 }
 
-export function addGame(type)
+export function addGame(type,gameID)
 {
-    let newGameID = Math.round(Math.random() * 99).toString()
+    let newGameID
+    if (gameID===undefined)
+        newGameID = Math.round(Math.random() * 99).toString()
+    else
+        newGameID = gameID
+    for( let i = 0; i < games.length; i++)
+        if ( games[i].ID === newGameID)
+            games.splice(i, 1);
     if (type===gameTypes.TAKE_SIX){
         games.push({ID:newGameID,game:getNewTakeSixGame(),type:gameTypes.TAKE_SIX})
     }

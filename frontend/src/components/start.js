@@ -59,6 +59,24 @@ export function Start() {
             }
           )
       }
+      
+
+      const startTakiTestingGame = (gameType) => {
+        axios
+          .post(endPoint + routes.START_TESTING_NEW_GAME, {gameType: gameType})
+          .then(
+            res => {
+              let ID = res.data.gameID
+              setNewGameID(ID)
+              setState(states.IN_GAME_AS_MANAGER)
+              setGameType (gameType)
+              setPlayerID(0)
+            },
+            error => {
+              console.log(error);
+            }
+          )
+      }
 
      
 
@@ -83,6 +101,7 @@ export function Start() {
         <div>
           <button disabled={newPlayerName===""} onClick={() => newGame(gameTypes.TAKI)}>משחק טאקי חדש</button>
           <button disabled={newPlayerName===""} onClick={() => joinGame(gameTypes.TAKI)}>הצטרף למשחק טאקי</button>
+          <button disable={(process.env.NODE_ENV !== envTypes.PRODUCTION).toString()} onClick={() => startTakiTestingGame(gameTypes.TAKI)}>משחק טאקי לבדיקות</button>
         </div>
 
       </div>
