@@ -7,9 +7,10 @@ import { getCardClass, getCardText } from './cards'
 
 
 
-export function Taki({ gameID, socket, playerName, playerID, isManager }) {
+export function Taki({ testingMode, gameID, socket, playerName, playerID, isManager }) {
 
   const [game, setGame] = useState({});
+  const [testingAddCard,setTestingAddCard] = useState("")
   
   const getPlayer = () => {
     return game.players.find((player) => player.ID === playerID)
@@ -27,7 +28,24 @@ export function Taki({ gameID, socket, playerName, playerID, isManager }) {
     return <div className="cards-list">{cardsOnTable}</div>
   }
 
-  
+  const onChangeNewTestingCard = e => {
+    setTestingAddCard(e.target.value);
+  }
+
+  const testingAddCardDiv = () => {
+    if (testingMode) {
+      return (<div><input name="newTestingCard" onChange={e => onChangeNewTestingCard(e)} />
+      <br></br>
+        <button onClick={() => {
+          socket.emit(socketMsgTypes.TESTING_ADD_CARD_TO_PLAYER, {
+            gameID: gameID, playerID: playerID,
+            card: JSON.parse(testingAddCard)
+          })
+        }}>הוסף קלף</button></div>)
+
+    }
+  }
+
 
   if (game.players === undefined)
     socket.emit(socketMsgTypes.REFRESH, { gameID: gameID });
@@ -52,6 +70,7 @@ export function Taki({ gameID, socket, playerName, playerID, isManager }) {
         </div>
 
         <div className="taki-cards">
+          {testingAddCardDiv()}
         <CardSelection showDoneTakiButton={showDoneTakiButton()} packLength={game.pack.length} gameState={game.state} playerID={playerID} gameID={gameID} socket={socket} player={getPlayer()} />
         <div>{game.message}</div>
         </div>

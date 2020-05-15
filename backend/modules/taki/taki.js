@@ -108,6 +108,8 @@ export function addCardToPlayer(game,playerID,card){
 
 }
 
+
+
 export function takeCard(game, playerID, criterion) {
     if (!allowed(game, playerID, userActions.TAKE_CARD))
         return

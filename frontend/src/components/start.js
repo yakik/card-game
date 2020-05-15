@@ -19,8 +19,10 @@ export function Start() {
   const [newPlayerName, setNewPlayerName] = useState("");
   const [playerID, setPlayerID] = useState("");
   const [gameType, setGameType] = useState("");
+  const [testingMode,setTestingMode] = useState(false)
   const [newGameID, setNewGameID] = useState([]);
   const [state, setState] = useState(states.NOT_IN_GAME);
+  
 
     const onChangeGameID = e => {
         setNewGameID(e.target.value);
@@ -71,6 +73,7 @@ export function Start() {
               setState(states.IN_GAME_AS_MANAGER)
               setGameType (gameType)
               setPlayerID(0)
+              setTestingMode(true)
             },
             error => {
               console.log(error);
@@ -78,7 +81,17 @@ export function Start() {
           )
       }
 
-     
+     const testingSelectPlayer=()=>{
+       if (testingMode) {
+         let selectPlayerButtons = []
+         for (let i = 0; i < 4; i++)
+           if (i !== playerID)
+             selectPlayerButtons.push(<button key={i} onClick={() => setPlayerID(i)}>{"Player " + i}</button>)
+         return <div>{selectPlayerButtons}</div>
+
+       }
+
+     }
 
 
   const onChangeNewPlayerName = e => {
@@ -112,8 +125,11 @@ if ( gameType===gameTypes.TAKE_SIX)
     return (<TakeSix gameID={newGameID.toString()} playerID={playerID}
      isManager={state === states.IN_GAME_AS_MANAGER ? true : false} socket={socket} endPoint={endPoint} />)
 else
-return (<Taki gameID={newGameID.toString()} playerID={playerID}
-     isManager={state === states.IN_GAME_AS_MANAGER ? true : false} socket={socket} endPoint={endPoint} />)
+return (<div>
+  {testingSelectPlayer()}
+  <Taki gameID={newGameID.toString()} playerID={playerID} testingMode={testingMode}
+     isManager={state === states.IN_GAME_AS_MANAGER ? true : false} socket={socket} endPoint={endPoint} />
+     </div>)
 
   }
 }
