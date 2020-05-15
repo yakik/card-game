@@ -58,10 +58,26 @@ export function pullCardFromPack(game, criterion) {
     }
 }
 
-let cardID=0
+export function areEqual(cardA,cardB){
+    if (cardA.type!==cardB.type)
+        return false
+    if (cardA.color!==undefined && cardB.color===undefined
+        || cardA.color===undefined && cardB.color!==undefined)
+        return false
+    if (cardA.color!==undefined && cardB.color!==undefined)
+        if (cardA.color!==cardB.color)
+            return false
+    if (cardA.number!==undefined && cardB.number===undefined
+        || cardA.number===undefined && cardB.number!==undefined)
+        return false
+    if (cardA.number!==undefined && cardB.number!==undefined)
+        if (cardA.number!==cardB.number)
+            return false
+    return true
+}
 
 export function getTakiCard(type, options) {
-    let card = { ID: cardID++, type: type }
+    let card = { type: type }
     if (options !== undefined) {
         if (options.color !== undefined)
             card = { ...card, color: options.color }

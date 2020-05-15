@@ -1,5 +1,5 @@
 import { userActions, takiCardTypes, takiSpecialAction, takiColors } from '../../constants'
-import { pullCardFromPack } from './takiPack'
+import { areEqual, pullCardFromPack } from './takiPack'
 import { allowed, updateTurnAfterSeletingCard, updateTurnAfterTakingCard} from './takiTurns'
 import {selectCardValidation} from './takiValidations'
 
@@ -88,7 +88,7 @@ export function selectCard(game, msg) {
 
 const moveCardFromPlayerToTable=(game,playerID,cardToMove)=>{
     let player = getPlayer(game, playerID)
-    let newCards = player.cards.filter((card) => card.ID !== cardToMove.ID)
+    let newCards = player.cards.filter((card) => !areEqual(card,cardToMove))
     game.onTable.push({ ...cardToMove, player: player.name })
     player.cards = newCards.sort(sortCards)
 }
