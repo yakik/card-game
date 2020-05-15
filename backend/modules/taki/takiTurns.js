@@ -73,6 +73,8 @@ export function setDefaultTurn(game) {
 export function updateTurnAfterSeletingCard(game, playerID, selectedCard, lastTakiCard) {
     if (lastTakiCard === undefined)
         lastTakiCard = false
+    
+        let message = ""
 
     setDefaultTurn(game)
 
@@ -93,7 +95,7 @@ export function updateTurnAfterSeletingCard(game, playerID, selectedCard, lastTa
             if (game.turn.plusTwo === undefined)
                 game.turn.plusTwo = 0
             game.turn.plusTwo += 2
-            game.message = "נא לקחת " + game.turn.plusTwo + " קלפים"
+            message = "נא לקחת " + game.turn.plusTwo + " קלפים"
         }
 
         if (getCardType(selectedCard) === takiCardTypes.PLUS) {
@@ -123,7 +125,7 @@ export function updateTurnAfterSeletingCard(game, playerID, selectedCard, lastTa
 
         setNextPlayer(game, getNextPlayerID(game.turn.playerID, game.players, game.turn.direction, getCardType(selectedCard)))
        
-                game.message = "תורו של " + getPlayerName(game, game.turn.playerID)
+                game.message = "תורו של " + getPlayerName(game, game.turn.playerID) + " " + message
     }
 }
 
