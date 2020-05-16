@@ -1,7 +1,7 @@
 
 
 import {   revealCards,  updatePilesAndScores} from '../modules/takeSix/takeSix'
-import { addCardToPlayer,takeCard, takeCardBack,reshuffleUsedCards, handleSpecialCard} from '../modules/taki/taki'
+import { setTestGame,addCardToPlayer,takeCard, takeCardBack,reshuffleUsedCards, handleSpecialCard} from '../modules/taki/taki'
 import { handleEndTakiSeries} from '../modules/taki/takiTurns'
 import { getGameType,reshuffle ,getGame, addGame, doesGameIDExist, addPlayer, removePlayer,updateState,selectCard} from '../modules/games'
 import {gameTypes,routes,socketMsgTypes,states, envTypes} from '../constants'
@@ -17,10 +17,7 @@ var corsOptions = {
 if (process.env.NODE_ENV!==envTypes.PRODUCTION){
   router.post(routes.START_TESTING_NEW_GAME, cors(corsOptions), (req, res) => {
     let newID = addGame(req.body.gameType,999)
-    addPlayer(newID,"0",0)
-    addPlayer(newID,"1",1)
-    addPlayer(newID,"2",2)
-    addPlayer(newID,"3",3)
+    setTestGame(getGame(newID))
     return res.json({ success: true, gameID: 999, });
   });
 }

@@ -1,5 +1,5 @@
 import { userActions, takiCardTypes, takiSpecialAction, takiColors } from '../../constants'
-import { areEqual, pullCardFromPack } from './takiPack'
+import { getTakiCard,areEqual, pullCardFromPack } from './takiPack'
 import { allowed, updateTurnAfterSeletingCard, updateTurnAfterTakingCard} from './takiTurns'
 import {selectCardValidation} from './takiValidations'
 
@@ -22,6 +22,16 @@ export function assignCardsForPlayers(game) {
         player.cards = player.cards.sort(sortCards)
     })
 }
+
+export function setTestGame(game){
+    addNewPlayer(game,"0",0)
+    addNewPlayer(game,"1",1)
+    addNewPlayer(game,"2",2)
+    addNewPlayer(game,"3",3)
+    for (let i = 0; i < 20; i++)
+        game.pack.push(getTakiCard(takiCardTypes.NUMBER,{color:takiColors.GREEN,number:"5"}));
+    game.onTable.push(getTakiCard(takiCardTypes.NUMBER,{color:takiColors.GREEN,number:"5"}))
+  }
 
 
 

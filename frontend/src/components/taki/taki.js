@@ -32,15 +32,17 @@ export function Taki({ testingMode, gameID, socket, playerName, playerID, isMana
     setTestingAddCard(e.target.value);
   }
 
+
   const testingAddCardDiv = () => {
     if (testingMode) {
-      return (<div><input name="newTestingCard" onChange={e => onChangeNewTestingCard(e)} />
+      return (<div><input name="newTestingCard" value={testingAddCard} onChange={e => onChangeNewTestingCard(e)} />
       <br></br>
         <button onClick={() => {
           socket.emit(socketMsgTypes.TESTING_ADD_CARD_TO_PLAYER, {
             gameID: gameID, playerID: playerID,
             card: JSON.parse(testingAddCard)
           })
+        setTestingAddCard("")
         }}>הוסף קלף</button></div>)
 
     }
@@ -72,7 +74,8 @@ export function Taki({ testingMode, gameID, socket, playerName, playerID, isMana
         <div className="taki-cards">
           {testingAddCardDiv()}
         <CardSelection showDoneTakiButton={showDoneTakiButton()} packLength={game.pack.length} gameState={game.state} playerID={playerID} gameID={gameID} socket={socket} player={getPlayer()} />
-        <div>{game.message}</div>
+        <div data-testid={"message_player"}></div>
+        <div ><span data-testid={"message_everyone"}>{game.message}</span></div>
         </div>
 
         <div className="taki-cards-on-table">

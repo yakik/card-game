@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { socketMsgTypes, takiColors, takiCardTypes } from '../../constants'
 
-import { getCardClass, getCardText } from './cards'
+import { getCardClass, getCardText, getCardTestID } from './cards'
 
 export function CardSelection({ showDoneTakiButton, packLength, playerID, gameID, socket, player }) {
   const [shouldSelectColor, setShouldSelectColor] = useState(false);
@@ -76,7 +76,8 @@ export function CardSelection({ showDoneTakiButton, packLength, playerID, gameID
         scaleCSS = " scaled"
       }
       return (
-        <button className={getCardClass(card) + scaleCSS} key={i++} onClick={() => onClickCard(socket, card)}>{getCardText(card)}</button>
+        <button data-testid={getCardTestID(card)} className={getCardClass(card) + scaleCSS}
+        key={i++} onClick={() => onClickCard(socket, card)}>{getCardText(card)}</button>
       )
     })
   }
@@ -85,12 +86,13 @@ export function CardSelection({ showDoneTakiButton, packLength, playerID, gameID
     if (shouldSelectKingType)
       return (
         <div dir="rtl">
-          <button className="card" onClick={() => { sendKingWithoutColor(takiCardTypes.PLUS_THREE) }}>3+</button>
+          <button data-testid={"king_selection_"+takiCardTypes.PLUS_THREE} className="card" onClick={() => { sendKingWithoutColor(takiCardTypes.PLUS_THREE) }}>3+</button>
           <span className="divider" />
-          <button className="card" onClick={() => { sendKingWithoutColor(takiCardTypes.PLUS_THREE_BREAK) }}>3+ שובר</button>
+          <button data-testid={"king_selection_"+takiCardTypes.PLUS_THREE_BREAK} className="card" onClick={() => { sendKingWithoutColor(takiCardTypes.PLUS_THREE_BREAK) }}>3+ שובר</button>
           <span className="divider" />
           <input
             type="radio"
+            data-testid={"king_selection_"+takiCardTypes.TAKI}
             value={takiCardTypes.TAKI}
             checked={selectedKingType === takiCardTypes.TAKI}
             onChange={() => { setShouldSelectColor(true); setSelectedKingType(takiCardTypes.TAKI) }}
@@ -99,6 +101,7 @@ export function CardSelection({ showDoneTakiButton, packLength, playerID, gameID
           <span className="divider" />
           <input
             type="radio"
+            data-testid={"king_selection_"+takiCardTypes.PLUS_TWO}
             value={takiCardTypes.PLUS_TWO}
             checked={selectedKingType === takiCardTypes.PLUS_TWO}
             onChange={() => { setShouldSelectColor(true); setSelectedKingType(takiCardTypes.PLUS_TWO) }}
@@ -108,6 +111,7 @@ export function CardSelection({ showDoneTakiButton, packLength, playerID, gameID
 
           <input
             type="radio"
+            data-testid={"king_selection_"+takiCardTypes.CHANGE_COLOR}
             value={takiCardTypes.CHANGE_COLOR}
             checked={selectedKingType === takiCardTypes.CHANGE_COLOR}
             onChange={() => { setShouldSelectColor(true); setSelectedKingType(takiCardTypes.CHANGE_COLOR) }}
@@ -117,6 +121,7 @@ export function CardSelection({ showDoneTakiButton, packLength, playerID, gameID
 
           <input
             type="radio"
+            data-testid={"king_selection_"+takiCardTypes.CHANGE_DIRECTION}
             value={takiCardTypes.CHANGE_DIRECTION}
             checked={selectedKingType === takiCardTypes.CHANGE_DIRECTION}
             onChange={() => { setShouldSelectColor(true); setSelectedKingType(takiCardTypes.CHANGE_DIRECTION) }}
@@ -126,6 +131,7 @@ export function CardSelection({ showDoneTakiButton, packLength, playerID, gameID
 
           <input
             type="radio"
+            data-testid={"king_selection_"+takiCardTypes.STOP}
             value={takiCardTypes.STOP}
             checked={selectedKingType === takiCardTypes.STOP}
             onChange={() => { setShouldSelectColor(true); setSelectedKingType(takiCardTypes.STOP) }}
@@ -141,18 +147,22 @@ export function CardSelection({ showDoneTakiButton, packLength, playerID, gameID
         <div dir="rtl">
           < button
             className="yellowCard"
+            data-testid={"color_selection_"+takiColors.YELLOW}
             onClick={() => { sendCardWithColor(takiColors.YELLOW) }}
           >צהוב</button>
           < button
             className="redCard"
+            data-testid={"color_selection_"+takiColors.RED}
             onClick={() => { sendCardWithColor(takiColors.RED) }}
           >אדום</button>
           < button
             className="greenCard"
+            data-testid={"color_selection_"+takiColors.GREEN}
             onClick={() => { sendCardWithColor(takiColors.GREEN) }}
           >ירוק</button>
           < button
             className="blueCard"
+            data-testid={"color_selection_"+takiColors.BLUE}
             onClick={() => { sendCardWithColor(takiColors.BLUE) }}
           >כחול</button>
         </div>)
