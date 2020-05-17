@@ -56,7 +56,7 @@ let card_king = { type: takiCardTypes.KING }
 it('test', function () {
     cy.visit('http://localhost:3000/')
 
-    cy.findAllByText('משחק טאקי לבדיקות').click()
+    cy.findByText('משחק טאקי לבדיקות').click()
 
     //starting always with player 0, next player is player 3
     selectSimpleCard(cy,card_red_5)
