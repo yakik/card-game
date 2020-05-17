@@ -49,9 +49,15 @@ const selectSimpleCard = (cy,card)=>{
 }
 
 let card_red_5 = { type: takiCardTypes.NUMBER, color: takiColors.RED, number: "5" }
+let card_taki_green={ type: takiCardTypes.TAKI,  color:takiColors.GREEN}
 let card_change_color = { type: takiCardTypes.CHANGE_COLOR }
 let card_plus_three = { type: takiCardTypes.PLUS_THREE }
+let card_break_plus_three = { type: takiCardTypes.PLUS_THREE_BREAK }
 let card_king = { type: takiCardTypes.KING }
+let card_plus_2_yellow = { type: takiCardTypes.PLUS_TWO, color: takiColors.YELLOW }
+let card_plus_2_green = { type: takiCardTypes.PLUS_TWO, color: takiColors.GREEN }
+let card_plus_2_red = { type: takiCardTypes.PLUS_TWO, color: takiColors.RED }
+let card_plus_2_blue = { type: takiCardTypes.PLUS_TWO, color: takiColors.BLUE }
 
 it('test', function () {
     cy.visit('http://localhost:3000/')
@@ -77,4 +83,67 @@ it('test', function () {
     selectKingNoColor(cy,takiCardTypes.PLUS_THREE)
     cy.findByTestId("message_everyone").should('have.text', messages.everyoneShouldTakeThreeCardsExcept('0'))
 
+    cy.findByText('Player 3').click()
+    takeCard(cy)
+    takeCard(cy)
+    takeCard(cy)
+
+    cy.findByText('Player 2').click()
+    takeCard(cy)
+    takeCard(cy)
+    takeCard(cy)
+
+    cy.findByText('Player 1').click()
+    takeCard(cy)
+    takeCard(cy)
+    takeCard(cy)
+
+    cy.findByText('Player 3').click()
+    selectSimpleCard(cy,card_plus_2_yellow)
+
+
+    
+    
+
+})
+
+it('test2   q', function () {
+    cy.visit('http://localhost:3000/')
+
+    cy.findByText('משחק טאקי לבדיקות').click()
+     //starting always with player 0, next player is player 3
+    takeCard(cy)
+    
+    cy.findByText('Player 3').click()
+    selectSimpleCard(cy,card_plus_2_yellow)
+
+    cy.findByText('Player 2').click()
+    selectSimpleCard(cy,card_plus_2_red)
+
+    cy.findByText('Player 1').click()
+    selectSimpleCard(cy,card_plus_2_blue)
+
+    cy.findByText('Player 0').click()
+    takeCard(cy)
+    takeCard(cy)
+    takeCard(cy)
+    takeCard(cy)
+    takeCard(cy)
+    takeCard(cy)
+
+    cy.findByText('Player 3').click()
+    selectSimpleCard(cy,card_plus_three)
+
+    cy.findByText('Player 1').click()
+    selectSimpleCard(cy,card_break_plus_three)
+
+    cy.findByText('Player 3').click()
+    takeCard(cy)
+    takeCard(cy)
+    takeCard(cy)
+
+    cy.findByText('Player 2').click()
+    selectSimpleCard(cy,card_taki_green)
+    
+    
 })
