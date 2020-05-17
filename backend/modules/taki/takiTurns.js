@@ -1,6 +1,6 @@
 import { turnDirections, takiCardTypes, userActions } from "../../constants";
 import { getTopCardOnTable } from "./takiPack"
-import {getPlayerName} from "./taki"
+import {getPlayer,getPlayerName} from "./taki"
 
 export function allowed(game, playerID, action, selectedCard) {
 
@@ -29,7 +29,7 @@ export function allowed(game, playerID, action, selectedCard) {
         return true
     }
     else
-        game.message="לא תורך"
+        getPlayer(game,playerID).message="לא תורך"
         return false
 }
 

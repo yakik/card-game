@@ -74,7 +74,7 @@ export function Taki({ testingMode, gameID, socket, playerName, playerID, isMana
         <div className="taki-cards">
           {testingAddCardDiv()}
         <CardSelection showDoneTakiButton={showDoneTakiButton()} packLength={game.pack.length} gameState={game.state} playerID={playerID} gameID={gameID} socket={socket} player={getPlayer()} />
-        <div data-testid={"message_player"}></div>
+        <div data-testid={"message_player"}>{getPlayer().message}</div>
         <div ><span data-testid={"message_everyone"}>{game.message}</span></div>
         </div>
 

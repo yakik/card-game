@@ -20,6 +20,10 @@ const addCardToPlayer = (cy, card) => {
     cy.findAllByText('הוסף קלף').click()
 }
 
+const takeCard = (cy) => {
+    cy.findByTestId("take_card").click()
+}
+
 const selectChangeColor = (cy,color)=>{
     addCardToPlayer(cy, card_change_color)
     cy.findByTestId(getCardTestID(card_change_color)).click()
@@ -56,6 +60,10 @@ it('test', function () {
 
     //starting always with player 0, next player is player 3
     selectSimpleCard(cy,card_red_5)
+
+    cy.findByText('Player 2').click()
+    takeCard(cy)
+    cy.findByTestId("message_player").should('have.text', 'לא תורך')
     
 
     cy.findByText('Player 3').click()

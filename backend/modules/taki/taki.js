@@ -41,7 +41,7 @@ export function addNewPlayer(game, name, playerID) {
         ID = game.lastPlayerID++
     else
         ID = playerID
-    game.players.push({ name: name, ID: ID, cards: [] })
+    game.players.push({ name: name, ID: ID, cards: [], message:''})
     if (game.turn.playerID===undefined)
         game.turn.playerID=ID
     

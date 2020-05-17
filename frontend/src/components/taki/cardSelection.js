@@ -182,7 +182,7 @@ export function CardSelection({ showDoneTakiButton, packLength, playerID, gameID
 
   if (player !== undefined && player.cards !== undefined)
     return (<div><button onClick={() => socket.emit(socketMsgTypes.TAKE_CARD_BACK, { gameID: gameID, playerID: playerID })}>החזר קלף</button>
-      <button className="takeCard" onClick={() => takeCard()}>{"קח קלף, נותרו " + packLength}</button>
+      <button data-testid="take_card" className="takeCard" onClick={() => takeCard()}>{"קח קלף, נותרו " + packLength}</button>
       <div>
         <p>{getCardsButtons(socket, player.cards)}</p>
       </div>
