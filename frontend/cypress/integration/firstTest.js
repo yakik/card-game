@@ -16,7 +16,7 @@ const getCardText = (card) => {
 }
 
 const addCardToPlayer = (cy, card) => {
-    cy.get('input').type(getCardText(card))
+    cy.findByTestId('test_text_for_new_card').type(getCardText(card))
     cy.findAllByText('הוסף קלף').click()
 }
 

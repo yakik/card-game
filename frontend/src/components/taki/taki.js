@@ -35,7 +35,7 @@ export function Taki({ testingMode, gameID, socket, playerName, playerID, isMana
 
   const testingAddCardDiv = () => {
     if (testingMode) {
-      return (<div><input name="newTestingCard" value={testingAddCard} onChange={e => onChangeNewTestingCard(e)} />
+      return (<div><input data-testid="test_text_for_new_card"  name="newTestingCard" value={testingAddCard} onChange={e => onChangeNewTestingCard(e)} />
       <br></br>
         <button onClick={() => {
           socket.emit(socketMsgTypes.TESTING_ADD_CARD_TO_PLAYER, {
