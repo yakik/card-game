@@ -1,4 +1,4 @@
-import { takiCardTypes, takiColors } from '../../src/constants'
+import { messages, takiCardTypes, takiColors } from '../../src/constants'
 import '@testing-library/cypress/add-commands'
 import { getCardTestID } from '../../src/components/taki/cards'
 
@@ -63,7 +63,7 @@ it('test', function () {
 
     cy.findByText('Player 2').click()
     takeCard(cy)
-    cy.findByTestId("message_player").should('have.text', 'לא תורך')
+    cy.findByTestId("message_player").should('have.text', messages.NOT_YOUR_TURN)
     
 
     cy.findByText('Player 3').click()
@@ -71,10 +71,10 @@ it('test', function () {
 
     cy.findByText('Player 2').click()
     selectKingWithColor(cy,takiCardTypes.STOP,takiColors.YELLOW)
-    cy.findByTestId("message_everyone").should('have.text', 'תורו של 0 ')
+    cy.findByTestId("message_everyone").should('have.text', messages.itIsPlayerXTurn('0'))
 
     cy.findByText('Player 0').click()
     selectKingNoColor(cy,takiCardTypes.PLUS_THREE)
-    cy.findByTestId("message_everyone").should('have.text', 'כולם חוץ מ 0לקחת שלושה קלפים')
+    cy.findByTestId("message_everyone").should('have.text', messages.everyoneShouldTakeThreeCardsExcept('0'))
 
 })

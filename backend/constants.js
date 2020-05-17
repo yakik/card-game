@@ -80,10 +80,17 @@ export const turnDirections = {
     RIGHT_TO_LEFT: 'right_to_left'
 }
 
-
-
 export const errors = {
     KING_MISSING_SELECTED_TYPE : '10_king_missing_selected_type',
     KING_MISSING_COLOR_SELECTION : '11_king_missing_color_selection',
     CHANGE_COLOR_MISSING_COLOR_SELECTION : '20_change_color_missing_color_selection',
+}
+
+export const messages = {
+    NOT_YOUR_TURN: 'לא תורך',
+    NOT_ALLOWED_TO_PLACE_CARDS_ON_A_PLUST_THREE: "אסור להניח קלף כשצריכים לקחת קלפים לפלוס שלוש",
+    pleaseTakeXCards: (numberOfCards)=>{return 'קלפים' + numberOfCards + 'נא לקחת '},
+    everyoneShouldTakeThreeCardsExcept: (playerName)=>{return playerName + 'כולם צריכים לקחת שלושה קלפים חוץ מ '},
+    shouldTakeThreeCards: (playerName)=>{return ' צריך לקחת שלושה קלפים' + playerName},
+    itIsPlayerXTurn: (playerName) => {return playerName + 'תורו של '}
 }

@@ -1,4 +1,4 @@
-import { turnDirections, takiCardTypes, userActions } from "../../constants";
+import { messages, turnDirections, takiCardTypes, userActions } from "../../constants";
 import { getTopCardOnTable } from "./takiPack"
 import {getPlayer,getPlayerName} from "./taki"
 
@@ -17,7 +17,7 @@ export function allowed(game, playerID, action, selectedCard) {
         }
         else {
             if (getCardType(selectedCard)!==takiCardTypes.PLUS_THREE_BREAK){
-                game.message("אסור להניח קלף כשצריכים לקחת קלפים לפלוס שלוש")
+                game.message = messages.NOT_ALLOWED_TO_PLACE_CARDS_ON_A_PLUST_THREE
                 return false
             }
             else
@@ -29,7 +29,7 @@ export function allowed(game, playerID, action, selectedCard) {
         return true
     }
     else
-        getPlayer(game,playerID).message="לא תורך"
+        getPlayer(game,playerID).message=messages.NOT_YOUR_TURN
         return false
 }
 
@@ -95,7 +95,7 @@ export function updateTurnAfterSeletingCard(game, playerID, selectedCard, lastTa
             if (game.turn.plusTwo === undefined)
                 game.turn.plusTwo = 0
             game.turn.plusTwo += 2
-            message = "נא לקחת " + game.turn.plusTwo + " קלפים"
+            message = messages.pleaseTakeXCards(game.turn.plusTwo)
         }
 
         if (getCardType(selectedCard) === takiCardTypes.PLUS) {
@@ -104,6 +104,7 @@ export function updateTurnAfterSeletingCard(game, playerID, selectedCard, lastTa
         }
 
         if (getCardType(selectedCard) === takiCardTypes.PLUS_THREE) {
+            
             game.turn = { ...game.turn, inPlusThree: true, plusThreeInitiator: playerID }
             let plusThreePlayersToTakeCards = []
             game.players.forEach(player => {
@@ -111,21 +112,20 @@ export function updateTurnAfterSeletingCard(game, playerID, selectedCard, lastTa
                     plusThreePlayersToTakeCards.push({ playerID: player.ID, remainingCardsToTake: 3 })
             })
             game.turn = { ...game.turn, plusThreePlayersToTakeCards: plusThreePlayersToTakeCards }
-            game.message = "כולם חוץ מ " + getPlayerName(game,playerID) + "לקחת שלושה קלפים" 
+            game.message =  messages.everyoneShouldTakeThreeCardsExcept(getPlayerName(game,playerID))
             return
         }
 
         if (getCardType(selectedCard) === takiCardTypes.PLUS_THREE_BREAK && game.turn.inPlusThree) {
             game.turn = { ...game.turn,
                 plusThreePlayersToTakeCards: [{playerID:game.turn.plusThreeInitiator,remainingCardsToTake:3}] }
-                game.message = "רק " + getPlayerName(game,playerID) + " צריך לקחת שלושה קלפים" 
+                game.message = messages.shouldTakeThreeCards(getPlayerName(game,playerID))
                 return
         }
 
-
         setNextPlayer(game, getNextPlayerID(game.turn.playerID, game.players, game.turn.direction, getCardType(selectedCard)))
        
-                game.message = "תורו של " + getPlayerName(game, game.turn.playerID) + " " + message
+                game.message = messages.itIsPlayerXTurn(getPlayerName(game, game.turn.playerID))
     }
 }
 
@@ -163,7 +163,7 @@ export function updateTurnAfterTakingCard(game, playerID) {
         else
             setNextPlayer(game, getNextPlayerID(game.turn.playerID, game.players, game.turn.direction))
     }
-    game.message = "תורו של " + getPlayerName(game, game.turn.playerID)
+    game.message = messages.itIsPlayerXTurn(getPlayerName(game, game.turn.playerID))
 }
 
 export function getNextPlayerID(currentPlayerID, players, direction, cardType) {

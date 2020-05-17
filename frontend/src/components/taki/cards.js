@@ -28,13 +28,11 @@ export function getCardClass(card) {
 }
 
 export function getCardTestID(card) {
-  console.log(card)
   let testID = "cards_" + card.type + "_" + getCardClass(card)
   if (card.color !== undefined)
     testID += "_" + card.color
   if (card.numnber !== undefined)
     testID += "_" + card.number
-  console.log(testID)
   return testID
 }
 
