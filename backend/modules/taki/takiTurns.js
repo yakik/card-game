@@ -95,7 +95,8 @@ export function updateTurnAfterSeletingCard(game, playerID, selectedCard, lastTa
             if (game.turn.plusTwo === undefined)
                 game.turn.plusTwo = 0
             game.turn.plusTwo += 2
-            message = messages.pleaseTakeXCards(game.turn.plusTwo)
+            game.turn.plusTwoAdding=true
+           // message = messages.pleaseTakeXCards(game.turn.plusTwo)
         }
 
         if (getCardType(selectedCard) === takiCardTypes.PLUS) {
@@ -126,6 +127,8 @@ export function updateTurnAfterSeletingCard(game, playerID, selectedCard, lastTa
         setNextPlayer(game, getNextPlayerID(game.turn.playerID, game.players, game.turn.direction, getCardType(selectedCard)))
        
                 game.message = messages.itIsPlayerXTurn(getPlayerName(game, game.turn.playerID))
+                if (game.turn.plusTwo>0)
+                    getPlayer(game,game.turn.playerID).message = messages.PleaseEitherPlaceTwoPlusOrTakeCards(game.turn.plusTwo)
     }
 }
 
@@ -158,12 +161,16 @@ export function updateTurnAfterTakingCard(game, playerID) {
     }
 
     if (!game.turn.inPlusThree) {
-        if (game.turn.plusTwo !== undefined && game.turn.plusTwo > 1)
+        if (game.turn.plusTwo !== undefined && game.turn.plusTwo > 1) {
             game.turn.plusTwo -= 1
+            game.turn.plusTwoAdding=false
+            getPlayer(game,game.turn.playerID).message = messages.pleaseTakeXCards(game.turn.plusTwo)
+        }
         else
             setNextPlayer(game, getNextPlayerID(game.turn.playerID, game.players, game.turn.direction))
     }
     game.message = messages.itIsPlayerXTurn(getPlayerName(game, game.turn.playerID))
+    
 }
 
 export function getNextPlayerID(currentPlayerID, players, direction, cardType) {

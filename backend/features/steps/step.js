@@ -5,7 +5,7 @@ import {
   getNewGame as getNewTakiGame, removePlayer as removeTakiPlayer, selectCard as selectCardTaki
 } from '../../modules/taki/taki'
 import { getTakiPack, getTakiCard, setGamePack } from "../../modules/taki/takiPack"
-import {  takiCardTypes, turnDirections } from '../../constants'
+import {  messages,takiCardTypes, turnDirections } from '../../constants'
 import {handleEndTakiSeries, setTurn, getCurrentTurnPlayerID} from '../../modules/taki/takiTurns'
 import { getShuffledPack } from '../../modules/cards';
 
@@ -69,6 +69,14 @@ Then('next player is {string}', function (playerName) {
   expect(getPlayerName(this.game,getCurrentTurnPlayerID(this.game))).to.eql(playerName)
 });
 
+Then('{string} is asked to either take {int} cards or place a plus two card', function (playerName, numberOfCards) {
+  expect(getPlayer(this.game,getPlayerID(this.game,playerName)).message).to.eql(messages.PleaseEitherPlaceTwoPlusOrTakeCards(numberOfCards))
+  });
+
+Then('{string} is asked to take {int} cards', function (playerName, numberOfCards) {
+  expect(getPlayer(this.game,getPlayerID(this.game,playerName)).message).to.eql(messages.pleaseTakeXCards(numberOfCards))
+});
+
 Then('it is still {string} turn. The following players need to take cards:', function (playerName, dataTable) {
   expect(getPlayerName(this.game, getCurrentTurnPlayerID(this.game))).to.eql(playerName,"Player name check")
   expect(this.game.turn.plusThreePlayersToTakeCards.length).to.eql(dataTable.rawTable.length,"number of players to take cards")
@@ -77,6 +85,8 @@ Then('it is still {string} turn. The following players need to take cards:', fun
     let cardsToTake = playerToTakeCards[1]
     expect(parseInt(cardsToTake, 10)).to.eql(
       this.game.turn.plusThreePlayersToTakeCards.find(player => player.playerID === playerID).remainingCardsToTake,"number of cards to take for player ID:"+playerID)
+    //expect(getPlayer(this.game,playerID).message).to.eql(messages.pleaseTakeXCards(cardsToTake))
+
   })
 
 });
