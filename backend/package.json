@@ -16,7 +16,6 @@
     "@babel/node": "^7.8.7",
     "@babel/preset-env": "^7.9.6",
     "@babylonjs/core": "^4.1.0",
-    "@types/jest": "^25.2.3",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
@@ -30,9 +29,11 @@
     "testEnvironment": "node"
   },
   "devDependencies": {
+    "@types/jest": "^25.2.3",
     "chai": "^4.2.0",
     "cucumber": "^6.0.5",
     "jest": "^26.0.0",
-    "newman": "^4.6.1"
+    "newman": "^4.6.1",
+    "ts-jest": "^26.0.0"
   }
 }
