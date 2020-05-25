@@ -1,7 +1,7 @@
 
 
 
-export function getCardsForPlayer(oldPack) {
+export function getCardsForPlayer(oldPack?) {
   let pack = oldPack.slice()
   let cards = []
   for (let u = 0; u < 10; u++)
