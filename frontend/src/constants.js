@@ -33,7 +33,8 @@ export const states = {
 
 export const gameTypes = {
     TAKE_SIX : "Take Six",
-    TAKI : "Taki"
+    TAKI : "Taki",
+    ERROR: "Error"
 }
 
 export const endPoints = {

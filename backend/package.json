@@ -6,7 +6,8 @@
     "start": "nodemon --exec  babel-node ./src/bin/www --extensions \".ts\",\".js\"",
     "test": "jest --watchAll",
     "cucumber": "babel-node  ./node_modules/.bin/cucumber-js src/features --extensions \".ts\",\".js\"",
-    "cucumberOne": "./node_modules/.bin/cucumber-js --tags @active --require-module @babel/register"
+    "cucumberOne": "./node_modules/.bin/cucumber-js --tags @active --require-module @babel/register",
+    "tsc": "tsc --noEmit"
   },
   "dependencies": {
     "@babel/cli": "^7.8.4",

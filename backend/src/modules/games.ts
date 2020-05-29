@@ -5,21 +5,27 @@ import {  addNewPlayer as addNewTakiPlayer,
     import {reshuffle as reshuffleTaki} from './takiPack'
 import {gameTypes} from '../constants'
 
-let games = []
+let games:Array<Game> = []
 
-export function getGame(gameID){
+let errorGame:Game = {ID:'999999', type:gameTypes.ERROR}
+let errorSpecificGame:SpecificGame = {}
+
+
+export function getGame(gameID:string):SpecificGame{
     for (let i=0;i<games.length;i++)
         if (games[i].ID == gameID)
-            return games[i].game
+            return games[i].game as SpecificGame
+    return errorSpecificGame
 }
 
-export function getGameObject(gameID){
+export function getGameObject(gameID:string):Game{
     for (let i=0;i<games.length;i++)
         if (games[i].ID == gameID)
             return games[i]
+    return errorGame
 }
 
-export function doesGameIDExist(gameID){
+export function doesGameIDExist(gameID:string){
     let exist=false
     for (let i=0;i<games.length;i++)
         if (games[i].ID == gameID)
@@ -27,53 +33,53 @@ export function doesGameIDExist(gameID){
     return exist
 }
 
-export function updateState(gameID, state) {
-    let game = getGame(gameID)
+export function updateState(gameID:string, state:string) {
+    let game:TakeSixGame = getGame(gameID) as TakeSixGame
     game.state = state
 }
 
-export function reshuffle(gameID){
+export function reshuffle(gameID:string){
     let game = getGameObject(gameID)
     if (game.type===gameTypes.TAKE_SIX)
-        return reshuffleTakeSix(game.game)
+        return reshuffleTakeSix(game.game as TakeSixGame)
         if (game.type===gameTypes.TAKI)
-        return reshuffleTaki(game.game)
+        return reshuffleTaki(game.game as TakiGame)
 
 }
-export function selectCard(gameID, msg){
+export function selectCard(gameID:string, msg:string){
     let game = getGameObject(gameID)
     if (game.type===gameTypes.TAKE_SIX)
-        return selectCardTakeSix(game.game, msg)
+        return selectCardTakeSix(game.game as TakeSixGame, msg)
         if (game.type===gameTypes.TAKI)
-        return selectCardTaki(game.game, msg)
+        return selectCardTaki(game.game as TakiGame, msg)
 
 }
 
 
-export function addPlayer(gameID, name, playerID) {
+export function addPlayer(gameID:string, name:string, playerID:string) {
     let game = getGameObject(gameID)
     if (game.type === gameTypes.TAKE_SIX)
-        return addNewTakeSixPlayer(game.game, name, playerID)
+        return addNewTakeSixPlayer(game.game as TakeSixGame, name, playerID)
     if (game.type === gameTypes.TAKI)
-        return addNewTakiPlayer(game.game, name, playerID)
+        return addNewTakiPlayer(game.game as TakiGame, name, playerID)
 }
 
-export function removePlayer(gameID, playerID){
+export function removePlayer(gameID:string, playerID:string){
     let game = getGameObject(gameID)
     if (game.type===gameTypes.TAKE_SIX)
-        return removeTakeSixPlayer(game.game, playerID)
+        return removeTakeSixPlayer(game.game as TakeSixGame, playerID)
         if (game.type===gameTypes.TAKI)
-        return removeTakiPlayer(game.game, playerID)
+        return removeTakiPlayer(game.game as TakiGame, playerID)
 }
 
-export function getGameType(gameID){
+export function getGameType(gameID:string){
     let game = getGameObject(gameID)
         return game.type
 }
 
-export function addGame(type,gameID)
+export function addGame(type:string,gameID:string)
 {
-    let newGameID
+    let newGameID:string
     if (gameID===undefined)
         newGameID = Math.round(Math.random() * 99).toString()
     else

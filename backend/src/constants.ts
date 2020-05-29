@@ -33,7 +33,8 @@ export const states = {
 
 export const gameTypes = {
     TAKE_SIX : "Take Six",
-    TAKI : "Taki"
+    TAKI : "Taki",
+    ERROR: "Error"
 }
 
 export const endPoints = {
@@ -89,9 +90,9 @@ export const errors = {
 export const messages = {
     NOT_YOUR_TURN: 'לא תורך',
     NOT_ALLOWED_TO_PLACE_CARDS_ON_A_PLUST_THREE: "אסור להניח קלף כשצריכים לקחת קלפים לפלוס שלוש",
-    pleaseTakeXCards: (numberOfCards)=>{return 'קלפים' + numberOfCards + 'נא לקחת '},
-    PleaseEitherPlaceTwoPlusOrTakeCards: (numberOfCards)=>{return 'קלפים' + numberOfCards + 'נא להניח קלף פלוס שתיים או לקחת '},
-    everyoneShouldTakeThreeCardsExcept: (playerName)=>{return playerName + 'כולם צריכים לקחת שלושה קלפים חוץ מ '},
-    shouldTakeThreeCards: (playerName)=>{return ' צריך לקחת שלושה קלפים' + playerName},
-    itIsPlayerXTurn: (playerName) => {return playerName + 'תורו של '}
+    pleaseTakeXCards: (numberOfCards:number):string=>{return 'קלפים' + numberOfCards + 'נא לקחת '},
+    PleaseEitherPlaceTwoPlusOrTakeCards: (numberOfCards:number):string=>{return 'קלפים' + numberOfCards + 'נא להניח קלף פלוס שתיים או לקחת '},
+    everyoneShouldTakeThreeCardsExcept: (playerName:string):string=>{return playerName + 'כולם צריכים לקחת שלושה קלפים חוץ מ '},
+    shouldTakeThreeCards: (playerName:string):string=>{return ' צריך לקחת שלושה קלפים' + playerName},
+    itIsPlayerXTurn: (playerName:string):string => {return playerName + 'תורו של '}
 }
