@@ -88,13 +88,10 @@ export function Start() {
            if (i !== playerID)
              selectPlayerButtons.push(<button key={i} onClick={() => setPlayerID(i)}>{"Player " + i}</button>)
          return <div>{selectPlayerButtons}</div>
-
        }
-
      }
 
-
-  const onChangeNewPlayerName = e => {
+     const onChangeNewPlayerName = e => {
     setNewPlayerName(e.target.value);
   };
 
@@ -104,7 +101,7 @@ export function Start() {
         <p>הקלד מספר המשחק</p>
         <input name="game ID" onChange={e => onChangeGameID(e)} />
         <p>הקלד שם שחקן</p>
-        <input name="playerName" onChange={e => onChangeNewPlayerName(e)} />
+        <input role='nameInput'  name="playerName" onChange={e => onChangeNewPlayerName(e)} />
         <br></br>
         <div>
           <button disabled={newPlayerName===""} onClick={() => newGame(gameTypes.TAKE_SIX)}>משחק טייק סיקס חדש</button>
@@ -114,7 +111,7 @@ export function Start() {
         <div>
           <button disabled={newPlayerName===""} onClick={() => newGame(gameTypes.TAKI)}>משחק טאקי חדש</button>
           <button disabled={newPlayerName===""} onClick={() => joinGame(gameTypes.TAKI)}>הצטרף למשחק טאקי</button>
-          <button disable={(process.env.NODE_ENV !== envTypes.PRODUCTION).toString()} onClick={() => startTakiTestingGame(gameTypes.TAKI)}>משחק טאקי לבדיקות</button>
+          <button disabled={(process.env.NODE_ENV !== envTypes.PRODUCTION)} onClick={() => startTakiTestingGame(gameTypes.TAKI)}>משחק טאקי לבדיקות</button>
         </div>
 
       </div>
