@@ -19,7 +19,6 @@ describe("taki tests", () => {
 
         const resp = { data: { gameID: '3', playerID: 'Erez' } };
         axios.post.mockResolvedValue(resp);
-      // Taki.mockResolvedValue(()=>()=><div>XXXXX</div>)
 
         const { getByText, getByTestId, debug } = render(
             <Start ></Start>);
