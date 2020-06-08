@@ -19,6 +19,7 @@ describe("taki tests", () => {
 
         const resp = { data: { gameID: '3', playerID: 'Erez' } };
         axios.post.mockResolvedValue(resp);
+        Taki.mockReturnValueOnce(<div>VVVVV</div>).mockReturnValueOnce(<div>YYYY</div>).mockReturnValueOnce(<div>ZZZZZ</div>)
 
         const { getByText, getByTestId, debug } = render(
             <Start ></Start>);
